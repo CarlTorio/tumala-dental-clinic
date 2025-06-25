@@ -1,17 +1,14 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { CalendarIcon, MenuIcon, PhoneIcon } from 'lucide-react';
-
 interface HeaderProps {
   onBookNow: () => void;
 }
-
-const Header = ({ onBookNow }: HeaderProps) => {
+const Header = ({
+  onBookNow
+}: HeaderProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  return (
-    <header className="bg-white shadow-sm sticky top-0 z-50">
+  return <header className="bg-white shadow-sm sticky top-0 z-50">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
@@ -19,7 +16,7 @@ const Header = ({ onBookNow }: HeaderProps) => {
             <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
               <span className="text-white font-bold text-lg">🦷</span>
             </div>
-            <span className="text-xl font-bold text-primary">DentalCare Plus</span>
+            <span className="text-xl font-bold text-primary">Tumala Dental Clinic</span>
           </div>
 
           {/* Desktop Navigation */}
@@ -51,17 +48,13 @@ const Header = ({ onBookNow }: HeaderProps) => {
           </div>
 
           {/* Mobile Menu Button */}
-          <button
-            className="md:hidden p-2"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
+          <button className="md:hidden p-2" onClick={() => setIsMenuOpen(!isMenuOpen)}>
             <MenuIcon className="h-6 w-6 text-gray-600" />
           </button>
         </div>
 
         {/* Mobile Menu */}
-        {isMenuOpen && (
-          <div className="md:hidden py-4 border-t">
+        {isMenuOpen && <div className="md:hidden py-4 border-t">
             <nav className="flex flex-col space-y-4">
               <a href="#services" className="text-gray-600 hover:text-primary transition-colors">
                 Services
@@ -86,11 +79,8 @@ const Header = ({ onBookNow }: HeaderProps) => {
                 </Button>
               </div>
             </nav>
-          </div>
-        )}
+          </div>}
       </div>
-    </header>
-  );
+    </header>;
 };
-
 export default Header;
