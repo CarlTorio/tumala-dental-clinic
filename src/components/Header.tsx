@@ -15,9 +15,13 @@ const Header = ({
   const handleSmoothScroll = (targetId: string) => {
     const element = document.getElementById(targetId);
     if (element) {
-      element.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
+      const headerHeight = 64; // Height of the sticky header (h-16 = 64px)
+      const elementPosition = element.offsetTop;
+      const offsetPosition = elementPosition - headerHeight - 20; // Extra 20px padding
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
       });
     }
     setIsMenuOpen(false); // Close mobile menu after clicking
