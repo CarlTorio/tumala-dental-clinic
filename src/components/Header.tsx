@@ -25,7 +25,7 @@ const Header = ({
                 className="w-full h-full object-contain"
               />
             </div>
-            <div className="flex flex-col">
+            <div className="flex items-center space-x-2">
               <span className="text-xl font-bold text-primary">Tumala</span>
               <span className="text-lg font-semibold text-primary dental-shimmer">Dental Clinic</span>
             </div>
