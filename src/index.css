@@ -113,27 +113,27 @@
     background: linear-gradient(
       90deg,
       hsl(var(--primary)) 0%,
-      #2563eb 25%,
-      #3b82f6 50%,
-      #2563eb 75%,
+      #4A90E2 25%,
+      #5BA7F7 50%,
+      #4A90E2 75%,
       hsl(var(--primary)) 100%
     );
-    background-size: 300% 100%;
+    background-size: 200% 100%;
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    animation: dental-shine 4s ease-in-out infinite;
+    animation: dental-shine 3s ease-in-out infinite;
   }
 
   @keyframes dental-shine {
     0% {
-      background-position: -300% 0;
+      background-position: -200% 0;
     }
     50% {
-      background-position: 300% 0;
+      background-position: 200% 0;
     }
     100% {
-      background-position: -300% 0;
+      background-position: -200% 0;
     }
   }
 }
