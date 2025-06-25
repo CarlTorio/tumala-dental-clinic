@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -79,7 +78,7 @@ const Index = () => {
       </section>
 
       {/* Services Section */}
-      <section className="py-16 px-4 dental-light-bg">
+      <section id="services-area" className="py-16 px-4 dental-light-bg">
         <div className="container mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold text-primary mb-4">Our Services</h2>
@@ -103,8 +102,8 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Clinic Information */}
-      <section className="py-16 px-4">
+      {/* About Section (Clinic Information) */}
+      <section id="about-area" className="py-16 px-4">
         <div className="container mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
@@ -235,8 +234,8 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Final CTA */}
-      <section className="py-16 px-4 dental-gradient text-white text-center">
+      {/* Contact Section (Final CTA) */}
+      <section id="contact-area" className="py-16 px-4 dental-gradient text-white text-center">
         <div className="container mx-auto">
           <h2 className="text-4xl font-bold mb-4">Ready to Schedule Your Visit?</h2>
           <p className="text-xl mb-8 opacity-90">
