@@ -1,20 +1,40 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { CalendarIcon, MenuIcon, PhoneIcon } from 'lucide-react';
+
 interface HeaderProps {
   onBookNow: () => void;
 }
+
 const Header = ({
   onBookNow
 }: HeaderProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  return <header className="bg-white shadow-sm sticky top-0 z-50">
+
+  return (
+    <header className="bg-white shadow-sm sticky top-0 z-50">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex items-center space-x-3">
-            <div className="w-14 h-14 flex items-center justify-center">
-              <img src="/lovable-uploads/6a05d520-602e-4c7d-8853-bc4fe00a965f.png" alt="Tumala Dental Clinic Logo" className="w-full h-full object-contain" />
+            <div className="w-14 h-14 flex items-center justify-center logo-teeth-container">
+              <div className="logo-content">
+                <img 
+                  src="/lovable-uploads/6a05d520-602e-4c7d-8853-bc4fe00a965f.png" 
+                  alt="Tumala Dental Clinic Logo" 
+                  className="w-full h-full object-contain" 
+                />
+              </div>
+              <div className="teeth-smile">
+                <div className="tooth"></div>
+                <div className="tooth"></div>
+                <div className="tooth"></div>
+                <div className="tooth"></div>
+                <div className="tooth"></div>
+                <div className="tooth"></div>
+                <div className="tooth"></div>
+              </div>
             </div>
             <div className="flex items-center space-x-2">
               <span className="font-bold text-primary text-lg">TUMALA</span>
@@ -55,7 +75,8 @@ const Header = ({
         </div>
 
         {/* Mobile Menu */}
-        {isMenuOpen && <div className="md:hidden py-4 border-t">
+        {isMenuOpen && (
+          <div className="md:hidden py-4 border-t">
             <nav className="flex flex-col space-y-4">
               <a href="#services" className="text-gray-600 hover:text-primary transition-colors">
                 Services
@@ -80,8 +101,11 @@ const Header = ({
                 </Button>
               </div>
             </nav>
-          </div>}
+          </div>
+        )}
       </div>
-    </header>;
+    </header>
+  );
 };
+
 export default Header;

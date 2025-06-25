@@ -125,6 +125,62 @@
     animation: dental-shine 3s ease-in-out infinite;
   }
 
+  .logo-teeth-container {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.6s ease-in-out;
+  }
+
+  .logo-teeth-container:hover .teeth-smile {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  .logo-teeth-container:hover .logo-content {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.9);
+  }
+
+  .teeth-smile {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateY(10px) scale(0.8) translate(-50%, -50%);
+    opacity: 0;
+    transition: all 0.6s ease-in-out;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+  }
+
+  .logo-content {
+    transition: all 0.6s ease-in-out;
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+
+  .tooth {
+    width: 4px;
+    height: 8px;
+    background: linear-gradient(to bottom, #ffffff 0%, hsl(var(--primary)) 100%);
+    margin: 0 1px;
+    border-radius: 2px 2px 0 0;
+    animation: tooth-bounce 0.6s ease-in-out forwards;
+    opacity: 0;
+    transform: translateY(5px);
+  }
+
+  .tooth:nth-child(1) { animation-delay: 0.1s; }
+  .tooth:nth-child(2) { animation-delay: 0.15s; }
+  .tooth:nth-child(3) { animation-delay: 0.2s; }
+  .tooth:nth-child(4) { animation-delay: 0.25s; }
+  .tooth:nth-child(5) { animation-delay: 0.3s; }
+  .tooth:nth-child(6) { animation-delay: 0.35s; }
+  .tooth:nth-child(7) { animation-delay: 0.4s; }
+
   @keyframes dental-shine {
     0% {
       background-position: -200% 0;
@@ -134,6 +190,21 @@
     }
     100% {
       background-position: -200% 0;
+    }
+  }
+
+  @keyframes tooth-bounce {
+    0% {
+      opacity: 0;
+      transform: translateY(5px);
+    }
+    50% {
+      opacity: 1;
+      transform: translateY(-2px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
     }
   }
 }
