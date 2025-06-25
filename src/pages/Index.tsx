@@ -6,6 +6,7 @@ import { CalendarIcon, ClockIcon, PhoneIcon, MailIcon, MapPinIcon } from 'lucide
 import BookingModal from '@/components/BookingModal';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import DentistLogin from '@/components/DentistLogin';
 
 const Index = () => {
   const [isBookingOpen, setIsBookingOpen] = useState(false);
@@ -249,6 +250,14 @@ const Index = () => {
             <CalendarIcon className="mr-2 h-5 w-5" />
             Book Now - It's Easy!
           </Button>
+        </div>
+      </section>
+
+      {/* Dentist Login Section */}
+      <section className="py-8 px-4 bg-gray-50 border-t">
+        <div className="container mx-auto text-center">
+          <h3 className="text-lg font-semibold text-gray-700 mb-4">Healthcare Professional Access</h3>
+          <DentistLogin />
         </div>
       </section>
 
