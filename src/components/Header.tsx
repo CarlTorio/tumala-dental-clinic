@@ -17,7 +17,7 @@ const Header = ({
               <img src="/lovable-uploads/6a05d520-602e-4c7d-8853-bc4fe00a965f.png" alt="Tumala Dental Clinic Logo" className="w-full h-full object-contain" />
             </div>
             <div className="flex items-center space-x-2">
-              <span className="text-xl font-bold text-primary">TUMALA</span>
+              <span className="font-bold text-primary text-lg">TUMALA</span>
               <span className="text-primary dental-shimmer text-2xl font-semibold">Dental Clinic</span>
             </div>
           </div>
