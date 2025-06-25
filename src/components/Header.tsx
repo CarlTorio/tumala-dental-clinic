@@ -30,9 +30,7 @@ const Header = ({
             <a href="#about" className="text-gray-600 hover:text-primary transition-colors">
               About
             </a>
-            <a href="#insurance" className="text-gray-600 hover:text-primary transition-colors">
-              Insurance
-            </a>
+            
             <a href="#contact" className="text-gray-600 hover:text-primary transition-colors">
               Contact
             </a>
