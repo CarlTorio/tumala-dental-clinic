@@ -18,7 +18,7 @@ const Header = ({
             </div>
             <div className="flex items-center space-x-2">
               <span className="text-xl font-bold text-primary">TUMALA</span>
-              <span className="text-primary dental-shimmer font-bold text-xl">Dental Clinic</span>
+              <span className="text-primary dental-shimmer text-2xl font-semibold">Dental Clinic</span>
             </div>
           </div>
 
