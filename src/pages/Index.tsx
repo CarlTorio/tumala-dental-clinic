@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -22,23 +21,25 @@ const Index = () => {
     }, 200);
   };
 
-  const services = [{
-    title: "General Dentistry",
-    description: "Comprehensive oral health care including cleanings, fillings, and preventive treatments.",
-    icon: "🦷"
-  }, {
-    title: "Cosmetic Dentistry",
-    description: "Enhance your smile with veneers, whitening, and aesthetic dental procedures.",
-    icon: "✨"
-  }, {
-    title: "Orthodontics",
-    description: "Straighten your teeth with braces, clear aligners, and orthodontic treatments.",
-    icon: "🦷"
-  }, {
-    title: "Emergency Care",
-    description: "Immediate dental care for urgent situations and dental emergencies.",
-    icon: "🚨"
-  }];
+  const services = [
+    {
+      title: "General Dentistry",
+      description: "Comprehensive oral health care including cleanings, fillings, and preventive treatments.",
+      icon: "🦷"
+    }, {
+      title: "Cosmetic Dentistry",
+      description: "Enhance your smile with veneers, whitening, and aesthetic dental procedures.",
+      icon: "✨"
+    }, {
+      title: "Orthodontics",
+      description: "Straighten your teeth with braces, clear aligners, and orthodontic treatments.",
+      icon: "🦷"
+    }, {
+      title: "Emergency Care",
+      description: "Immediate dental care for urgent situations and dental emergencies.",
+      icon: "🚨"
+    }
+  ];
 
   return <div className="min-h-screen bg-white">
       <Header onBookNow={handleBookingClick} />
@@ -52,7 +53,7 @@ const Index = () => {
           <p className="text-xl md:text-2xl mb-8 opacity-90 max-w-3xl mx-auto">Looking for a gentle &amp; effective dental experience? Don't hesitate to visit us. We're committed to providing you with healthy, confident smile.</p>
           <Button 
             size="lg" 
-            className={`bg-white text-primary hover:bg-gray-100 text-lg px-8 py-4 rounded-full transform hover:scale-105 transition-all duration-300 animate-bounce-gentle ${
+            className={`bg-white text-primary hover:bg-gray-100 text-lg px-8 py-4 rounded-full transform hover:scale-105 transition-all duration-300 animate-zoom-gentle ${
               isButtonHighlighted ? 'ring-4 ring-blue-300 ring-opacity-75 shadow-lg scale-110' : ''
             }`}
             onClick={handleBookingClick}
@@ -157,7 +158,7 @@ const Index = () => {
           <p className="text-xl mb-8 opacity-90">
             Take the first step towards a healthier, more beautiful smile today.
           </p>
-          <Button size="lg" className="bg-white text-primary hover:bg-gray-100 text-lg px-8 py-4 rounded-full animate-bounce-gentle" onClick={handleBookingClick}>
+          <Button size="lg" className="bg-white text-primary hover:bg-gray-100 text-lg px-8 py-4 rounded-full animate-zoom-gentle" onClick={handleBookingClick}>
             <CalendarIcon className="mr-2 h-5 w-5" />
             Book Now - It's Easy!
           </Button>
