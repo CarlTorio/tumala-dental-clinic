@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
@@ -8,12 +7,10 @@ import { CalendarIcon, ClockIcon, UserIcon, CheckIcon, ArrowLeftIcon } from 'luc
 import AppointmentCalendar from '@/components/AppointmentCalendar';
 import PatientForm from '@/components/PatientForm';
 import BookingConfirmation from '@/components/BookingConfirmation';
-
 interface BookingModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
-
 export interface AppointmentData {
   date: Date | null;
   time: string;
@@ -28,7 +25,6 @@ export interface AppointmentData {
     insurance: string;
   };
 }
-
 const BookingModal = ({
   isOpen,
   onClose
@@ -48,7 +44,6 @@ const BookingModal = ({
       insurance: ''
     }
   });
-
   const handleDateTimeSelect = (date: Date, time: string) => {
     setAppointmentData(prev => ({
       ...prev,
@@ -57,11 +52,9 @@ const BookingModal = ({
     }));
     setCurrentStep(1.5); // Go to confirmation step
   };
-
   const handleTimeConfirm = () => {
     setCurrentStep(2); // Go to patient information
   };
-
   const handlePatientInfoSubmit = (patientInfo: AppointmentData['patientInfo']) => {
     setAppointmentData(prev => ({
       ...prev,
@@ -69,7 +62,6 @@ const BookingModal = ({
     }));
     setCurrentStep(3);
   };
-
   const handleClose = () => {
     setCurrentStep(1);
     setAppointmentData({
@@ -88,7 +80,6 @@ const BookingModal = ({
     });
     onClose();
   };
-
   const formatTimeSlot = (time: string) => {
     const [hour, minute] = time.split(':');
     const hourNum = parseInt(hour);
@@ -96,7 +87,6 @@ const BookingModal = ({
     const displayHour = hourNum > 12 ? hourNum - 12 : hourNum === 0 ? 12 : hourNum;
     return `${displayHour}:${minute} ${ampm}`;
   };
-
   const steps = [{
     number: 1,
     title: 'Select Date & Time',
@@ -110,9 +100,7 @@ const BookingModal = ({
     title: 'Confirmation',
     icon: CheckIcon
   }];
-
-  return (
-    <Dialog open={isOpen} onOpenChange={handleClose}>
+  return <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto p-4 sm:p-6">
         <DialogHeader>
           <DialogTitle className="text-xl sm:text-2xl font-bold text-primary text-center">
@@ -121,47 +109,30 @@ const BookingModal = ({
           
           {/* Progress Steps */}
           <div className="flex justify-center space-x-2 sm:space-x-8 mt-4 sm:mt-6 overflow-x-auto pb-2">
-            {steps.map(step => (
-              <div key={step.number} className="flex items-center space-x-1 sm:space-x-2 min-w-0 flex-shrink-0">
-                <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center ${
-                  currentStep >= step.number ? 'bg-primary text-white' : 'bg-gray-200 text-gray-500'
-                }`}>
-                  {currentStep > step.number ? (
-                    <CheckIcon className="h-3 w-3 sm:h-5 sm:w-5" />
-                  ) : (
-                    <step.icon className="h-3 w-3 sm:h-5 sm:w-5" />
-                  )}
+            {steps.map(step => <div key={step.number} className="flex items-center space-x-1 sm:space-x-2 min-w-0 flex-shrink-0">
+                <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center ${currentStep >= step.number ? 'bg-primary text-white' : 'bg-gray-200 text-gray-500'}`}>
+                  {currentStep > step.number ? <CheckIcon className="h-3 w-3 sm:h-5 sm:w-5" /> : <step.icon className="h-3 w-3 sm:h-5 sm:w-5" />}
                 </div>
-                <span className={`text-xs sm:text-sm font-medium ${
-                  currentStep >= step.number ? 'text-primary' : 'text-gray-500'
-                } hidden sm:block`}>
+                <span className={`text-xs sm:text-sm font-medium ${currentStep >= step.number ? 'text-primary' : 'text-gray-500'} hidden sm:block`}>
                   {step.title}
                 </span>
-              </div>
-            ))}
+              </div>)}
           </div>
         </DialogHeader>
 
         <div className="mt-4 sm:mt-6">
           {/* Step 1: Calendar Selection */}
-          {currentStep === 1 && (
-            <div className="space-y-4 sm:space-y-6">
+          {currentStep === 1 && <div className="space-y-4 sm:space-y-6">
               <div className="text-center">
                 <h3 className="text-base sm:text-lg font-semibold mb-2">Choose Your Preferred Date and Time</h3>
               </div>
               <AppointmentCalendar onSelect={handleDateTimeSelect} />
-            </div>
-          )}
+            </div>}
 
           {/* Step 1.5: Time Confirmation */}
-          {currentStep === 1.5 && (
-            <div className="space-y-4 sm:space-y-6">
+          {currentStep === 1.5 && <div className="space-y-4 sm:space-y-6">
               <div className="flex items-center justify-between">
-                <Button 
-                  variant="outline" 
-                  onClick={() => setCurrentStep(1)} 
-                  className="flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm px-2 sm:px-4"
-                >
+                <Button variant="outline" onClick={() => setCurrentStep(1)} className="flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm px-2 sm:px-4">
                   <ArrowLeftIcon className="h-3 w-3 sm:h-4 sm:w-4" />
                   <span className="hidden sm:inline">Back to Calendar</span>
                   <span className="sm:hidden">Back</span>
@@ -187,12 +158,12 @@ const BookingModal = ({
                         <CalendarIcon className="h-4 w-4 text-gray-500" />
                         <span className="font-medium">Date:</span>
                         <Badge variant="outline" className="text-primary">
-                          {appointmentData.date?.toLocaleDateString('en-US', { 
-                            weekday: 'long', 
-                            year: 'numeric', 
-                            month: 'long', 
-                            day: 'numeric' 
-                          })}
+                          {appointmentData.date?.toLocaleDateString('en-US', {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                      })}
                         </Badge>
                       </div>
                       <div className="flex items-center justify-center space-x-2">
@@ -208,11 +179,7 @@ const BookingModal = ({
                       <p className="text-gray-600 text-sm">
                         Please confirm your appointment time to proceed with patient information.
                       </p>
-                      <Button 
-                        onClick={handleTimeConfirm}
-                        className="w-full bg-primary hover:bg-primary/90"
-                        size="lg"
-                      >
+                      <Button onClick={handleTimeConfirm} className="w-full bg-primary hover:bg-primary/90" size="lg">
                         <CheckIcon className="mr-2 h-4 w-4" />
                         Confirm Appointment Time
                       </Button>
@@ -220,18 +187,12 @@ const BookingModal = ({
                   </CardContent>
                 </Card>
               </div>
-            </div>
-          )}
+            </div>}
 
           {/* Step 2: Patient Information */}
-          {currentStep === 2 && (
-            <div className="space-y-4 sm:space-y-6">
+          {currentStep === 2 && <div className="space-y-4 sm:space-y-6">
               <div className="flex items-center justify-between">
-                <Button 
-                  variant="outline" 
-                  onClick={() => setCurrentStep(1.5)} 
-                  className="flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm px-2 sm:px-4"
-                >
+                <Button variant="outline" onClick={() => setCurrentStep(1.5)} className="flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm px-2 sm:px-4">
                   <ArrowLeftIcon className="h-3 w-3 sm:h-4 sm:w-4" />
                   <span className="hidden sm:inline">Back to Confirmation</span>
                   <span className="sm:hidden">Back</span>
@@ -247,35 +208,26 @@ const BookingModal = ({
               </div>
               
               <PatientForm onSubmit={handlePatientInfoSubmit} initialData={appointmentData.patientInfo} />
-            </div>
-          )}
+            </div>}
 
           {/* Step 3: Confirmation */}
-          {currentStep === 3 && (
-            <div className="space-y-4 sm:space-y-6">
+          {currentStep === 3 && <div className="space-y-4 sm:space-y-6">
               <div className="flex items-center justify-between">
-                <Button 
-                  variant="outline" 
-                  onClick={() => setCurrentStep(2)} 
-                  className="flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm px-2 sm:px-4"
-                >
+                <Button variant="outline" onClick={() => setCurrentStep(2)} className="flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm px-2 sm:px-4">
                   <ArrowLeftIcon className="h-3 w-3 sm:h-4 sm:w-4" />
                   <span className="hidden sm:inline">Back to Form</span>
                   <span className="sm:hidden">Back</span>
                 </Button>
                 <div className="text-center">
-                  <h3 className="text-base sm:text-lg font-semibold text-green-600">Appointment Confirmed!</h3>
+                  
                 </div>
                 <div></div>
               </div>
               
               <BookingConfirmation appointmentData={appointmentData} onClose={handleClose} />
-            </div>
-          )}
+            </div>}
         </div>
       </DialogContent>
-    </Dialog>
-  );
+    </Dialog>;
 };
-
 export default BookingModal;
