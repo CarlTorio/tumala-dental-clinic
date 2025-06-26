@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -31,14 +32,12 @@ const Index = () => {
       <Header onBookNow={() => setIsBookingOpen(true)} />
       
       {/* Hero Section */}
-      <section className="relative dental-gradient text-white py-20 px-4 overflow-hidden">
-        {/* Circular gradient overlay */}
-        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-gradient-radial from-white/30 via-white/15 to-transparent rounded-full -translate-x-1/2 -translate-y-1/4 blur-2xl"></div>
-        <div className="container mx-auto text-center relative z-10">
-          <h1 className="text-5xl md:text-6xl font-bold mb-6 animate-fade-in drop-shadow-lg">
+      <section className="relative dental-gradient text-white py-20 px-4">
+        <div className="container mx-auto text-center">
+          <h1 className="text-5xl md:text-6xl font-bold mb-6 animate-fade-in">
             Your Perfect Smile Starts Here
           </h1>
-          <p className="text-xl md:text-2xl mb-8 opacity-90 max-w-3xl mx-auto drop-shadow-md">Looking for a gentle &amp; effective dental experience? Don't hesitate to visit us. We're committed to providing you with healthy, confident smile.</p>
+          <p className="text-xl md:text-2xl mb-8 opacity-90 max-w-3xl mx-auto">Looking for a gentle &amp; effective dental experience? Don't hesitate to visit us. We're committed to providing you with healthy, confident smile.</p>
           <Button size="lg" className="bg-white text-primary hover:bg-gray-100 text-lg px-8 py-4 rounded-full transform hover:scale-105 transition-all duration-300" onClick={() => setIsBookingOpen(true)}>
             <CalendarIcon className="mr-2 h-5 w-5" />
             Book Your Appointment
