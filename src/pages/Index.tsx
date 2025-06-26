@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -61,15 +60,10 @@ const Index = () => {
             Your Perfect Smile Starts Here
           </h1>
           <p className="text-xl md:text-2xl mb-8 opacity-90 max-w-3xl mx-auto">Looking for a gentle &amp; effective dental experience? Don't hesitate to visit us. We're committed to providing you with healthy, confident smile.</p>
-          <div className="relative inline-block">
-            <Button size="lg" className={`bg-white text-primary hover:bg-gray-100 text-lg px-8 py-4 rounded-full transform hover:scale-105 transition-all duration-700 animate-zoom-gentle ${isButtonHighlighted ? 'ring-4 ring-blue-300 ring-opacity-75 shadow-lg scale-110' : ''}`} onClick={handleBookingClick}>
-              <CalendarIcon className="mr-2 h-5 w-5" />
-              Book Your Appointment
-            </Button>
-            <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 text-white text-sm animate-pulse-gentle hidden md:block">
-              👆 Click here
-            </div>
-          </div>
+          <Button size="lg" className={`bg-white text-primary hover:bg-gray-100 text-lg px-8 py-4 rounded-full transform hover:scale-105 transition-all duration-700 animate-zoom-gentle ${isButtonHighlighted ? 'ring-4 ring-blue-300 ring-opacity-75 shadow-lg scale-110' : ''}`} onClick={handleBookingClick}>
+            <CalendarIcon className="mr-2 h-5 w-5" />
+            Book Your Appointment
+          </Button>
         </div>
       </section>
 
@@ -171,15 +165,10 @@ const Index = () => {
           <p className="text-xl mb-8 opacity-90">
             Take the first step towards a healthier, more beautiful smile today.
           </p>
-          <div className="relative inline-block">
-            <Button size="lg" className={`bg-white text-primary hover:bg-gray-100 text-lg px-8 py-4 rounded-full transform hover:scale-105 transition-all duration-700 animate-zoom-gentle ${isCtaButtonHighlighted ? 'ring-4 ring-blue-300 ring-opacity-75 shadow-lg scale-110' : ''}`} onClick={handleCtaBookingClick}>
-              <CalendarIcon className="mr-2 h-5 w-5" />
-              Book Now - It's Easy!
-            </Button>
-            <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 text-white text-sm animate-pulse-gentle">
-              👆 Click here
-            </div>
-          </div>
+          <Button size="lg" className={`bg-white text-primary hover:bg-gray-100 text-lg px-8 py-4 rounded-full transform hover:scale-105 transition-all duration-700 animate-zoom-gentle ${isCtaButtonHighlighted ? 'ring-4 ring-blue-300 ring-opacity-75 shadow-lg scale-110' : ''}`} onClick={handleCtaBookingClick}>
+            <CalendarIcon className="mr-2 h-5 w-5" />
+            Book Now - It's Easy!
+          </Button>
         </div>
       </section>
 
