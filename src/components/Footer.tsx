@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { MapPinIcon, PhoneIcon, MailIcon, ClockIcon, Facebook } from 'lucide-react';
 const Footer = () => {
@@ -59,7 +60,7 @@ Brgy. Malabanias, Angeles City, Pampanga</p>
             <div className="space-y-2 text-gray-400">
               <div className="flex justify-between">
                 <span>Monday - Friday</span>
-                <span>Monday - Saturday</span>
+                <span>9:00 AM - 7:00 PM</span>
               </div>
               <div className="flex justify-between">
                 <span>Saturday - Sunday</span>
@@ -85,9 +86,10 @@ Brgy. Malabanias, Angeles City, Pampanga</p>
               <li>General Dentistry</li>
               <li>TMJ Practitioner</li>
               <li>Orthodontics</li>
-              
-              
-              
+              <li>Pediatric Dentistry</li>
+              <li>Radiograph (XRAY)</li>
+              <li>Prosthodontics</li>
+              <li>Esthetics</li>
             </ul>
           </div>
         </div>
