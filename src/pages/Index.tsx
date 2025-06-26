@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -52,30 +51,16 @@ const Index = () => {
             Your Perfect Smile Starts Here
           </h1>
           <p className="text-xl md:text-2xl mb-8 opacity-90 max-w-3xl mx-auto">Looking for a gentle &amp; effective dental experience? Don't hesitate to visit us. We're committed to providing you with healthy, confident smile.</p>
-          
-          {/* Click Here Indicator */}
-          <div className="mb-4 animate-bounce">
-            <span className="text-white text-lg font-semibold">👆 Click Here 👆</span>
-          </div>
-          
           <Button 
             size="lg" 
-            className={`bg-white text-primary hover:bg-gray-100 text-lg px-8 py-4 rounded-full transform hover:scale-105 transition-all duration-300 ${
+            className={`bg-white text-primary hover:bg-gray-100 text-lg px-8 py-4 rounded-full transform hover:scale-105 transition-all duration-300 animate-zoom-gentle ${
               isButtonHighlighted ? 'ring-4 ring-blue-300 ring-opacity-75 shadow-lg scale-110' : ''
             }`}
-            style={{
-              animation: 'zoom-gentle 6s ease-in-out infinite'
-            }}
             onClick={handleBookingClick}
           >
             <CalendarIcon className="mr-2 h-5 w-5" />
             Book Your Appointment
           </Button>
-          
-          {/* Additional Click Indicator */}
-          <div className="mt-4 text-white/80 text-sm animate-pulse">
-            ✨ Easy Online Booking ✨
-          </div>
         </div>
       </section>
 
@@ -173,17 +158,7 @@ const Index = () => {
           <p className="text-xl mb-8 opacity-90">
             Take the first step towards a healthier, more beautiful smile today.
           </p>
-          <div className="mb-4">
-            <span className="text-white text-lg font-semibold animate-bounce">👇 Book Now 👇</span>
-          </div>
-          <Button 
-            size="lg" 
-            className="bg-white text-primary hover:bg-gray-100 text-lg px-8 py-4 rounded-full" 
-            style={{
-              animation: 'zoom-gentle 6s ease-in-out infinite'
-            }}
-            onClick={handleBookingClick}
-          >
+          <Button size="lg" className="bg-white text-primary hover:bg-gray-100 text-lg px-8 py-4 rounded-full animate-zoom-gentle" onClick={handleBookingClick}>
             <CalendarIcon className="mr-2 h-5 w-5" />
             Book Now - It's Easy!
           </Button>
