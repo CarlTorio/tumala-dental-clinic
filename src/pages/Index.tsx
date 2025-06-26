@@ -6,8 +6,21 @@ import BookingModal from '@/components/BookingModal';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import DentistLogin from '@/components/DentistLogin';
+
 const Index = () => {
   const [isBookingOpen, setIsBookingOpen] = useState(false);
+  const [isButtonHighlighted, setIsButtonHighlighted] = useState(false);
+
+  const handleBookingClick = () => {
+    setIsButtonHighlighted(true);
+    setIsBookingOpen(true);
+    
+    // Remove highlight after animation
+    setTimeout(() => {
+      setIsButtonHighlighted(false);
+    }, 200);
+  };
+
   const services = [{
     title: "General Dentistry",
     description: "Comprehensive oral health care including cleanings, fillings, and preventive treatments.",
@@ -25,8 +38,9 @@ const Index = () => {
     description: "Immediate dental care for urgent situations and dental emergencies.",
     icon: "🚨"
   }];
+
   return <div className="min-h-screen bg-white">
-      <Header onBookNow={() => setIsBookingOpen(true)} />
+      <Header onBookNow={handleBookingClick} />
       
       {/* Hero Section */}
       <section className="relative dental-gradient text-white py-20 px-4">
@@ -35,7 +49,13 @@ const Index = () => {
             Your Perfect Smile Starts Here
           </h1>
           <p className="text-xl md:text-2xl mb-8 opacity-90 max-w-3xl mx-auto">Looking for a gentle &amp; effective dental experience? Don't hesitate to visit us. We're committed to providing you with healthy, confident smile.</p>
-          <Button size="lg" className="bg-white text-primary hover:bg-gray-100 text-lg px-8 py-4 rounded-full transform hover:scale-105 transition-all duration-300" onClick={() => setIsBookingOpen(true)}>
+          <Button 
+            size="lg" 
+            className={`bg-white text-primary hover:bg-gray-100 text-lg px-8 py-4 rounded-full transform hover:scale-105 transition-all duration-300 ${
+              isButtonHighlighted ? 'ring-4 ring-blue-300 ring-opacity-75 shadow-lg scale-110' : ''
+            }`}
+            onClick={handleBookingClick}
+          >
             <CalendarIcon className="mr-2 h-5 w-5" />
             Book Your Appointment
           </Button>
@@ -136,7 +156,7 @@ const Index = () => {
           <p className="text-xl mb-8 opacity-90">
             Take the first step towards a healthier, more beautiful smile today.
           </p>
-          <Button size="lg" className="bg-white text-primary hover:bg-gray-100 text-lg px-8 py-4 rounded-full" onClick={() => setIsBookingOpen(true)}>
+          <Button size="lg" className="bg-white text-primary hover:bg-gray-100 text-lg px-8 py-4 rounded-full" onClick={handleBookingClick}>
             <CalendarIcon className="mr-2 h-5 w-5" />
             Book Now - It's Easy!
           </Button>
@@ -156,4 +176,5 @@ const Index = () => {
       <BookingModal isOpen={isBookingOpen} onClose={() => setIsBookingOpen(false)} />
     </div>;
 };
+
 export default Index;
