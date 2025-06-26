@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -7,22 +6,39 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { UserIcon, LockIcon, CalendarIcon, CheckIcon, ClockIcon, RefreshCwIcon } from 'lucide-react';
+import { Checkbox } from '@/components/ui/checkbox';
+import { UserIcon, LockIcon, CalendarIcon, CheckIcon, ClockIcon, RefreshCwIcon, DeviceIcon } from 'lucide-react';
 import { getAppointments, updateAppointmentStatus, type StoredAppointment } from '@/utils/appointmentStorage';
 
-const DentistLogin = () => {
+interface DentistLoginProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const DentistLogin = ({ isOpen, onClose }: DentistLoginProps) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [isOpen, setIsOpen] = useState(false);
   const [appointments, setAppointments] = useState<StoredAppointment[]>([]);
+  const [rememberDevice, setRememberDevice] = useState(false);
+  const [isDeviceRemembered, setIsDeviceRemembered] = useState(false);
 
   useEffect(() => {
-    if (isLoggedIn) {
+    // Check if device is remembered on component mount
+    const deviceRemembered = localStorage.getItem('dentist_device_remembered');
+    if (deviceRemembered === 'true') {
+      setIsDeviceRemembered(true);
+      setIsLoggedIn(true);
       loadAppointments();
     }
-  }, [isLoggedIn]);
+  }, []);
+
+  useEffect(() => {
+    if (isLoggedIn && !isDeviceRemembered) {
+      loadAppointments();
+    }
+  }, [isLoggedIn, isDeviceRemembered]);
 
   const loadAppointments = () => {
     const stored = getAppointments();
@@ -35,6 +51,13 @@ const DentistLogin = () => {
     if (username === 'DENTIST' && password === 'APPOINTMENTS') {
       setIsLoggedIn(true);
       setError('');
+      
+      // Save device if remember is checked
+      if (rememberDevice) {
+        localStorage.setItem('dentist_device_remembered', 'true');
+        setIsDeviceRemembered(true);
+      }
+      
       loadAppointments();
     } else {
       setError('Invalid username or password');
@@ -46,7 +69,14 @@ const DentistLogin = () => {
     setUsername('');
     setPassword('');
     setError('');
-    setIsOpen(false);
+    setRememberDevice(false);
+    onClose();
+  };
+
+  const handleForgetDevice = () => {
+    localStorage.removeItem('dentist_device_remembered');
+    setIsDeviceRemembered(false);
+    handleLogout();
   };
 
   const handleStatusUpdate = (id: string, newStatus: 'Confirmed' | 'Pending') => {
@@ -58,17 +88,11 @@ const DentistLogin = () => {
   const confirmedAppointments = appointments.filter(apt => apt.status === 'Confirmed');
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        <Button variant="outline" className="bg-primary text-white hover:bg-primary/90">
-          <UserIcon className="mr-2 h-4 w-4" />
-          Dentist Login
-        </Button>
-      </DialogTrigger>
+    <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-6xl max-h-[80vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-primary">
-            {isLoggedIn ? 'Patient Appointments Dashboard' : 'Dentist Login'}
+            {isLoggedIn ? 'Patient Appointments Dashboard' : 'Healthcare Professional Access'}
           </DialogTitle>
         </DialogHeader>
         
@@ -105,6 +129,18 @@ const DentistLogin = () => {
                 />
               </div>
             </div>
+
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="remember-device"
+                checked={rememberDevice}
+                onCheckedChange={(checked) => setRememberDevice(checked as boolean)}
+              />
+              <Label htmlFor="remember-device" className="text-sm flex items-center cursor-pointer">
+                <DeviceIcon className="h-4 w-4 mr-1" />
+                Remember this device
+              </Label>
+            </div>
             
             {error && (
               <p className="text-red-500 text-sm">{error}</p>
@@ -124,9 +160,17 @@ const DentistLogin = () => {
                   Refresh
                 </Button>
               </div>
-              <Button onClick={handleLogout} variant="outline">
-                Logout
-              </Button>
+              <div className="flex items-center space-x-2">
+                {isDeviceRemembered && (
+                  <Button onClick={handleForgetDevice} variant="outline" size="sm">
+                    <DeviceIcon className="h-4 w-4 mr-2" />
+                    Forget Device
+                  </Button>
+                )}
+                <Button onClick={handleLogout} variant="outline">
+                  Logout
+                </Button>
+              </div>
             </div>
             
             <Tabs defaultValue="all" className="w-full">

@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { CalendarIcon, ClockIcon, PhoneIcon, MailIcon, MapPinIcon } from 'lucide-react';
@@ -6,16 +7,19 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import DentistLogin from '@/components/DentistLogin';
 import ServiceCard from '@/components/ServiceCard';
+import HiddenAccessButton from '@/components/HiddenAccessButton';
 import { useTypingAnimation } from '@/hooks/useTypingAnimation';
 
 const Index = () => {
   const [isBookingOpen, setIsBookingOpen] = useState(false);
+  const [isDentistLoginOpen, setIsDentistLoginOpen] = useState(false);
   const [isButtonHighlighted, setIsButtonHighlighted] = useState(false);
   const [isCtaButtonHighlighted, setIsCtaButtonHighlighted] = useState(false);
   const {
     displayedText,
     isComplete
   } = useTypingAnimation("Your Perfect Smile Starts Here", 80, 0);
+  
   const handleBookingClick = () => {
     setIsButtonHighlighted(true);
     setIsBookingOpen(true);
@@ -25,6 +29,7 @@ const Index = () => {
       setIsButtonHighlighted(false);
     }, 400);
   };
+  
   const handleCtaBookingClick = () => {
     setIsCtaButtonHighlighted(true);
     setIsBookingOpen(true);
@@ -34,9 +39,15 @@ const Index = () => {
       setIsCtaButtonHighlighted(false);
     }, 400);
   };
+  
   const handleMapClick = () => {
     window.open('https://maps.app.goo.gl/Mnej5iLxeQNfKZur7', '_blank');
   };
+
+  const handleHiddenAccess = () => {
+    setIsDentistLoginOpen(true);
+  };
+  
   const services = [{
     title: "General Dentistry",
     description: "Comprehensive oral health care including cleanings, fillings, and preventive treatments.",
@@ -88,7 +99,6 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Video Section */}
       <section className="py-16 px-4 dental-light-bg">
         <div className="container mx-auto">
           <div className="max-w-4xl mx-auto">
@@ -104,7 +114,6 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Services Section */}
       <section id="services-area" className="py-16 px-4 dental-light-bg">
         <div className="container mx-auto">
           <div className="text-center mb-12">
@@ -114,12 +123,10 @@ const Index = () => {
             </p>
           </div>
           
-          {/* Desktop Layout - Center Esthetics */}
           <div className="hidden md:block">
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
               {services.slice(0, 6).map((service, index) => <ServiceCard key={index} service={service} index={index} />)}
             </div>
-            {/* Center the Esthetics service */}
             <div className="flex justify-center">
               <div className="w-full max-w-sm">
                 <ServiceCard service={services[6]} index={6} />
@@ -127,7 +134,6 @@ const Index = () => {
             </div>
           </div>
 
-          {/* Mobile Layout - All services in grid with animations */}
           <div className="block md:hidden">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               {services.map((service, index) => <ServiceCard key={index} service={service} index={index} />)}
@@ -136,7 +142,6 @@ const Index = () => {
         </div>
       </section>
 
-      {/* About Section (Clinic Information) */}
       <section id="about-area" className="py-16 px-4">
         <div className="container mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -183,7 +188,6 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Contact Section (Final CTA) */}
       <section id="contact-area" className="py-16 px-4 dental-gradient text-white text-center">
         <div className="container mx-auto">
           <h2 className="text-4xl font-bold mb-4">Ready to Schedule Your Visit?</h2>
@@ -199,15 +203,18 @@ const Index = () => {
 
       <Footer />
       
-      {/* Dentist Login Section - Moved below footer */}
-      <section className="py-8 px-4 bg-gray-50 border-t">
+      {/* Updated Healthcare Professional Access Section - Now matches footer styling */}
+      <section className="py-8 px-4 bg-gray-900 text-white border-t border-gray-700">
         <div className="container mx-auto text-center">
-          <h3 className="text-lg font-semibold text-gray-700 mb-4">Healthcare Professional Access</h3>
-          <DentistLogin />
+          <div className="flex items-center justify-center space-x-4">
+            <h3 className="text-lg font-semibold text-gray-300">Healthcare Professional Access</h3>
+            <HiddenAccessButton onDoubleClick={handleHiddenAccess} />
+          </div>
         </div>
       </section>
       
       <BookingModal isOpen={isBookingOpen} onClose={() => setIsBookingOpen(false)} />
+      <DentistLogin isOpen={isDentistLoginOpen} onClose={() => setIsDentistLoginOpen(false)} />
     </div>
   );
 };
