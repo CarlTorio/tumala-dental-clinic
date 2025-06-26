@@ -1,5 +1,6 @@
+
 import React from 'react';
-import { MapPinIcon, PhoneIcon, MailIcon, ClockIcon } from 'lucide-react';
+import { MapPinIcon, PhoneIcon, MailIcon, ClockIcon, Facebook } from 'lucide-react';
 const Footer = () => {
   return <footer className="bg-gray-900 text-white py-12">
       <div className="container mx-auto px-4">
@@ -15,8 +16,14 @@ const Footer = () => {
             <p className="text-gray-400 mb-4">Healthy teeth, Happy life! 
 We love helping you to achieve a bright and confident smile every day. </p>
             <div className="flex space-x-4">
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                Facebook
+              <a 
+                href="https://www.facebook.com/profile.php?id=61573834983240" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex items-center space-x-2 text-gray-400 hover:text-white transition-colors"
+              >
+                <Facebook className="h-5 w-5" />
+                <span>Facebook</span>
               </a>
               <a href="#" className="text-gray-400 hover:text-white transition-colors">
                 Instagram
