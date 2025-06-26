@@ -7,8 +7,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Checkbox } from '@/components/ui/checkbox';
-import { UserIcon, LockIcon, CalendarIcon, CheckIcon, ClockIcon, RefreshCwIcon, MonitorIcon } from 'lucide-react';
+import { UserIcon, LockIcon, CalendarIcon, CheckIcon, ClockIcon, RefreshCwIcon, MonitorIcon, BellIcon } from 'lucide-react';
 import { getAppointments, updateAppointmentStatus, type StoredAppointment } from '@/utils/appointmentStorage';
+import { useToast } from '@/hooks/use-toast';
 
 interface DentistLoginProps {
   isOpen: boolean;
@@ -23,6 +24,7 @@ const DentistLogin = ({ isOpen, onClose }: DentistLoginProps) => {
   const [appointments, setAppointments] = useState<StoredAppointment[]>([]);
   const [rememberDevice, setRememberDevice] = useState(false);
   const [isDeviceRemembered, setIsDeviceRemembered] = useState(false);
+  const { toast } = useToast();
 
   useEffect(() => {
     // Check if device is remembered on component mount
@@ -84,9 +86,38 @@ const DentistLogin = ({ isOpen, onClose }: DentistLoginProps) => {
     loadAppointments();
   };
 
-  // Filter appointments
-  const pendingAppointments = appointments.filter(apt => apt.status === 'Pending');
-  const doneAppointments = appointments.filter(apt => apt.status === 'Done');
+  const handleNotifyPatient = (appointment: StoredAppointment) => {
+    // For now, this will just show a toast notification
+    // In a real implementation, this would send an email
+    toast({
+      title: "Notification Sent",
+      description: `Reminder sent to ${appointment.patientName} at ${appointment.email}`,
+    });
+    console.log('Notifying patient:', appointment);
+  };
+
+  // Filter and sort appointments
+  const pendingAppointments = appointments
+    .filter(apt => apt.status === 'Pending')
+    .sort((a, b) => {
+      // Sort by date first, then by time (nearest appointments first)
+      const dateComparison = new Date(a.date).getTime() - new Date(b.date).getTime();
+      if (dateComparison !== 0) return dateComparison;
+      
+      // If same date, sort by time
+      const timeToMinutes = (time: string) => {
+        const [hours, minutes] = time.split(':').map(Number);
+        return hours * 60 + minutes;
+      };
+      return timeToMinutes(a.time) - timeToMinutes(b.time);
+    });
+  
+  const doneAppointments = appointments
+    .filter(apt => apt.status === 'Done')
+    .sort((a, b) => {
+      // Sort by bookedAt timestamp (latest done first)
+      return new Date(b.bookedAt).getTime() - new Date(a.bookedAt).getTime();
+    });
   
   // Filter today's pending appointments and sort by time
   const today = new Date().toLocaleDateString();
@@ -405,6 +436,15 @@ const DentistLogin = ({ isOpen, onClose }: DentistLoginProps) => {
                               >
                                 <CheckIcon className="h-4 w-4 mr-1" />
                                 Mark Done
+                              </Button>
+                              <Button
+                                onClick={() => handleNotifyPatient(appointment)}
+                                size="sm"
+                                variant="outline"
+                                className="border-blue-500 text-blue-600 hover:bg-blue-50"
+                              >
+                                <BellIcon className="h-4 w-4 mr-1" />
+                                Notify
                               </Button>
                             </div>
                           </CardTitle>
