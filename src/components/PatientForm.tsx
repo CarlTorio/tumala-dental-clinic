@@ -157,7 +157,7 @@ const PatientForm = ({ onSubmit, initialData }: PatientFormProps) => {
                 value={formData.email}
                 onChange={(e) => handleInputChange('email', e.target.value)}
                 className={errors.email ? 'border-red-500' : ''}
-                placeholder="your.email@example.com"
+                placeholder="Enter your email address"
               />
               {errors.email && (
                 <p className="text-red-500 text-sm mt-1">{errors.email}</p>
@@ -172,7 +172,7 @@ const PatientForm = ({ onSubmit, initialData }: PatientFormProps) => {
                 value={formData.phone}
                 onChange={(e) => handleInputChange('phone', e.target.value)}
                 className={errors.phone ? 'border-red-500' : ''}
-                placeholder="(555) 123-4567"
+                placeholder="Enter your phone number"
               />
               {errors.phone && (
                 <p className="text-red-500 text-sm mt-1">{errors.phone}</p>
