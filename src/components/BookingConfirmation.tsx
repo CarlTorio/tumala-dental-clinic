@@ -1,17 +1,17 @@
-
 import React, { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { CheckCircleIcon, CalendarIcon, ClockIcon, UserIcon, MailIcon, PhoneIcon } from 'lucide-react';
 import { AppointmentData } from '@/components/BookingModal';
 import { saveAppointment } from '@/utils/appointmentStorage';
-
 interface BookingConfirmationProps {
   appointmentData: AppointmentData;
   onClose: () => void;
 }
-
-const BookingConfirmation = ({ appointmentData, onClose }: BookingConfirmationProps) => {
+const BookingConfirmation = ({
+  appointmentData,
+  onClose
+}: BookingConfirmationProps) => {
   useEffect(() => {
     // Save the appointment when confirmation is shown
     if (appointmentData.date && appointmentData.time && appointmentData.patientInfo.fullName) {
@@ -19,9 +19,7 @@ const BookingConfirmation = ({ appointmentData, onClose }: BookingConfirmationPr
       console.log('Appointment saved to storage:', appointmentData);
     }
   }, [appointmentData]);
-
-  return (
-    <div className="space-y-6">
+  return <div className="space-y-6">
       <div className="text-center">
         <CheckCircleIcon className="h-16 w-16 text-green-500 mx-auto mb-4" />
         <h2 className="text-2xl font-bold text-green-600 mb-2">Appointment Confirmed!</h2>
@@ -74,12 +72,10 @@ const BookingConfirmation = ({ appointmentData, onClose }: BookingConfirmationPr
             </div>
           </div>
           
-          {appointmentData.patientInfo.specialNotes && (
-            <div className="border-t pt-4">
+          {appointmentData.patientInfo.specialNotes && <div className="border-t pt-4">
               <span className="font-medium">Special Notes:</span>
               <p className="text-gray-600 mt-1">{appointmentData.patientInfo.specialNotes}</p>
-            </div>
-          )}
+            </div>}
         </CardContent>
       </Card>
 
@@ -88,21 +84,16 @@ const BookingConfirmation = ({ appointmentData, onClose }: BookingConfirmationPr
         <ul className="text-blue-700 space-y-1 text-sm">
           <li>• You will receive a confirmation email with appointment details</li>
           <li>• Please arrive 15 minutes early for your appointment</li>
-          <li>• Bring your insurance card and a valid ID</li>
+          
           <li>• If you need to reschedule, please call us at least 24 hours in advance</li>
         </ul>
       </div>
 
       <div className="flex flex-col sm:flex-row gap-3 justify-center">
-        <Button 
-          onClick={onClose}
-          className="bg-primary hover:bg-primary/90"
-        >
+        <Button onClick={onClose} className="bg-primary hover:bg-primary/90">
           Close
         </Button>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default BookingConfirmation;
