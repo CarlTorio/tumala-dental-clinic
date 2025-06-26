@@ -1,15 +1,15 @@
-
 export const dentalConcerns = [
-  'Routine Cleaning',
-  'Tooth Pain',
-  'Cosmetic Consultation',
-  'Orthodontic Consultation',
-  'Emergency Care',
-  'Filling/Restoration',
-  'Crown/Bridge',
-  'Root Canal',
-  'Gum Disease Treatment',
-  'Other'
+  'Consultation',
+  'Tooth Extraction (Bunot)',
+  'Tooth Restoration (Pasta)',
+  'Oral Prophylaxis (Cleaning)',
+  'Braces & Retainers',
+  'Teeth Whitening',
+  'Root Canal Treatment',
+  'Jacket Crown',
+  'Periapical Xray',
+  'TMJ Treatment',
+  'Others (Iba pa.)'
 ];
 
 export const insuranceProviders = [
