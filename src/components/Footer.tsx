@@ -26,10 +26,12 @@ We love helping you to achieve a bright and confident smile every day. </p>
                 <span>Facebook</span>
               </a>
               <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                Instagram
+                <span className="hidden md:inline">Instagram</span>
+                <span className="md:hidden">IG</span>
               </a>
               <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                Google
+                <span className="hidden md:inline">Google</span>
+                <span className="md:hidden">G</span>
               </a>
             </div>
           </div>
@@ -48,7 +50,7 @@ Brgy. Malabanias, Angeles City, Pampanga</p>
               </div>
               <div className="flex items-center space-x-2">
                 <PhoneIcon className="h-5 w-5 text-primary" />
-                <span className="text-gray-400">0999 464 8865</span>
+                <span className="text-gray-400">09994648856</span>
               </div>
               <div className="flex items-center space-x-2">
                 <MailIcon className="h-5 w-5 text-primary" />
@@ -76,7 +78,7 @@ Brgy. Malabanias, Angeles City, Pampanga</p>
               <div className="pt-2 border-t border-gray-700">
                 <div className="flex items-center space-x-2 text-red-400">
                   <PhoneIcon className="h-4 w-4" />
-                  <span className="text-sm">Emergency: 0999 464 8865</span>
+                  <span className="text-sm">Emergency: 09994648856</span>
                 </div>
               </div>
             </div>

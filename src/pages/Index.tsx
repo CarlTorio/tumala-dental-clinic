@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -10,6 +11,8 @@ import DentistLogin from '@/components/DentistLogin';
 const Index = () => {
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [isButtonHighlighted, setIsButtonHighlighted] = useState(false);
+  const [isCtaButtonHighlighted, setIsCtaButtonHighlighted] = useState(false);
+  
   const handleBookingClick = () => {
     setIsButtonHighlighted(true);
     setIsBookingOpen(true);
@@ -19,22 +22,35 @@ const Index = () => {
       setIsButtonHighlighted(false);
     }, 400);
   };
+
+  const handleCtaBookingClick = () => {
+    setIsCtaButtonHighlighted(true);
+    setIsBookingOpen(true);
+
+    // Remove highlight after animation
+    setTimeout(() => {
+      setIsCtaButtonHighlighted(false);
+    }, 400);
+  };
+
   const handleMapClick = () => {
     window.open('https://maps.app.goo.gl/Mnej5iLxeQNfKZur7', '_blank');
   };
+  
   const services = [{
     title: "General Dentistry",
     description: "Comprehensive oral health care including cleanings, fillings, and preventive treatments.",
     icon: "🦷"
   }, {
-    title: "Orthodontics",
-    description: "Straighten your teeth with braces, clear aligners, and orthodontic treatments.",
-    icon: "🦷"
-  }, {
     title: "TMJ-Practitioner",
     description: "Specialized treatment for temporomandibular joint disorders, jaw pain, and bite alignment issues.",
     icon: "🔧"
+  }, {
+    title: "Orthodontics",
+    description: "Straighten your teeth with braces, clear aligners, and orthodontic treatments.",
+    icon: "🦷"
   }];
+  
   return <div className="min-h-screen bg-white">
       <Header onBookNow={handleBookingClick} />
       
@@ -50,7 +66,7 @@ const Index = () => {
               <CalendarIcon className="mr-2 h-5 w-5" />
               Book Your Appointment
             </Button>
-            <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 text-white text-sm animate-pulse-gentle">
+            <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 text-white text-sm animate-pulse-gentle hidden md:block">
               👆 Click here
             </div>
           </div>
@@ -155,10 +171,15 @@ const Index = () => {
           <p className="text-xl mb-8 opacity-90">
             Take the first step towards a healthier, more beautiful smile today.
           </p>
-          <Button size="lg" className="bg-white text-primary hover:bg-gray-100 text-lg px-8 py-4 rounded-full animate-zoom-gentle" onClick={handleBookingClick}>
-            <CalendarIcon className="mr-2 h-5 w-5" />
-            Book Now - It's Easy!
-          </Button>
+          <div className="relative inline-block">
+            <Button size="lg" className={`bg-white text-primary hover:bg-gray-100 text-lg px-8 py-4 rounded-full transform hover:scale-105 transition-all duration-700 animate-zoom-gentle ${isCtaButtonHighlighted ? 'ring-4 ring-blue-300 ring-opacity-75 shadow-lg scale-110' : ''}`} onClick={handleCtaBookingClick}>
+              <CalendarIcon className="mr-2 h-5 w-5" />
+              Book Now - It's Easy!
+            </Button>
+            <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 text-white text-sm animate-pulse-gentle">
+              👆 Click here
+            </div>
+          </div>
         </div>
       </section>
 
