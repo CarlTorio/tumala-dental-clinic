@@ -58,3 +58,12 @@ export const updateAppointmentStatus = (id: string, status: 'Confirmed' | 'Pendi
   );
   localStorage.setItem('dentalAppointments', JSON.stringify(updatedAppointments));
 };
+
+export const isTimeSlotBooked = (date: Date, time: string): boolean => {
+  const appointments = getAppointments();
+  const dateKey = date.toLocaleDateString();
+  
+  return appointments.some(appointment => 
+    appointment.date === dateKey && appointment.time === time
+  );
+};

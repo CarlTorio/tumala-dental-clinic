@@ -5,7 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ClockIcon } from 'lucide-react';
-import { addDays, format, isSameDay, isToday, isFuture, isAfter, startOfDay } from 'date-fns';
+import { addDays, format, isSameDay, isToday, isFuture, isAfter, startOfDay, getDay } from 'date-fns';
+import { getAppointments } from '@/utils/appointmentStorage';
 
 interface AppointmentCalendarProps {
   onSelect: (date: Date, time: string) => void;
@@ -14,28 +15,34 @@ interface AppointmentCalendarProps {
 const AppointmentCalendar = ({ onSelect }: AppointmentCalendarProps) => {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   
-  // Generate time slots (30-minute intervals from 8 AM to 6 PM)
+  // Generate time slots (30-minute intervals from 9 AM to 7 PM)
   const timeSlots = useMemo(() => {
     const slots = [];
-    for (let hour = 8; hour < 18; hour++) {
+    for (let hour = 9; hour < 19; hour++) {
       slots.push(`${hour}:00`);
       slots.push(`${hour}:30`);
     }
     return slots;
   }, []);
 
-  // Mock booked appointments for demonstration
+  // Get actual booked appointments from storage
   const bookedSlots = useMemo(() => {
-    const today = new Date();
-    return {
-      [format(today, 'yyyy-MM-dd')]: ['9:00', '10:30', '14:00', '15:30'],
-      [format(addDays(today, 1), 'yyyy-MM-dd')]: ['8:00', '11:00', '16:00'],
-      [format(addDays(today, 2), 'yyyy-MM-dd')]: ['9:30', '13:00', '17:00']
-    };
+    const appointments = getAppointments();
+    const bookedByDate: { [key: string]: string[] } = {};
+    
+    appointments.forEach(appointment => {
+      const dateKey = appointment.date;
+      if (!bookedByDate[dateKey]) {
+        bookedByDate[dateKey] = [];
+      }
+      bookedByDate[dateKey].push(appointment.time);
+    });
+    
+    return bookedByDate;
   }, []);
 
   const isSlotBooked = (date: Date, time: string) => {
-    const dateKey = format(date, 'yyyy-MM-dd');
+    const dateKey = date.toLocaleDateString();
     return bookedSlots[dateKey]?.includes(time) || false;
   };
 
@@ -63,11 +70,13 @@ const AppointmentCalendar = ({ onSelect }: AppointmentCalendarProps) => {
     return `${displayHour}:${minute} ${ampm}`;
   };
 
-  // Disable dates that are in the past or more than 30 days in the future
+  // Disable dates that are in the past, more than 30 days in the future, or Sundays
   const disableDate = (date: Date) => {
     const today = startOfDay(new Date());
     const maxDate = addDays(today, 30);
-    return date < today || date > maxDate;
+    const dayOfWeek = getDay(date); // 0 = Sunday, 1 = Monday, etc.
+    
+    return date < today || date > maxDate || dayOfWeek === 0; // Disable Sundays
   };
 
   return (
@@ -91,6 +100,7 @@ const AppointmentCalendar = ({ onSelect }: AppointmentCalendarProps) => {
           <div className="mt-4 text-sm text-gray-600">
             <p>• Available appointments up to 30 days in advance</p>
             <p>• Select a date to view available time slots</p>
+            <p>• Office closed on Sundays</p>
           </div>
         </CardContent>
       </Card>
@@ -145,8 +155,8 @@ const AppointmentCalendar = ({ onSelect }: AppointmentCalendarProps) => {
           {selectedDate && (
             <div className="mt-4 text-xs text-gray-500 space-y-1">
               <p>• Each appointment is 30 minutes</p>
-              <p>• Office hours: 8:00 AM - 6:00 PM (Mon-Fri), 9:00 AM - 3:00 PM (Sat)</p>
-              <p>• Same-day appointments subject to availability</p>
+              <p>• Office hours: 9:00 AM - 7:00 PM (Mon-Sat)</p>
+              <p>• Closed on Sundays</p>
             </div>
           )}
         </CardContent>
