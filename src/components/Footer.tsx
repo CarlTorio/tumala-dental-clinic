@@ -1,10 +1,7 @@
-
 import React from 'react';
 import { MapPinIcon, PhoneIcon, MailIcon, ClockIcon } from 'lucide-react';
-
 const Footer = () => {
-  return (
-    <footer className="bg-gray-900 text-white py-12">
+  return <footer className="bg-gray-900 text-white py-12">
       <div className="container mx-auto px-4">
         <div className="grid md:grid-cols-4 gap-8">
           {/* Practice Info */}
@@ -38,13 +35,13 @@ const Footer = () => {
               <div className="flex items-start space-x-2">
                 <MapPinIcon className="h-5 w-5 text-primary mt-0.5" />
                 <div className="text-gray-400">
-                  <p>123 Dental Plaza, Suite 200</p>
+                  <p>4009-A Richtofen St. Hensonville Subd. , Brgy. Malabanias, Angeles City, Pampanga</p>
                   <p>Medical District, City, State 12345</p>
                 </div>
               </div>
               <div className="flex items-center space-x-2">
                 <PhoneIcon className="h-5 w-5 text-primary" />
-                <span className="text-gray-400">(555) 123-SMILE</span>
+                <span className="text-gray-400">+63 999 464 8865</span>
               </div>
               <div className="flex items-center space-x-2">
                 <MailIcon className="h-5 w-5 text-primary" />
@@ -96,8 +93,6 @@ const Footer = () => {
           <p>&copy; 2024 DentalCare Plus. All rights reserved. | HIPAA Compliant | SSL Secured</p>
         </div>
       </div>
-    </footer>
-  );
+    </footer>;
 };
-
 export default Footer;
