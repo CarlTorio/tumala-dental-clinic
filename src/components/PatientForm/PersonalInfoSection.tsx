@@ -43,13 +43,10 @@ const PersonalInfoSection = ({ formData, errors, onInputChange }: PersonalInfoSe
             <Label htmlFor="age">Age *</Label>
             <Input
               id="age"
-              type="number"
               value={formData.dateOfBirth}
               onChange={(e) => onInputChange('dateOfBirth', e.target.value)}
               className={errors.dateOfBirth ? 'border-red-500' : ''}
               placeholder="Enter your age"
-              min="1"
-              max="120"
             />
             {errors.dateOfBirth && (
               <p className="text-red-500 text-sm mt-1">{errors.dateOfBirth}</p>

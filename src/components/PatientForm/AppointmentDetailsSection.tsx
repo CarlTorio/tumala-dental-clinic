@@ -5,7 +5,6 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { dentalConcerns, insuranceProviders } from './patientFormData';
 import type { AppointmentData } from '../BookingModal';
 
@@ -50,13 +49,11 @@ const AppointmentDetailsSection = ({ formData, errors, onInputChange }: Appointm
               <SelectValue placeholder="Select your dental concern" />
             </SelectTrigger>
             <SelectContent className="z-50">
-              <ScrollArea className="h-[200px]">
-                {dentalConcerns.map((concern) => (
-                  <SelectItem key={concern} value={concern}>
-                    {concern}
-                  </SelectItem>
-                ))}
-              </ScrollArea>
+              {dentalConcerns.map((concern) => (
+                <SelectItem key={concern} value={concern}>
+                  {concern}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
           {errors.dentalConcern && (
@@ -74,13 +71,11 @@ const AppointmentDetailsSection = ({ formData, errors, onInputChange }: Appointm
               <SelectValue placeholder="Select your insurance provider" />
             </SelectTrigger>
             <SelectContent className="z-50">
-              <ScrollArea className="h-[200px]">
-                {insuranceProviders.map((provider) => (
-                  <SelectItem key={provider} value={provider}>
-                    {provider}
-                  </SelectItem>
-                ))}
-              </ScrollArea>
+              {insuranceProviders.map((provider) => (
+                <SelectItem key={provider} value={provider}>
+                  {provider}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
