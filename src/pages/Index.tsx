@@ -105,7 +105,7 @@ const Index = () => {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {services.map((service, index) => <Card key={index} className="hover:shadow-lg transition-shadow duration-300 border-0 bg-white">
                 <CardHeader className="text-center">
-                  <div className="text-4xl mb-2">{service.icon}</div>
+                  
                   <CardTitle className="text-primary">{service.title}</CardTitle>
                 </CardHeader>
                 <CardContent>
