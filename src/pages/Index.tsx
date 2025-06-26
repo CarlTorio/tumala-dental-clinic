@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -6,6 +7,7 @@ import BookingModal from '@/components/BookingModal';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import DentistLogin from '@/components/DentistLogin';
+
 const Index = () => {
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const services = [{
@@ -25,6 +27,7 @@ const Index = () => {
     description: "Immediate dental care for urgent situations and dental emergencies.",
     icon: "🚨"
   }];
+
   return <div className="min-h-screen bg-white">
       <Header onBookNow={() => setIsBookingOpen(true)} />
       
@@ -39,6 +42,29 @@ const Index = () => {
             <CalendarIcon className="mr-2 h-5 w-5" />
             Book Your Appointment
           </Button>
+        </div>
+      </section>
+
+      {/* Video Section */}
+      <section className="relative py-16 px-4 dental-light-bg overflow-hidden">
+        <div className="container mx-auto">
+          <div className="relative max-w-4xl mx-auto">
+            {/* Feather effects */}
+            <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-white via-white/50 to-transparent z-10 pointer-events-none"></div>
+            <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-white via-white/50 to-transparent z-10 pointer-events-none"></div>
+            
+            {/* Video */}
+            <div className="relative rounded-lg overflow-hidden shadow-lg">
+              <iframe
+                src="https://drive.google.com/file/d/1S6yFZ7XhkrOEOi0R8hBeKmra8wQVbdkH/preview?autoplay=1&loop=1&mute=1&controls=0"
+                className="w-full h-64 md:h-96"
+                frameBorder="0"
+                allow="autoplay; encrypted-media"
+                allowFullScreen
+                title="Tumala Dental Clinic Video"
+              ></iframe>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -140,4 +166,5 @@ const Index = () => {
       <BookingModal isOpen={isBookingOpen} onClose={() => setIsBookingOpen(false)} />
     </div>;
 };
+
 export default Index;
