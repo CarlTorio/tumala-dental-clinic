@@ -83,9 +83,9 @@ Brgy. Malabanias, Angeles City, Pampanga</p>
               <li>General Dentistry</li>
               <li>TMJ Practitioner</li>
               <li>Orthodontics</li>
-              <li>Emergency Care</li>
-              <li>Pediatric Dentistry</li>
-              <li>Oral Surgery</li>
+              
+              
+              
             </ul>
           </div>
         </div>
