@@ -1,7 +1,10 @@
+
 import React from 'react';
 import { MapPinIcon, PhoneIcon, MailIcon, ClockIcon, Facebook } from 'lucide-react';
+
 const Footer = () => {
-  return <footer className="bg-gray-900 text-white py-12">
+  return (
+    <footer className="bg-gray-900 text-white py-12">
       <div className="container mx-auto px-4">
         <div className="grid md:grid-cols-4 gap-8">
           {/* Practice Info */}
@@ -12,19 +15,24 @@ const Footer = () => {
               </div>
               <span className="text-lg font-bold">Tumala Dental Clinic</span>
             </div>
-            <p className="text-gray-400 mb-4">Healthy teeth, Happy life! 
-We love helping you to achieve a bright and confident smile every day. </p>
+            <p className="text-gray-400 mb-4">
+              Healthy teeth, Happy life! 
+              We love helping you to achieve a bright and confident smile every day.
+            </p>
             <div className="flex space-x-4">
-              <a href="https://www.facebook.com/profile.php?id=61573834983240" target="_blank" rel="noopener noreferrer" className="flex items-center space-x-2 text-gray-400 hover:text-white transition-colors">
+              <a 
+                href="https://www.facebook.com/profile.php?id=61573834983240" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="flex items-center space-x-2 text-gray-400 hover:text-white transition-colors"
+              >
                 <Facebook className="h-5 w-5" />
                 <span>Facebook</span>
               </a>
               <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                
                 <span className="md:hidden">IG</span>
               </a>
               <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                
                 <span className="md:hidden">G</span>
               </a>
             </div>
@@ -37,9 +45,8 @@ We love helping you to achieve a bright and confident smile every day. </p>
               <div className="flex items-start space-x-2">
                 <MapPinIcon className="h-5 w-5 text-primary mt-0.5" />
                 <div className="text-gray-400">
-                  <p>4009-A Richtofen St. Hensonville,
-Brgy. Malabanias, Angeles City, Pampanga</p>
-                  
+                  <p>4009-A Richtofen St. Hensonville,</p>
+                  <p>Brgy. Malabanias, Angeles City, Pampanga</p>
                 </div>
               </div>
               <div className="flex items-center space-x-2">
@@ -58,16 +65,12 @@ Brgy. Malabanias, Angeles City, Pampanga</p>
             <h3 className="text-lg font-semibold mb-4">Clinic Hours</h3>
             <div className="space-y-2 text-gray-400">
               <div className="flex justify-between">
-                <span>Monday - Friday</span>
+                <span>Monday - Saturday</span>
                 <span>9:00 AM - 7:00 PM</span>
               </div>
               <div className="flex justify-between">
                 <span>Sunday</span>
                 <span>1:00 PM - 7:00 PM</span>
-              </div>
-              <div className="flex justify-between">
-                
-                
               </div>
               <div className="pt-2 border-t border-gray-700">
                 <div className="flex items-center space-x-2 text-red-400">
@@ -97,6 +100,8 @@ Brgy. Malabanias, Angeles City, Pampanga</p>
           <p>© 2025 TumalaDentalClinic . All rights reserved.</p>
         </div>
       </div>
-    </footer>;
+    </footer>
+  );
 };
+
 export default Footer;
