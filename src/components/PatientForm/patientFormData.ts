@@ -1,3 +1,4 @@
+
 export const dentalConcerns = [
   'Consultation',
   'Tooth Extraction (Bunot)',
@@ -10,16 +11,4 @@ export const dentalConcerns = [
   'Periapical Xray',
   'TMJ Treatment',
   'Others (Iba pa.)'
-];
-
-export const insuranceProviders = [
-  'No Insurance',
-  'Delta Dental',
-  'Blue Cross Blue Shield',
-  'Aetna',
-  'Cigna',
-  'MetLife',
-  'Humana',
-  'Guardian',
-  'Other'
 ];

@@ -5,7 +5,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { dentalConcerns, insuranceProviders } from './patientFormData';
+import { dentalConcerns } from './patientFormData';
 import type { AppointmentData } from '../BookingModal';
 
 interface AppointmentDetailsSectionProps {
@@ -59,25 +59,6 @@ const AppointmentDetailsSection = ({ formData, errors, onInputChange }: Appointm
           {errors.dentalConcern && (
             <p className="text-red-500 text-sm mt-1">{errors.dentalConcern}</p>
           )}
-        </div>
-
-        <div>
-          <Label htmlFor="insurance">Insurance Provider</Label>
-          <Select
-            value={formData.insurance}
-            onValueChange={(value) => onInputChange('insurance', value)}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Select your insurance provider" />
-            </SelectTrigger>
-            <SelectContent className="z-50">
-              {insuranceProviders.map((provider) => (
-                <SelectItem key={provider} value={provider}>
-                  {provider}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
         </div>
 
         <div>

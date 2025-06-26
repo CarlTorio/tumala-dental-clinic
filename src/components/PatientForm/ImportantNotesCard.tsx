@@ -9,8 +9,6 @@ const ImportantNotesCard = () => {
         <h4 className="font-semibold text-blue-800 mb-2">Before Your Visit:</h4>
         <ul className="text-sm text-blue-700 space-y-1">
           <li>• Arrive 15 minutes early for paperwork</li>
-          <li>• Bring a valid ID and insurance card</li>
-          <li>• List of current medications</li>
           <li>• We'll send a confirmation email with all details</li>
         </ul>
       </CardContent>
