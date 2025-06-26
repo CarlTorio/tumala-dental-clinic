@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -199,7 +200,7 @@ const PatientForm = ({ onSubmit, initialData }: PatientFormProps) => {
                     <SelectValue placeholder="Month" />
                   </SelectTrigger>
                   <SelectContent>
-                    <ScrollArea className="h-[200px]">
+                    <ScrollArea className="h-[200px] smooth-scroll">
                       {months.map((month) => (
                         <SelectItem key={month.value} value={month.value}>
                           {month.label}
@@ -214,7 +215,7 @@ const PatientForm = ({ onSubmit, initialData }: PatientFormProps) => {
                     <SelectValue placeholder="Day" />
                   </SelectTrigger>
                   <SelectContent>
-                    <ScrollArea className="h-[200px]">
+                    <ScrollArea className="h-[200px] smooth-scroll">
                       {days.map((day) => (
                         <SelectItem key={day.value} value={day.value}>
                           {day.label}
@@ -225,11 +226,11 @@ const PatientForm = ({ onSubmit, initialData }: PatientFormProps) => {
                 </Select>
                 
                 <Select value={dobYear} onValueChange={(value) => handleDateChange('year', value)}>
-                  <SelectTrigger className={errors.dateOfBirth ? 'border-red-500' : ''}>
+                  <SelectTrigger className={errors.dateOfBirth ? 'border-red-5000' : ''}>
                     <SelectValue placeholder="Year" />
                   </SelectTrigger>
                   <SelectContent>
-                    <ScrollArea className="h-[200px]">
+                    <ScrollArea className="h-[200px] smooth-scroll">
                       {years.map((year) => (
                         <SelectItem key={year.value} value={year.value}>
                           {year.label}
@@ -313,11 +314,13 @@ const PatientForm = ({ onSubmit, initialData }: PatientFormProps) => {
                 <SelectValue placeholder="Select your dental concern" />
               </SelectTrigger>
               <SelectContent>
-                {dentalConcerns.map((concern) => (
-                  <SelectItem key={concern} value={concern}>
-                    {concern}
-                  </SelectItem>
-                ))}
+                <ScrollArea className="h-[200px] smooth-scroll">
+                  {dentalConcerns.map((concern) => (
+                    <SelectItem key={concern} value={concern}>
+                      {concern}
+                    </SelectItem>
+                  ))}
+                </ScrollArea>
               </SelectContent>
             </Select>
             {errors.dentalConcern && (
@@ -335,11 +338,13 @@ const PatientForm = ({ onSubmit, initialData }: PatientFormProps) => {
                 <SelectValue placeholder="Select your insurance provider" />
               </SelectTrigger>
               <SelectContent>
-                {insuranceProviders.map((provider) => (
-                  <SelectItem key={provider} value={provider}>
-                    {provider}
-                  </SelectItem>
-                ))}
+                <ScrollArea className="h-[200px] smooth-scroll">
+                  {insuranceProviders.map((provider) => (
+                    <SelectItem key={provider} value={provider}>
+                      {provider}
+                    </SelectItem>
+                  ))}
+                </ScrollArea>
               </SelectContent>
             </Select>
           </div>
