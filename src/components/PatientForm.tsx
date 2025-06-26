@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -19,6 +18,30 @@ interface PatientFormProps {
 const PatientForm = ({ onSubmit, initialData }: PatientFormProps) => {
   const [formData, setFormData] = useState(initialData);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [dobMonth, setDobMonth] = useState('');
+  const [dobDay, setDobDay] = useState('');
+  const [dobYear, setDobYear] = useState('');
+
+  // Initialize date of birth selects from existing data
+  React.useEffect(() => {
+    if (initialData.dateOfBirth) {
+      const date = new Date(initialData.dateOfBirth);
+      setDobMonth((date.getMonth() + 1).toString().padStart(2, '0'));
+      setDobDay(date.getDate().toString().padStart(2, '0'));
+      setDobYear(date.getFullYear().toString());
+    }
+  }, [initialData.dateOfBirth]);
+
+  // Update formData when individual date components change
+  React.useEffect(() => {
+    if (dobMonth && dobDay && dobYear) {
+      const dateString = `${dobYear}-${dobMonth.padStart(2, '0')}-${dobDay.padStart(2, '0')}`;
+      setFormData(prev => ({
+        ...prev,
+        dateOfBirth: dateString
+      }));
+    }
+  }, [dobMonth, dobDay, dobYear]);
 
   const dentalConcerns = [
     'Routine Cleaning',
@@ -45,6 +68,35 @@ const PatientForm = ({ onSubmit, initialData }: PatientFormProps) => {
     'Other'
   ];
 
+  // Generate months array
+  const months = [
+    { value: '01', label: 'January' },
+    { value: '02', label: 'February' },
+    { value: '03', label: 'March' },
+    { value: '04', label: 'April' },
+    { value: '05', label: 'May' },
+    { value: '06', label: 'June' },
+    { value: '07', label: 'July' },
+    { value: '08', label: 'August' },
+    { value: '09', label: 'September' },
+    { value: '10', label: 'October' },
+    { value: '11', label: 'November' },
+    { value: '12', label: 'December' }
+  ];
+
+  // Generate days array (1-31)
+  const days = Array.from({ length: 31 }, (_, i) => {
+    const day = (i + 1).toString().padStart(2, '0');
+    return { value: day, label: day };
+  });
+
+  // Generate years array (current year - 100 to current year)
+  const currentYear = new Date().getFullYear();
+  const years = Array.from({ length: 100 }, (_, i) => {
+    const year = (currentYear - i).toString();
+    return { value: year, label: year };
+  });
+
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
 
@@ -64,7 +116,7 @@ const PatientForm = ({ onSubmit, initialData }: PatientFormProps) => {
       newErrors.phone = 'Please enter a valid phone number';
     }
 
-    if (!formData.dateOfBirth) {
+    if (!dobMonth || !dobDay || !dobYear) {
       newErrors.dateOfBirth = 'Date of birth is required';
     }
 
@@ -97,6 +149,20 @@ const PatientForm = ({ onSubmit, initialData }: PatientFormProps) => {
     }
   };
 
+  const handleDateChange = (type: 'month' | 'day' | 'year', value: string) => {
+    if (type === 'month') setDobMonth(value);
+    if (type === 'day') setDobDay(value);
+    if (type === 'year') setDobYear(value);
+    
+    // Clear date of birth error when user selects values
+    if (errors.dateOfBirth) {
+      setErrors(prev => ({
+        ...prev,
+        dateOfBirth: ''
+      }));
+    }
+  };
+
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Personal Information */}
@@ -125,14 +191,47 @@ const PatientForm = ({ onSubmit, initialData }: PatientFormProps) => {
             </div>
             
             <div>
-              <Label htmlFor="dateOfBirth">Date of Birth *</Label>
-              <Input
-                id="dateOfBirth"
-                type="date"
-                value={formData.dateOfBirth}
-                onChange={(e) => handleInputChange('dateOfBirth', e.target.value)}
-                className={errors.dateOfBirth ? 'border-red-500' : ''}
-              />
+              <Label>Date of Birth *</Label>
+              <div className="grid grid-cols-3 gap-2">
+                <Select value={dobMonth} onValueChange={(value) => handleDateChange('month', value)}>
+                  <SelectTrigger className={errors.dateOfBirth ? 'border-red-500' : ''}>
+                    <SelectValue placeholder="Month" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {months.map((month) => (
+                      <SelectItem key={month.value} value={month.value}>
+                        {month.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                
+                <Select value={dobDay} onValueChange={(value) => handleDateChange('day', value)}>
+                  <SelectTrigger className={errors.dateOfBirth ? 'border-red-500' : ''}>
+                    <SelectValue placeholder="Day" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {days.map((day) => (
+                      <SelectItem key={day.value} value={day.value}>
+                        {day.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                
+                <Select value={dobYear} onValueChange={(value) => handleDateChange('year', value)}>
+                  <SelectTrigger className={errors.dateOfBirth ? 'border-red-500' : ''}>
+                    <SelectValue placeholder="Year" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {years.map((year) => (
+                      <SelectItem key={year.value} value={year.value}>
+                        {year.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
               {errors.dateOfBirth && (
                 <p className="text-red-500 text-sm mt-1">{errors.dateOfBirth}</p>
               )}
