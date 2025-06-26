@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -7,7 +6,6 @@ import BookingModal from '@/components/BookingModal';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import DentistLogin from '@/components/DentistLogin';
-
 const Index = () => {
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const services = [{
@@ -27,14 +25,13 @@ const Index = () => {
     description: "Immediate dental care for urgent situations and dental emergencies.",
     icon: "🚨"
   }];
-
   return <div className="min-h-screen bg-white">
       <Header onBookNow={() => setIsBookingOpen(true)} />
       
       {/* Hero Section */}
       <section className="relative dental-gradient text-white py-20 px-4">
         <div className="container mx-auto text-center">
-          <h1 className="text-5xl md:text-6xl font-bold mb-6 animate-fade-in">
+          <h1 className="text-5xl font-bold mb-6 animate-fade-in md:text-5xl">
             Your Perfect Smile Starts Here
           </h1>
           <p className="text-xl md:text-2xl mb-8 opacity-90 max-w-3xl mx-auto">Looking for a gentle &amp; effective dental experience? Don't hesitate to visit us. We're committed to providing you with healthy, confident smile.</p>
@@ -49,19 +46,13 @@ const Index = () => {
       <section className="py-16 px-4 dental-light-bg">
         <div className="container mx-auto">
           <div className="max-w-4xl mx-auto">
-            <div className="rounded-lg overflow-hidden shadow-lg relative" style={{ paddingTop: '56.25%' }}>
-              <iframe
-                src="https://www.youtube.com/embed/vkijaBkDdJM?autoplay=1&mute=1&loop=1&playlist=vkijaBkDdJM&controls=0&showinfo=0&rel=0&modestbranding=1&iv_load_policy=3&cc_load_policy=0&fs=0&disablekb=1&vq=hd1080&title=0&byline=0&portrait=0&branding=0&autohide=1&theme=light&color=white&start=0&end=0"
-                className="absolute top-0 left-0 w-full h-full"
-                frameBorder="0"
-                allow="autoplay; encrypted-media"
-                allowFullScreen
-                title="Tumala Dental Clinic Video"
-                style={{ 
-                  aspectRatio: '16/9',
-                  objectFit: 'cover'
-                }}
-              ></iframe>
+            <div className="rounded-lg overflow-hidden shadow-lg relative" style={{
+            paddingTop: '56.25%'
+          }}>
+              <iframe src="https://www.youtube.com/embed/vkijaBkDdJM?autoplay=1&mute=1&loop=1&playlist=vkijaBkDdJM&controls=0&showinfo=0&rel=0&modestbranding=1&iv_load_policy=3&cc_load_policy=0&fs=0&disablekb=1&vq=hd1080&title=0&byline=0&portrait=0&branding=0&autohide=1&theme=light&color=white&start=0&end=0" className="absolute top-0 left-0 w-full h-full" frameBorder="0" allow="autoplay; encrypted-media" allowFullScreen title="Tumala Dental Clinic Video" style={{
+              aspectRatio: '16/9',
+              objectFit: 'cover'
+            }}></iframe>
             </div>
           </div>
         </div>
@@ -165,5 +156,4 @@ const Index = () => {
       <BookingModal isOpen={isBookingOpen} onClose={() => setIsBookingOpen(false)} />
     </div>;
 };
-
 export default Index;
