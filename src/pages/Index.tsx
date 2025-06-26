@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { CalendarIcon, ClockIcon, PhoneIcon, MailIcon, MapPinIcon } from 'lucide-react';
@@ -7,7 +6,6 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import DentistLogin from '@/components/DentistLogin';
 import ServiceCard from '@/components/ServiceCard';
-import HiddenAccessButton from '@/components/HiddenAccessButton';
 import { useTypingAnimation } from '@/hooks/useTypingAnimation';
 
 const Index = () => {
@@ -44,7 +42,7 @@ const Index = () => {
     window.open('https://maps.app.goo.gl/Mnej5iLxeQNfKZur7', '_blank');
   };
 
-  const handleHiddenAccess = () => {
+  const handleDentistAccess = () => {
     setIsDentistLoginOpen(true);
   };
   
@@ -80,7 +78,10 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-white">
-      <Header onBookNow={handleBookingClick} />
+      <Header 
+        onBookNow={handleBookingClick} 
+        onDentistAccess={handleDentistAccess}
+      />
       
       {/* Hero Section */}
       <section className="relative dental-gradient text-white py-20 px-4">
@@ -202,16 +203,6 @@ const Index = () => {
       </section>
 
       <Footer />
-      
-      {/* Updated Healthcare Professional Access Section - Now matches footer styling */}
-      <section className="py-8 px-4 bg-gray-900 text-white border-t border-gray-700">
-        <div className="container mx-auto text-center">
-          <div className="flex items-center justify-center space-x-4">
-            <h3 className="text-lg font-semibold text-gray-300">Healthcare Professional Access</h3>
-            <HiddenAccessButton onDoubleClick={handleHiddenAccess} />
-          </div>
-        </div>
-      </section>
       
       <BookingModal isOpen={isBookingOpen} onClose={() => setIsBookingOpen(false)} />
       <DentistLogin isOpen={isDentistLoginOpen} onClose={() => setIsDentistLoginOpen(false)} />

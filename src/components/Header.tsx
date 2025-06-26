@@ -1,13 +1,19 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { CalendarIcon, MenuIcon, PhoneIcon } from 'lucide-react';
+
 interface HeaderProps {
   onBookNow: () => void;
+  onDentistAccess: () => void;
 }
+
 const Header = ({
-  onBookNow
+  onBookNow,
+  onDentistAccess
 }: HeaderProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  
   const handleSmoothScroll = (targetId: string) => {
     const element = document.getElementById(targetId);
     if (element) {
@@ -22,13 +28,26 @@ const Header = ({
     }
     setIsMenuOpen(false); // Close mobile menu after clicking
   };
-  return <header className="bg-white shadow-sm sticky top-0 z-50">
+
+  const handleLogoDoubleClick = () => {
+    onDentistAccess();
+  };
+
+  return (
+    <header className="bg-white shadow-sm sticky top-0 z-50">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex items-center space-x-3">
-            <div className="w-14 h-14 flex items-center justify-center">
-              <img src="/lovable-uploads/6a05d520-602e-4c7d-8853-bc4fe00a965f.png" alt="Tumala Dental Clinic Logo" className="w-full h-full object-contain" />
+            <div 
+              className="w-14 h-14 flex items-center justify-center cursor-pointer hover:opacity-80 transition-opacity"
+              onDoubleClick={handleLogoDoubleClick}
+            >
+              <img 
+                src="/lovable-uploads/6a05d520-602e-4c7d-8853-bc4fe00a965f.png" 
+                alt="Tumala Dental Clinic Logo" 
+                className="w-full h-full object-contain" 
+              />
             </div>
             <div className="flex items-center space-x-2">
               <span className="font-bold text-primary text-lg">TUMALA</span>
@@ -51,7 +70,6 @@ const Header = ({
 
           {/* Desktop Actions */}
           <div className="hidden md:flex items-center space-x-4">
-            
             <Button onClick={onBookNow} className="bg-primary hover:bg-primary/90">
               <CalendarIcon className="mr-2 h-4 w-4" />
               Book Now
@@ -65,7 +83,8 @@ const Header = ({
         </div>
 
         {/* Mobile Menu */}
-        {isMenuOpen && <div className="md:hidden py-4 border-t">
+        {isMenuOpen && (
+          <div className="md:hidden py-4 border-t">
             <nav className="flex flex-col space-y-4">
               <button onClick={() => handleSmoothScroll('services-area')} className="text-gray-600 hover:text-primary transition-colors text-left">
                 Services
@@ -87,8 +106,11 @@ const Header = ({
                 </Button>
               </div>
             </nav>
-          </div>}
+          </div>
+        )}
       </div>
-    </header>;
+    </header>
+  );
 };
+
 export default Header;
