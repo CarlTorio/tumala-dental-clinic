@@ -95,7 +95,7 @@ const Index = () => {
                   <MapPinIcon className="h-6 w-6 text-primary mt-1" />
                   <div>
                     <h3 className="font-semibold text-lg">Location</h3>
-                    <p className="text-gray-600">123 Dental Plaza, Suite 200<br />Medical District, City, State 12345</p>
+                    <p className="text-gray-600">4009-A Richtofen St. Hensonville,<br />Brgy. Malabanias, Angeles City, Pampanga</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-4">
@@ -115,7 +115,7 @@ const Index = () => {
                     <h3 className="font-semibold text-lg">Contact</h3>
                     <p className="text-gray-600">
                       Office: +63 999 464 8865<br />
-                      Emergency: (555) 911-CARE
+                      Email: tumaladentalclinic@gmail.com
                     </p>
                   </div>
                 </div>
