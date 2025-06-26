@@ -35,8 +35,9 @@ const Footer = () => {
               <div className="flex items-start space-x-2">
                 <MapPinIcon className="h-5 w-5 text-primary mt-0.5" />
                 <div className="text-gray-400">
-                  <p>4009-A Richtofen St. Hensonville Subd. , Brgy. Malabanias, Angeles City, Pampanga</p>
-                  <p>Medical District, City, State 12345</p>
+                  <p>4009-A Richtofen St. Hensonville,
+Brgy. Malabanias, Angeles City, Pampanga</p>
+                  
                 </div>
               </div>
               <div className="flex items-center space-x-2">
