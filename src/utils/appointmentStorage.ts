@@ -7,7 +7,7 @@ export interface StoredAppointment {
   service: string;
   date: string;
   time: string;
-  status: 'Done' | 'Pending';
+  status: 'Done' | 'Pending' | 'Didn\'t show up';
   dateOfBirth: string;
   dentalConcern: string;
   patientType: 'new' | 'returning';
@@ -51,7 +51,7 @@ export const getAppointments = (): StoredAppointment[] => {
   }
 };
 
-export const updateAppointmentStatus = (id: string, status: 'Done' | 'Pending'): void => {
+export const updateAppointmentStatus = (id: string, status: 'Done' | 'Pending' | 'Didn\'t show up'): void => {
   const appointments = getAppointments();
   const updatedAppointments = appointments.map(apt => 
     apt.id === id ? { ...apt, status } : apt

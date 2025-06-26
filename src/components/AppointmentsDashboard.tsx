@@ -26,7 +26,7 @@ const AppointmentsDashboard = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const handleStatusChange = (id: string, status: 'Done' | 'Pending') => {
+  const handleStatusChange = (id: string, status: 'Done' | 'Pending' | 'Didn\'t show up') => {
     updateAppointmentStatus(id, status);
     setAppointments(prev => prev.map(apt => 
       apt.id === id ? { ...apt, status } : apt
@@ -55,10 +55,22 @@ const AppointmentsDashboard = () => {
     if (activeTab === 'all') return true;
     if (activeTab === 'pending') return apt.status === 'Pending';
     if (activeTab === 'completed') return apt.status === 'Done';
+    if (activeTab === 'no-show') return apt.status === 'Didn\'t show up';
     return true;
   });
 
-  const AppointmentCard = ({ appointment }: { appointment: StoredAppointment }) => (
+  const getBadgeVariant = (status: string) => {
+    switch (status) {
+      case 'Done':
+        return 'default';
+      case 'Didn\'t show up':
+        return 'destructive';
+      default:
+        return 'secondary';
+    }
+  };
+
+  const AppointmentCard = ({ appointment, showActions = true }: { appointment: StoredAppointment; showActions?: boolean }) => (
     <Card className="mb-4 shadow-sm border-l-4 border-l-primary">
       <CardHeader className="pb-3">
         <div className="flex justify-between items-start">
@@ -67,7 +79,7 @@ const AppointmentsDashboard = () => {
               {appointment.patientName}
             </CardTitle>
             <div className="flex items-center gap-2 mt-1">
-              <Badge variant={appointment.status === 'Done' ? 'default' : 'secondary'}>
+              <Badge variant={getBadgeVariant(appointment.status)}>
                 {appointment.status}
               </Badge>
               <Badge variant="outline" className="text-xs">
@@ -75,16 +87,49 @@ const AppointmentsDashboard = () => {
               </Badge>
             </div>
           </div>
-          <div className="flex gap-2">
-            <Button
-              size="sm"
-              variant={appointment.status === 'Done' ? 'outline' : 'default'}
-              onClick={() => handleStatusChange(appointment.id, appointment.status === 'Done' ? 'Pending' : 'Done')}
-              className="text-xs"
-            >
-              {appointment.status === 'Done' ? 'Reopen' : 'Complete'}
-            </Button>
-          </div>
+          {showActions && (
+            <div className="flex gap-2 flex-wrap">
+              {appointment.status === 'Pending' && (
+                <>
+                  <Button
+                    size="sm"
+                    onClick={() => handleStatusChange(appointment.id, 'Done')}
+                    className="text-xs"
+                  >
+                    Complete
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="destructive"
+                    onClick={() => handleStatusChange(appointment.id, 'Didn\'t show up')}
+                    className="text-xs"
+                  >
+                    Didn't show up
+                  </Button>
+                </>
+              )}
+              {appointment.status === 'Done' && (
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => handleStatusChange(appointment.id, 'Pending')}
+                  className="text-xs"
+                >
+                  Reopen
+                </Button>
+              )}
+              {appointment.status === 'Didn\'t show up' && (
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => handleStatusChange(appointment.id, 'Pending')}
+                  className="text-xs"
+                >
+                  Reopen
+                </Button>
+              )}
+            </div>
+          )}
         </div>
       </CardHeader>
       <CardContent className="pt-0">
@@ -142,13 +187,16 @@ const AppointmentsDashboard = () => {
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="all">All ({appointments.length})</TabsTrigger>
           <TabsTrigger value="pending">
             Pending ({appointments.filter(apt => apt.status === 'Pending').length})
           </TabsTrigger>
           <TabsTrigger value="completed">
             Done ({appointments.filter(apt => apt.status === 'Done').length})
+          </TabsTrigger>
+          <TabsTrigger value="no-show">
+            No Show ({appointments.filter(apt => apt.status === 'Didn\'t show up').length})
           </TabsTrigger>
         </TabsList>
 
@@ -161,7 +209,7 @@ const AppointmentsDashboard = () => {
               </Card>
             ) : (
               filteredAppointments.map(appointment => (
-                <AppointmentCard key={appointment.id} appointment={appointment} />
+                <AppointmentCard key={appointment.id} appointment={appointment} showActions={false} />
               ))
             )}
           </div>
@@ -188,6 +236,21 @@ const AppointmentsDashboard = () => {
               <Card className="p-8 text-center">
                 <UserIcon className="h-12 w-12 mx-auto text-gray-400 mb-4" />
                 <p className="text-gray-500">No completed appointments</p>
+              </Card>
+            ) : (
+              filteredAppointments.map(appointment => (
+                <AppointmentCard key={appointment.id} appointment={appointment} />
+              ))
+            )}
+          </div>
+        </TabsContent>
+
+        <TabsContent value="no-show" className="mt-4">
+          <div className="space-y-4">
+            {filteredAppointments.length === 0 ? (
+              <Card className="p-8 text-center">
+                <UserIcon className="h-12 w-12 mx-auto text-gray-400 mb-4" />
+                <p className="text-gray-500">No no-show appointments</p>
               </Card>
             ) : (
               filteredAppointments.map(appointment => (
