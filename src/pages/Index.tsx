@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -7,41 +6,35 @@ import BookingModal from '@/components/BookingModal';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import DentistLogin from '@/components/DentistLogin';
-
 const Index = () => {
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [isButtonHighlighted, setIsButtonHighlighted] = useState(false);
-
   const handleBookingClick = () => {
     setIsButtonHighlighted(true);
     setIsBookingOpen(true);
-    
+
     // Remove highlight after animation
     setTimeout(() => {
       setIsButtonHighlighted(false);
     }, 400);
   };
-
-  const services = [
-    {
-      title: "General Dentistry",
-      description: "Comprehensive oral health care including cleanings, fillings, and preventive treatments.",
-      icon: "🦷"
-    }, {
-      title: "Cosmetic Dentistry",
-      description: "Enhance your smile with veneers, whitening, and aesthetic dental procedures.",
-      icon: "✨"
-    }, {
-      title: "Orthodontics",
-      description: "Straighten your teeth with braces, clear aligners, and orthodontic treatments.",
-      icon: "🦷"
-    }, {
-      title: "Emergency Care",
-      description: "Immediate dental care for urgent situations and dental emergencies.",
-      icon: "🚨"
-    }
-  ];
-
+  const services = [{
+    title: "General Dentistry",
+    description: "Comprehensive oral health care including cleanings, fillings, and preventive treatments.",
+    icon: "🦷"
+  }, {
+    title: "Cosmetic Dentistry",
+    description: "Enhance your smile with veneers, whitening, and aesthetic dental procedures.",
+    icon: "✨"
+  }, {
+    title: "Orthodontics",
+    description: "Straighten your teeth with braces, clear aligners, and orthodontic treatments.",
+    icon: "🦷"
+  }, {
+    title: "Emergency Care",
+    description: "Immediate dental care for urgent situations and dental emergencies.",
+    icon: "🚨"
+  }];
   return <div className="min-h-screen bg-white">
       <Header onBookNow={handleBookingClick} />
       
@@ -53,19 +46,11 @@ const Index = () => {
           </h1>
           <p className="text-xl md:text-2xl mb-8 opacity-90 max-w-3xl mx-auto">Looking for a gentle &amp; effective dental experience? Don't hesitate to visit us. We're committed to providing you with healthy, confident smile.</p>
           <div className="relative inline-block">
-            <Button 
-              size="lg" 
-              className={`bg-white text-primary hover:bg-gray-100 text-lg px-8 py-4 rounded-full transform hover:scale-105 transition-all duration-500 animate-zoom-gentle ${
-                isButtonHighlighted ? 'ring-4 ring-blue-300 ring-opacity-75 shadow-lg scale-110' : ''
-              }`}
-              onClick={handleBookingClick}
-            >
+            <Button size="lg" className={`bg-white text-primary hover:bg-gray-100 text-lg px-8 py-4 rounded-full transform hover:scale-105 transition-all duration-500 animate-zoom-gentle ${isButtonHighlighted ? 'ring-4 ring-blue-300 ring-opacity-75 shadow-lg scale-110' : ''}`} onClick={handleBookingClick}>
               <CalendarIcon className="mr-2 h-5 w-5" />
               Book Your Appointment
             </Button>
-            <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-sm opacity-80 animate-pulse">
-              👆 Click here
-            </div>
+            
           </div>
         </div>
       </section>
@@ -184,5 +169,4 @@ const Index = () => {
       <BookingModal isOpen={isBookingOpen} onClose={() => setIsBookingOpen(false)} />
     </div>;
 };
-
 export default Index;
