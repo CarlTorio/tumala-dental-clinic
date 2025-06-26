@@ -12,9 +12,8 @@ const Footer = () => {
               </div>
               <span className="text-lg font-bold">DentalCare Plus</span>
             </div>
-            <p className="text-gray-400 mb-4">
-              Providing exceptional dental care with compassion and the latest technology for over 15 years.
-            </p>
+            <p className="text-gray-400 mb-4">Healthy teeth, Happy life! 
+We love helping you to achieve a bright and confident smile every day. </p>
             <div className="flex space-x-4">
               <a href="#" className="text-gray-400 hover:text-white transition-colors">
                 Facebook
@@ -42,7 +41,7 @@ Brgy. Malabanias, Angeles City, Pampanga</p>
               </div>
               <div className="flex items-center space-x-2">
                 <PhoneIcon className="h-5 w-5 text-primary" />
-                <span className="text-gray-400">+63 999 464 8865</span>
+                <span className="text-gray-400">0999 464 8865</span>
               </div>
               <div className="flex items-center space-x-2">
                 <MailIcon className="h-5 w-5 text-primary" />
@@ -70,7 +69,7 @@ Brgy. Malabanias, Angeles City, Pampanga</p>
               <div className="pt-2 border-t border-gray-700">
                 <div className="flex items-center space-x-2 text-red-400">
                   <PhoneIcon className="h-4 w-4" />
-                  <span className="text-sm">Emergency: (555) 911-CARE</span>
+                  <span className="text-sm">Emergency: 0999 464 8865</span>
                 </div>
               </div>
             </div>
@@ -91,7 +90,7 @@ Brgy. Malabanias, Angeles City, Pampanga</p>
         </div>
 
         <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
-          <p>&copy; 2024 DentalCare Plus. All rights reserved. | HIPAA Compliant | SSL Secured</p>
+          <p>© 2025 DentalCare Plus. All rights reserved.</p>
         </div>
       </div>
     </footer>;
