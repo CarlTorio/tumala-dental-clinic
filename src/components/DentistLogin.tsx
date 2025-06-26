@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -8,7 +7,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Checkbox } from '@/components/ui/checkbox';
-import { UserIcon, LockIcon, CalendarIcon, CheckIcon, ClockIcon, RefreshCwIcon, MonitorIcon, BellIcon } from 'lucide-react';
+import { UserIcon, LockIcon, CalendarIcon, CheckIcon, ClockIcon, RefreshCwIcon, MonitorIcon, BellIcon, XIcon } from 'lucide-react';
 import { getAppointments, updateAppointmentStatus, type StoredAppointment } from '@/utils/appointmentStorage';
 import { useToast } from '@/hooks/use-toast';
 
@@ -82,7 +81,7 @@ const DentistLogin = ({ isOpen, onClose }: DentistLoginProps) => {
     handleLogout();
   };
 
-  const handleStatusUpdate = (id: string, newStatus: 'Done' | 'Pending') => {
+  const handleStatusUpdate = (id: string, newStatus: 'Done' | 'Pending' | 'No Show') => {
     updateAppointmentStatus(id, newStatus);
     loadAppointments();
   };
@@ -305,15 +304,26 @@ const DentistLogin = ({ isOpen, onClose }: DentistLoginProps) => {
                               </span>
                             </TableCell>
                             <TableCell>
-                              <div className="flex space-x-2">
+                              <div className="flex flex-col space-y-2">
                                 {appointment.status === 'Pending' && (
-                                  <Button
-                                    onClick={() => handleStatusUpdate(appointment.id, 'Done')}
-                                    size="sm"
-                                    className="bg-green-600 hover:bg-green-700"
-                                  >
-                                    <CheckIcon className="h-4 w-4" />
-                                  </Button>
+                                  <>
+                                    <Button
+                                      onClick={() => handleStatusUpdate(appointment.id, 'Done')}
+                                      size="sm"
+                                      className="bg-green-600 hover:bg-green-700"
+                                    >
+                                      <CheckIcon className="h-4 w-4" />
+                                    </Button>
+                                    <Button
+                                      onClick={() => handleStatusUpdate(appointment.id, 'No Show')}
+                                      size="sm"
+                                      variant="destructive"
+                                      className="bg-red-600 hover:bg-red-700"
+                                    >
+                                      <XIcon className="h-4 w-4" />
+                                      Didn't show up
+                                    </Button>
+                                  </>
                                 )}
                                 {appointment.status === 'Done' && (
                                   <Button
@@ -358,14 +368,25 @@ const DentistLogin = ({ isOpen, onClose }: DentistLoginProps) => {
                                 <span className="px-3 py-1 rounded-full text-sm bg-yellow-100 text-yellow-800">
                                   {appointment.status}
                                 </span>
-                                <Button
-                                  onClick={() => handleStatusUpdate(appointment.id, 'Done')}
-                                  size="sm"
-                                  className="bg-green-600 hover:bg-green-700"
-                                >
-                                  <CheckIcon className="h-4 w-4 mr-1" />
-                                  Mark Done
-                                </Button>
+                                <div className="flex flex-col space-y-2">
+                                  <Button
+                                    onClick={() => handleStatusUpdate(appointment.id, 'Done')}
+                                    size="sm"
+                                    className="bg-green-600 hover:bg-green-700"
+                                  >
+                                    <CheckIcon className="h-4 w-4 mr-1" />
+                                    Mark Done
+                                  </Button>
+                                  <Button
+                                    onClick={() => handleStatusUpdate(appointment.id, 'No Show')}
+                                    size="sm"
+                                    variant="destructive"
+                                    className="bg-red-600 hover:bg-red-700"
+                                  >
+                                    <XIcon className="h-4 w-4 mr-1" />
+                                    Didn't show up
+                                  </Button>
+                                </div>
                               </div>
                             </CardTitle>
                           </CardHeader>
@@ -430,23 +451,34 @@ const DentistLogin = ({ isOpen, onClose }: DentistLoginProps) => {
                               <span className="px-3 py-1 rounded-full text-sm bg-yellow-100 text-yellow-800">
                                 {appointment.status}
                               </span>
-                              <Button
-                                onClick={() => handleStatusUpdate(appointment.id, 'Done')}
-                                size="sm"
-                                className="bg-green-600 hover:bg-green-700"
-                              >
-                                <CheckIcon className="h-4 w-4 mr-1" />
-                                Mark Done
-                              </Button>
-                              <Button
-                                onClick={() => handleNotifyPatient(appointment)}
-                                size="sm"
-                                variant="outline"
-                                className="border-blue-500 text-blue-600 hover:bg-blue-50"
-                              >
-                                <BellIcon className="h-4 w-4 mr-1" />
-                                Notify
-                              </Button>
+                              <div className="flex flex-col space-y-2">
+                                <Button
+                                  onClick={() => handleStatusUpdate(appointment.id, 'Done')}
+                                  size="sm"
+                                  className="bg-green-600 hover:bg-green-700"
+                                >
+                                  <CheckIcon className="h-4 w-4 mr-1" />
+                                  Mark Done
+                                </Button>
+                                <Button
+                                  onClick={() => handleStatusUpdate(appointment.id, 'No Show')}
+                                  size="sm"
+                                  variant="destructive"
+                                  className="bg-red-600 hover:bg-red-700"
+                                >
+                                  <XIcon className="h-4 w-4 mr-1" />
+                                  Didn't show up
+                                </Button>
+                                <Button
+                                  onClick={() => handleNotifyPatient(appointment)}
+                                  size="sm"
+                                  variant="outline"
+                                  className="border-blue-500 text-blue-600 hover:bg-blue-50"
+                                >
+                                  <BellIcon className="h-4 w-4 mr-1" />
+                                  Notify
+                                </Button>
+                              </div>
                             </div>
                           </CardTitle>
                         </CardHeader>
