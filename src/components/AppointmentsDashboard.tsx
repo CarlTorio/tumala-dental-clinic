@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -96,13 +95,13 @@ const AppointmentsDashboard = () => {
                     onClick={() => handleStatusChange(appointment.id, 'Done')}
                     className="text-xs"
                   >
-                    Complete
+                    Mark Done
                   </Button>
                   <Button
                     size="sm"
                     variant="destructive"
                     onClick={() => handleStatusChange(appointment.id, 'Didn\'t show up')}
-                    className="text-xs"
+                    className="text-xs bg-red-600 hover:bg-red-700"
                   >
                     Didn't show up
                   </Button>
