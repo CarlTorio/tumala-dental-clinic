@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -6,10 +7,12 @@ import BookingModal from '@/components/BookingModal';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import DentistLogin from '@/components/DentistLogin';
+
 const Index = () => {
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [isButtonHighlighted, setIsButtonHighlighted] = useState(false);
   const [isCtaButtonHighlighted, setIsCtaButtonHighlighted] = useState(false);
+
   const handleBookingClick = () => {
     setIsButtonHighlighted(true);
     setIsBookingOpen(true);
@@ -19,6 +22,7 @@ const Index = () => {
       setIsButtonHighlighted(false);
     }, 400);
   };
+
   const handleCtaBookingClick = () => {
     setIsCtaButtonHighlighted(true);
     setIsBookingOpen(true);
@@ -28,39 +32,51 @@ const Index = () => {
       setIsCtaButtonHighlighted(false);
     }, 400);
   };
+
   const handleMapClick = () => {
     window.open('https://maps.app.goo.gl/Mnej5iLxeQNfKZur7', '_blank');
   };
-  const services = [{
-    title: "General Dentistry",
-    description: "Comprehensive oral health care including cleanings, fillings, and preventive treatments.",
-    icon: "🦷"
-  }, {
-    title: "TMJ-Practitioner",
-    description: "Specialized treatment for temporomandibular joint disorders, jaw pain, and bite alignment issues.",
-    icon: "🔧"
-  }, {
-    title: "Orthodontics",
-    description: "Straighten your teeth with braces, clear aligners, and orthodontic treatments.",
-    icon: "🦷"
-  }, {
-    title: "Pediatric Dentistry",
-    description: "Specialized dental care for children, focusing on prevention and creating positive dental experiences.",
-    icon: "👶"
-  }, {
-    title: "Radiograph (XRAY)",
-    description: "Advanced digital X-ray imaging for accurate diagnosis and treatment planning.",
-    icon: "📸"
-  }, {
-    title: "Prosthodontics",
-    description: "Restoration and replacement of teeth with crowns, bridges, dentures, and implants.",
-    icon: "🦷"
-  }, {
-    title: "Esthetics",
-    description: "Cosmetic dental treatments to enhance your smile's appearance and boost confidence.",
-    icon: "✨"
-  }];
-  return <div className="min-h-screen bg-white">
+
+  const services = [
+    {
+      title: "General Dentistry",
+      description: "Comprehensive oral health care including cleanings, fillings, and preventive treatments.",
+      icon: "🦷"
+    },
+    {
+      title: "TMJ-Practitioner", 
+      description: "Specialized treatment for temporomandibular joint disorders, jaw pain, and bite alignment issues.",
+      icon: "🔧"
+    },
+    {
+      title: "Orthodontics",
+      description: "Straighten your teeth with braces, clear aligners, and orthodontic treatments.",
+      icon: "🦷"
+    },
+    {
+      title: "Pediatric Dentistry",
+      description: "Specialized dental care for children, focusing on prevention and creating positive dental experiences.",
+      icon: "👶"
+    },
+    {
+      title: "Radiograph (XRAY)",
+      description: "Advanced digital X-ray imaging for accurate diagnosis and treatment planning.",
+      icon: "📸"
+    },
+    {
+      title: "Prosthodontics",
+      description: "Restoration and replacement of teeth with crowns, bridges, dentures, and implants.",
+      icon: "🦷"
+    },
+    {
+      title: "Esthetics",
+      description: "Cosmetic dental treatments to enhance your smile's appearance and boost confidence.",
+      icon: "✨"
+    }
+  ];
+
+  return (
+    <div className="min-h-screen bg-white">
       <Header onBookNow={handleBookingClick} />
       
       {/* Hero Section */}
@@ -69,8 +85,14 @@ const Index = () => {
           <h1 className="text-5xl font-bold mb-6 animate-fade-in md:text-5xl">
             Your Perfect Smile Starts Here
           </h1>
-          <p className="text-xl md:text-2xl mb-8 opacity-90 max-w-3xl mx-auto">Looking for a gentle &amp; effective dental experience? Don't hesitate to visit us. We're committed to providing you with healthy, confident smile.</p>
-          <Button size="lg" className={`bg-white text-primary hover:bg-gray-100 text-lg px-8 py-4 rounded-full transform hover:scale-105 transition-all duration-700 animate-zoom-gentle ${isButtonHighlighted ? 'ring-4 ring-blue-300 ring-opacity-75 shadow-lg scale-110' : ''}`} onClick={handleBookingClick}>
+          <p className="text-xl md:text-2xl mb-8 opacity-90 max-w-3xl mx-auto">
+            Looking for a gentle & effective dental experience? Don't hesitate to visit us. We're committed to providing you with healthy, confident smile.
+          </p>
+          <Button 
+            size="lg" 
+            className={`bg-white text-primary hover:bg-gray-100 text-lg px-8 py-4 rounded-full transform hover:scale-105 transition-all duration-700 animate-zoom-gentle ${isButtonHighlighted ? 'ring-4 ring-blue-300 ring-opacity-75 shadow-lg scale-110' : ''}`}
+            onClick={handleBookingClick}
+          >
             <CalendarIcon className="mr-2 h-5 w-5" />
             Book Your Appointment
           </Button>
@@ -81,13 +103,19 @@ const Index = () => {
       <section className="py-16 px-4 dental-light-bg">
         <div className="container mx-auto">
           <div className="max-w-4xl mx-auto">
-            <div className="rounded-lg overflow-hidden shadow-lg relative" style={{
-            paddingTop: '56.25%'
-          }}>
-              <iframe src="https://www.youtube.com/embed/vkijaBkDdJM?autoplay=1&mute=1&loop=1&playlist=vkijaBkDdJM&controls=0&showinfo=0&rel=0&modestbranding=1&iv_load_policy=3&cc_load_policy=0&fs=0&disablekb=1&vq=hd1080&title=0&byline=0&portrait=0&branding=0&autohide=1&theme=light&color=white&start=0&end=0" className="absolute top-0 left-0 w-full h-full" frameBorder="0" allow="autoplay; encrypted-media" allowFullScreen title="Tumala Dental Clinic Video" style={{
-              aspectRatio: '16/9',
-              objectFit: 'cover'
-            }}></iframe>
+            <div className="rounded-lg overflow-hidden shadow-lg relative" style={{ paddingTop: '56.25%' }}>
+              <iframe 
+                src="https://www.youtube.com/embed/vkijaBkDdJM?autoplay=1&mute=1&loop=1&playlist=vkijaBkDdJM&controls=0&showinfo=0&rel=0&modestbranding=1&iv_load_policy=3&cc_load_policy=0&fs=0&disablekb=1&hd=1&vq=hd1080&quality=hd1080&title=0&byline=0&portrait=0&branding=0&autohide=1&theme=light&color=white&start=0&end=0" 
+                className="absolute top-0 left-0 w-full h-full md:w-full md:h-full" 
+                frameBorder="0" 
+                allow="autoplay; encrypted-media" 
+                allowFullScreen 
+                title="Tumala Dental Clinic Video"
+                style={{
+                  aspectRatio: '16/9',
+                  objectFit: 'cover'
+                }}
+              />
             </div>
           </div>
         </div>
@@ -170,7 +198,11 @@ const Index = () => {
           <p className="text-xl mb-8 opacity-90">
             Take the first step towards a healthier, more beautiful smile today.
           </p>
-          <Button size="lg" className={`bg-white text-primary hover:bg-gray-100 text-lg px-8 py-4 rounded-full transform hover:scale-105 transition-all duration-700 animate-zoom-gentle ${isCtaButtonHighlighted ? 'ring-4 ring-blue-300 ring-opacity-75 shadow-lg scale-110' : ''}`} onClick={handleCtaBookingClick}>
+          <Button 
+            size="lg" 
+            className={`bg-white text-primary hover:bg-gray-100 text-lg px-8 py-4 rounded-full transform hover:scale-105 transition-all duration-700 animate-zoom-gentle ${isCtaButtonHighlighted ? 'ring-4 ring-blue-300 ring-opacity-75 shadow-lg scale-110' : ''}`}
+            onClick={handleCtaBookingClick}
+          >
             <CalendarIcon className="mr-2 h-5 w-5" />
             Book Now - It's Easy!
           </Button>
@@ -188,6 +220,8 @@ const Index = () => {
       <Footer />
       
       <BookingModal isOpen={isBookingOpen} onClose={() => setIsBookingOpen(false)} />
-    </div>;
+    </div>
+  );
 };
+
 export default Index;
