@@ -79,18 +79,27 @@ const DentistLogin = ({ isOpen, onClose }: DentistLoginProps) => {
     handleLogout();
   };
 
-  const handleStatusUpdate = (id: string, newStatus: 'Confirmed' | 'Pending') => {
+  const handleStatusUpdate = (id: string, newStatus: 'Done' | 'Pending') => {
     updateAppointmentStatus(id, newStatus);
     loadAppointments();
   };
 
   // Filter appointments
   const pendingAppointments = appointments.filter(apt => apt.status === 'Pending');
-  const confirmedAppointments = appointments.filter(apt => apt.status === 'Confirmed');
+  const doneAppointments = appointments.filter(apt => apt.status === 'Done');
   
-  // Filter today's appointments
+  // Filter today's pending appointments and sort by time
   const today = new Date().toLocaleDateString();
-  const todayAppointments = appointments.filter(apt => apt.date === today);
+  const todayPendingAppointments = appointments
+    .filter(apt => apt.date === today && apt.status === 'Pending')
+    .sort((a, b) => {
+      // Convert time strings to minutes for comparison
+      const timeToMinutes = (time: string) => {
+        const [hours, minutes] = time.split(':').map(Number);
+        return hours * 60 + minutes;
+      };
+      return timeToMinutes(a.time) - timeToMinutes(b.time);
+    });
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -181,14 +190,14 @@ const DentistLogin = ({ isOpen, onClose }: DentistLoginProps) => {
             <Tabs defaultValue="all" className="w-full">
               <TabsList className="grid w-full grid-cols-4">
                 <TabsTrigger value="all">All Appointments ({appointments.length})</TabsTrigger>
-                <TabsTrigger value="today" className="text-blue-600">
-                  Today ({todayAppointments.length})
+                <TabsTrigger value="pending-today" className="text-blue-600">
+                  Pending Today ({todayPendingAppointments.length})
                 </TabsTrigger>
                 <TabsTrigger value="pending" className="text-yellow-600">
                   Pending ({pendingAppointments.length})
                 </TabsTrigger>
-                <TabsTrigger value="confirmed" className="text-green-600">
-                  Confirmed ({confirmedAppointments.length})
+                <TabsTrigger value="done" className="text-green-600">
+                  Done ({doneAppointments.length})
                 </TabsTrigger>
               </TabsList>
               
@@ -256,7 +265,7 @@ const DentistLogin = ({ isOpen, onClose }: DentistLoginProps) => {
                             </TableCell>
                             <TableCell>
                               <span className={`px-2 py-1 rounded-full text-xs ${
-                                appointment.status === 'Confirmed' 
+                                appointment.status === 'Done' 
                                   ? 'bg-green-100 text-green-800' 
                                   : 'bg-yellow-100 text-yellow-800'
                               }`}>
@@ -267,14 +276,14 @@ const DentistLogin = ({ isOpen, onClose }: DentistLoginProps) => {
                               <div className="flex space-x-2">
                                 {appointment.status === 'Pending' && (
                                   <Button
-                                    onClick={() => handleStatusUpdate(appointment.id, 'Confirmed')}
+                                    onClick={() => handleStatusUpdate(appointment.id, 'Done')}
                                     size="sm"
                                     className="bg-green-600 hover:bg-green-700"
                                   >
                                     <CheckIcon className="h-4 w-4" />
                                   </Button>
                                 )}
-                                {appointment.status === 'Confirmed' && (
+                                {appointment.status === 'Done' && (
                                   <Button
                                     onClick={() => handleStatusUpdate(appointment.id, 'Pending')}
                                     size="sm"
@@ -293,44 +302,38 @@ const DentistLogin = ({ isOpen, onClose }: DentistLoginProps) => {
                 </div>
               </TabsContent>
               
-              <TabsContent value="today" className="mt-4">
+              <TabsContent value="pending-today" className="mt-4">
                 <div className="space-y-4">
-                  {todayAppointments.length === 0 ? (
+                  {todayPendingAppointments.length === 0 ? (
                     <Card className="text-center py-8">
                       <CardContent>
                         <CalendarIcon className="h-12 w-12 text-blue-400 mx-auto mb-4" />
-                        <p className="text-gray-500">No appointments for today</p>
-                        <p className="text-sm text-gray-400">Today's appointments will appear here</p>
+                        <p className="text-gray-500">No pending appointments for today</p>
+                        <p className="text-sm text-gray-400">Today's pending appointments will appear here</p>
                       </CardContent>
                     </Card>
                   ) : (
                     <div className="space-y-4">
                       <div className="text-sm text-gray-600 mb-4">
-                        Showing appointments for {today}
+                        Showing pending appointments for {today} (sorted by time)
                       </div>
-                      {todayAppointments.map((appointment) => (
+                      {todayPendingAppointments.map((appointment) => (
                         <Card key={appointment.id} className="border-l-4 border-l-blue-500">
                           <CardHeader className="pb-3">
                             <CardTitle className="flex items-center justify-between">
                               <span className="text-lg">{appointment.patientName}</span>
                               <div className="flex items-center space-x-2">
-                                <span className={`px-3 py-1 rounded-full text-sm ${
-                                  appointment.status === 'Confirmed' 
-                                    ? 'bg-green-100 text-green-800' 
-                                    : 'bg-yellow-100 text-yellow-800'
-                                }`}>
+                                <span className="px-3 py-1 rounded-full text-sm bg-yellow-100 text-yellow-800">
                                   {appointment.status}
                                 </span>
-                                {appointment.status === 'Pending' && (
-                                  <Button
-                                    onClick={() => handleStatusUpdate(appointment.id, 'Confirmed')}
-                                    size="sm"
-                                    className="bg-green-600 hover:bg-green-700"
-                                  >
-                                    <CheckIcon className="h-4 w-4 mr-1" />
-                                    Confirm
-                                  </Button>
-                                )}
+                                <Button
+                                  onClick={() => handleStatusUpdate(appointment.id, 'Done')}
+                                  size="sm"
+                                  className="bg-green-600 hover:bg-green-700"
+                                >
+                                  <CheckIcon className="h-4 w-4 mr-1" />
+                                  Mark Done
+                                </Button>
                               </div>
                             </CardTitle>
                           </CardHeader>
@@ -396,12 +399,12 @@ const DentistLogin = ({ isOpen, onClose }: DentistLoginProps) => {
                                 {appointment.status}
                               </span>
                               <Button
-                                onClick={() => handleStatusUpdate(appointment.id, 'Confirmed')}
+                                onClick={() => handleStatusUpdate(appointment.id, 'Done')}
                                 size="sm"
                                 className="bg-green-600 hover:bg-green-700"
                               >
                                 <CheckIcon className="h-4 w-4 mr-1" />
-                                Confirm
+                                Mark Done
                               </Button>
                             </div>
                           </CardTitle>
@@ -447,17 +450,17 @@ const DentistLogin = ({ isOpen, onClose }: DentistLoginProps) => {
                 </div>
               </TabsContent>
               
-              <TabsContent value="confirmed" className="mt-4">
+              <TabsContent value="done" className="mt-4">
                 <div className="space-y-4">
-                  {confirmedAppointments.length === 0 ? (
+                  {doneAppointments.length === 0 ? (
                     <Card className="text-center py-8">
                       <CardContent>
                         <CheckIcon className="h-12 w-12 text-green-400 mx-auto mb-4" />
-                        <p className="text-gray-500">No confirmed appointments</p>
+                        <p className="text-gray-500">No completed appointments</p>
                       </CardContent>
                     </Card>
                   ) : (
-                    confirmedAppointments.map((appointment) => (
+                    doneAppointments.map((appointment) => (
                       <Card key={appointment.id} className="border-l-4 border-l-green-500">
                         <CardHeader className="pb-3">
                           <CardTitle className="flex items-center justify-between">
