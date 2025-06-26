@@ -1,4 +1,5 @@
 
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -46,23 +47,22 @@ const Index = () => {
       </section>
 
       {/* Video Section */}
-      <section className="relative py-16 px-4 dental-light-bg overflow-hidden">
+      <section className="py-16 px-4 dental-light-bg">
         <div className="container mx-auto">
-          <div className="relative max-w-4xl mx-auto">
-            {/* Feather effects */}
-            <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-white via-white/50 to-transparent z-10 pointer-events-none"></div>
-            <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-white via-white/50 to-transparent z-10 pointer-events-none"></div>
-            
-            {/* Video */}
-            <div className="relative rounded-lg overflow-hidden shadow-lg">
-              <iframe
-                src="https://drive.google.com/file/d/1S6yFZ7XhkrOEOi0R8hBeKmra8wQVbdkH/preview?autoplay=1&loop=1&mute=1&controls=0"
-                className="w-full h-64 md:h-96"
-                frameBorder="0"
-                allow="autoplay; encrypted-media"
-                allowFullScreen
-                title="Tumala Dental Clinic Video"
-              ></iframe>
+          <div className="max-w-4xl mx-auto">
+            <div className="rounded-lg overflow-hidden shadow-lg">
+              <video
+                className="w-full h-64 md:h-96 object-cover"
+                autoPlay
+                loop
+                muted
+                playsInline
+                controls={false}
+                style={{ pointerEvents: 'none' }}
+              >
+                <source src="https://drive.google.com/uc?export=download&id=1S6yFZ7XhkrOEOi0R8hBeKmra8wQVbdkH" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
             </div>
           </div>
         </div>
@@ -168,3 +168,4 @@ const Index = () => {
 };
 
 export default Index;
+
