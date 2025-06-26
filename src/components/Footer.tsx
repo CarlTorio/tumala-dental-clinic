@@ -46,7 +46,7 @@ Brgy. Malabanias, Angeles City, Pampanga</p>
               </div>
               <div className="flex items-center space-x-2">
                 <MailIcon className="h-5 w-5 text-primary" />
-                <span className="text-gray-400">info@dentalcareplus.com</span>
+                <span className="text-gray-400">tumaladentalclinic@gmail.com</span>
               </div>
             </div>
           </div>
