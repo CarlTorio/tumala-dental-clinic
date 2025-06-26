@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -7,35 +6,26 @@ import BookingModal from '@/components/BookingModal';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import DentistLogin from '@/components/DentistLogin';
-
 const Index = () => {
   const [isBookingOpen, setIsBookingOpen] = useState(false);
-
-  const services = [
-    {
-      title: "General Dentistry",
-      description: "Comprehensive oral health care including cleanings, fillings, and preventive treatments.",
-      icon: "🦷"
-    },
-    {
-      title: "Cosmetic Dentistry",
-      description: "Enhance your smile with veneers, whitening, and aesthetic dental procedures.",
-      icon: "✨"
-    },
-    {
-      title: "Orthodontics",
-      description: "Straighten your teeth with braces, clear aligners, and orthodontic treatments.",
-      icon: "🦷"
-    },
-    {
-      title: "Emergency Care",
-      description: "Immediate dental care for urgent situations and dental emergencies.",
-      icon: "🚨"
-    }
-  ];
-
-  return (
-    <div className="min-h-screen bg-white">
+  const services = [{
+    title: "General Dentistry",
+    description: "Comprehensive oral health care including cleanings, fillings, and preventive treatments.",
+    icon: "🦷"
+  }, {
+    title: "Cosmetic Dentistry",
+    description: "Enhance your smile with veneers, whitening, and aesthetic dental procedures.",
+    icon: "✨"
+  }, {
+    title: "Orthodontics",
+    description: "Straighten your teeth with braces, clear aligners, and orthodontic treatments.",
+    icon: "🦷"
+  }, {
+    title: "Emergency Care",
+    description: "Immediate dental care for urgent situations and dental emergencies.",
+    icon: "🚨"
+  }];
+  return <div className="min-h-screen bg-white">
       <Header onBookNow={() => setIsBookingOpen(true)} />
       
       {/* Hero Section */}
@@ -44,15 +34,8 @@ const Index = () => {
           <h1 className="text-5xl md:text-6xl font-bold mb-6 animate-fade-in">
             Your Perfect Smile Starts Here
           </h1>
-          <p className="text-xl md:text-2xl mb-8 opacity-90 max-w-3xl mx-auto">
-            Experience exceptional dental care with our state-of-the-art facility and compassionate team. 
-            Book your appointment today and take the first step towards optimal oral health.
-          </p>
-          <Button 
-            size="lg" 
-            className="bg-white text-primary hover:bg-gray-100 text-lg px-8 py-4 rounded-full transform hover:scale-105 transition-all duration-300"
-            onClick={() => setIsBookingOpen(true)}
-          >
+          <p className="text-xl md:text-2xl mb-8 opacity-90 max-w-3xl mx-auto">Looking for a gentle &amp; effective dental experience? Don't hesitate to visit us. We're committed to providing you with healthy, confident smile.</p>
+          <Button size="lg" className="bg-white text-primary hover:bg-gray-100 text-lg px-8 py-4 rounded-full transform hover:scale-105 transition-all duration-300" onClick={() => setIsBookingOpen(true)}>
             <CalendarIcon className="mr-2 h-5 w-5" />
             Book Your Appointment
           </Button>
@@ -69,8 +52,7 @@ const Index = () => {
             </p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {services.map((service, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow duration-300 border-0 bg-white">
+            {services.map((service, index) => <Card key={index} className="hover:shadow-lg transition-shadow duration-300 border-0 bg-white">
                 <CardHeader className="text-center">
                   <div className="text-4xl mb-2">{service.icon}</div>
                   <CardTitle className="text-primary">{service.title}</CardTitle>
@@ -78,8 +60,7 @@ const Index = () => {
                 <CardContent>
                   <p className="text-gray-600 text-center">{service.description}</p>
                 </CardContent>
-              </Card>
-            ))}
+              </Card>)}
           </div>
         </div>
       </section>
@@ -139,11 +120,7 @@ const Index = () => {
           <p className="text-xl mb-8 opacity-90">
             Take the first step towards a healthier, more beautiful smile today.
           </p>
-          <Button 
-            size="lg" 
-            className="bg-white text-primary hover:bg-gray-100 text-lg px-8 py-4 rounded-full"
-            onClick={() => setIsBookingOpen(true)}
-          >
+          <Button size="lg" className="bg-white text-primary hover:bg-gray-100 text-lg px-8 py-4 rounded-full" onClick={() => setIsBookingOpen(true)}>
             <CalendarIcon className="mr-2 h-5 w-5" />
             Book Now - It's Easy!
           </Button>
@@ -160,12 +137,7 @@ const Index = () => {
 
       <Footer />
       
-      <BookingModal 
-        isOpen={isBookingOpen} 
-        onClose={() => setIsBookingOpen(false)} 
-      />
-    </div>
-  );
+      <BookingModal isOpen={isBookingOpen} onClose={() => setIsBookingOpen(false)} />
+    </div>;
 };
-
 export default Index;
