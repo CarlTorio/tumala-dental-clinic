@@ -59,15 +59,15 @@ const AppointmentsDashboard = () => {
   });
 
   const AppointmentCard = ({ appointment }: { appointment: StoredAppointment }) => (
-    <Card className="mb-3 shadow-sm border-l-4 border-l-primary">
-      <CardHeader className="pb-2 px-3 pt-3">
+    <Card className="mb-4 shadow-sm border-l-4 border-l-primary">
+      <CardHeader className="pb-3">
         <div className="flex justify-between items-start">
           <div>
-            <CardTitle className="text-base font-semibold text-primary">
+            <CardTitle className="text-lg font-semibold text-primary">
               {appointment.patientName}
             </CardTitle>
             <div className="flex items-center gap-2 mt-1">
-              <Badge variant={appointment.status === 'Done' ? 'default' : 'secondary'} className="text-xs">
+              <Badge variant={appointment.status === 'Done' ? 'default' : 'secondary'}>
                 {appointment.status}
               </Badge>
               <Badge variant="outline" className="text-xs">
@@ -75,53 +75,55 @@ const AppointmentsDashboard = () => {
               </Badge>
             </div>
           </div>
-          <Button
-            size="sm"
-            variant={appointment.status === 'Done' ? 'outline' : 'default'}
-            onClick={() => handleStatusChange(appointment.id, appointment.status === 'Done' ? 'Pending' : 'Done')}
-            className="text-xs px-2 py-1 h-7"
-          >
-            {appointment.status === 'Done' ? 'Reopen' : 'Complete'}
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              size="sm"
+              variant={appointment.status === 'Done' ? 'outline' : 'default'}
+              onClick={() => handleStatusChange(appointment.id, appointment.status === 'Done' ? 'Pending' : 'Done')}
+              className="text-xs"
+            >
+              {appointment.status === 'Done' ? 'Reopen' : 'Complete'}
+            </Button>
+          </div>
         </div>
       </CardHeader>
-      <CardContent className="pt-0 px-3 pb-3">
-        <div className="space-y-2">
-          <div className="grid grid-cols-1 gap-2">
+      <CardContent className="pt-0">
+        <div className="space-y-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="flex items-center gap-2 text-sm">
-              <CalendarIcon className="h-3 w-3 text-gray-500" />
+              <CalendarIcon className="h-4 w-4 text-gray-500" />
               <span className="font-medium">Date:</span>
-              <span className="text-xs">{formatDate(appointment.date)}</span>
+              <span>{formatDate(appointment.date)}</span>
             </div>
             <div className="flex items-center gap-2 text-sm">
-              <ClockIcon className="h-3 w-3 text-gray-500" />
+              <ClockIcon className="h-4 w-4 text-gray-500" />
               <span className="font-medium">Time:</span>
-              <span className="text-xs">{formatTime(appointment.time)}</span>
+              <span>{formatTime(appointment.time)}</span>
             </div>
           </div>
           
-          <div className="grid grid-cols-1 gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="flex items-center gap-2 text-sm">
-              <PhoneIcon className="h-3 w-3 text-gray-500" />
+              <PhoneIcon className="h-4 w-4 text-gray-500" />
               <span className="font-medium">Phone:</span>
-              <span className="text-xs">{appointment.phone}</span>
+              <span>{appointment.phone}</span>
             </div>
             <div className="flex items-center gap-2 text-sm">
-              <MailIcon className="h-3 w-3 text-gray-500" />
+              <MailIcon className="h-4 w-4 text-gray-500" />
               <span className="font-medium">Email:</span>
-              <span className="truncate text-xs">{appointment.email}</span>
+              <span className="truncate">{appointment.email}</span>
             </div>
           </div>
 
-          <div className="border-t pt-2">
+          <div className="border-t pt-3">
             <div className="text-sm">
               <span className="font-medium">Service:</span>
-              <span className="ml-2 text-xs">{appointment.service}</span>
+              <span className="ml-2">{appointment.service}</span>
             </div>
             {appointment.specialNotes && (
-              <div className="text-sm mt-1">
+              <div className="text-sm mt-2">
                 <span className="font-medium">Notes:</span>
-                <span className="ml-2 text-gray-600 text-xs">{appointment.specialNotes}</span>
+                <span className="ml-2 text-gray-600">{appointment.specialNotes}</span>
               </div>
             )}
           </div>
@@ -131,31 +133,31 @@ const AppointmentsDashboard = () => {
   );
 
   const DashboardContent = () => (
-    <div className="space-y-3">
+    <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <h2 className="text-lg font-bold text-primary">Patient Appointments</h2>
-        <Badge variant="outline" className="text-xs">
+        <h2 className="text-xl font-bold text-primary">Patient Appointments</h2>
+        <Badge variant="outline" className="text-sm">
           {filteredAppointments.length} appointments
         </Badge>
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-3 h-9">
-          <TabsTrigger value="all" className="text-xs">All ({appointments.length})</TabsTrigger>
-          <TabsTrigger value="pending" className="text-xs">
+        <TabsList className="grid w-full grid-cols-3">
+          <TabsTrigger value="all">All ({appointments.length})</TabsTrigger>
+          <TabsTrigger value="pending">
             Pending ({appointments.filter(apt => apt.status === 'Pending').length})
           </TabsTrigger>
-          <TabsTrigger value="completed" className="text-xs">
+          <TabsTrigger value="completed">
             Done ({appointments.filter(apt => apt.status === 'Done').length})
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="all" className="mt-3">
-          <div className="space-y-3 max-h-[calc(100vh-280px)] overflow-y-auto">
+        <TabsContent value="all" className="mt-4">
+          <div className="space-y-4">
             {filteredAppointments.length === 0 ? (
-              <Card className="p-6 text-center">
-                <CalendarIcon className="h-10 w-10 mx-auto text-gray-400 mb-3" />
-                <p className="text-gray-500 text-sm">No appointments found</p>
+              <Card className="p-8 text-center">
+                <CalendarIcon className="h-12 w-12 mx-auto text-gray-400 mb-4" />
+                <p className="text-gray-500">No appointments found</p>
               </Card>
             ) : (
               filteredAppointments.map(appointment => (
@@ -165,12 +167,12 @@ const AppointmentsDashboard = () => {
           </div>
         </TabsContent>
 
-        <TabsContent value="pending" className="mt-3">
-          <div className="space-y-3 max-h-[calc(100vh-280px)] overflow-y-auto">
+        <TabsContent value="pending" className="mt-4">
+          <div className="space-y-4">
             {filteredAppointments.length === 0 ? (
-              <Card className="p-6 text-center">
-                <ClockIcon className="h-10 w-10 mx-auto text-gray-400 mb-3" />
-                <p className="text-gray-500 text-sm">No pending appointments</p>
+              <Card className="p-8 text-center">
+                <ClockIcon className="h-12 w-12 mx-auto text-gray-400 mb-4" />
+                <p className="text-gray-500">No pending appointments</p>
               </Card>
             ) : (
               filteredAppointments.map(appointment => (
@@ -180,12 +182,12 @@ const AppointmentsDashboard = () => {
           </div>
         </TabsContent>
 
-        <TabsContent value="completed" className="mt-3">
-          <div className="space-y-3 max-h-[calc(100vh-280px)] overflow-y-auto">
+        <TabsContent value="completed" className="mt-4">
+          <div className="space-y-4">
             {filteredAppointments.length === 0 ? (
-              <Card className="p-6 text-center">
-                <UserIcon className="h-10 w-10 mx-auto text-gray-400 mb-3" />
-                <p className="text-gray-500 text-sm">No completed appointments</p>
+              <Card className="p-8 text-center">
+                <UserIcon className="h-12 w-12 mx-auto text-gray-400 mb-4" />
+                <p className="text-gray-500">No completed appointments</p>
               </Card>
             ) : (
               filteredAppointments.map(appointment => (
@@ -207,14 +209,14 @@ const AppointmentsDashboard = () => {
             Appointments
           </Button>
         </SheetTrigger>
-        <SheetContent side="bottom" className="h-[90vh] overflow-hidden">
-          <SheetHeader className="pb-3">
-            <SheetTitle className="text-lg">Appointments Dashboard</SheetTitle>
-            <SheetDescription className="text-sm">
+        <SheetContent side="bottom" className="h-[85vh] overflow-y-auto">
+          <SheetHeader>
+            <SheetTitle>Appointments Dashboard</SheetTitle>
+            <SheetDescription>
               Manage and view all patient appointments
             </SheetDescription>
           </SheetHeader>
-          <div className="h-full overflow-hidden">
+          <div className="mt-6">
             <DashboardContent />
           </div>
         </SheetContent>
