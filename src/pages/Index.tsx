@@ -115,8 +115,8 @@ const Index = () => {
                     <h3 className="font-semibold text-lg">Office Hours</h3>
                     <div className="text-gray-600">
                       <p>Monday - Friday: 9:00 AM - 7:00 PM</p>
-                      <p>Saturday: 9:00 AM - 7:00 PM</p>
-                      <p>Sunday: Closed</p>
+                      <p>Saturday- Sunday: 9:00 AM - 7:00 PM</p>
+                      
                     </div>
                   </div>
                 </div>
