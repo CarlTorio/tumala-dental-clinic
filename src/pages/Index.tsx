@@ -6,6 +6,7 @@ import BookingModal from '@/components/BookingModal';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import DentistLogin from '@/components/DentistLogin';
+
 const Index = () => {
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [isButtonHighlighted, setIsButtonHighlighted] = useState(false);
@@ -125,7 +126,7 @@ const Index = () => {
                   <div>
                     <h3 className="font-semibold text-lg">Contact</h3>
                     <p className="text-gray-600">
-                      Office: +63 999 464 8865<br />
+                      Clinic: 09994648856<br />
                       Email: tumaladentalclinic@gmail.com
                     </p>
                   </div>
@@ -174,4 +175,5 @@ const Index = () => {
       <BookingModal isOpen={isBookingOpen} onClose={() => setIsBookingOpen(false)} />
     </div>;
 };
+
 export default Index;
