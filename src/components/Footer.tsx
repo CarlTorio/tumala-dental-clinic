@@ -10,7 +10,7 @@ const Footer = () => {
               <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
                 <span className="text-white font-bold">🦷</span>
               </div>
-              <span className="text-lg font-bold">DentalCare Plus</span>
+              <span className="text-lg font-bold">Tumala Dental Clinic</span>
             </div>
             <p className="text-gray-400 mb-4">Healthy teeth, Happy life! 
 We love helping you to achieve a bright and confident smile every day. </p>
