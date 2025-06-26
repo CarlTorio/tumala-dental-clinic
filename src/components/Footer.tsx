@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { MapPinIcon, PhoneIcon, MailIcon, ClockIcon, Facebook } from 'lucide-react';
 const Footer = () => {
@@ -82,36 +81,15 @@ Brgy. Malabanias, Angeles City, Pampanga</p>
           {/* Services */}
           <div>
             <h3 className="text-lg font-semibold mb-4">Our Services</h3>
-            <div className="space-y-3 text-gray-400">
-              <div>
-                <div className="font-medium text-white">General Dentistry</div>
-                <div className="text-sm">Comprehensive oral health care and routine checkups</div>
-              </div>
-              <div>
-                <div className="font-medium text-white">TMJ Practitioner</div>
-                <div className="text-sm">Treatment for jaw joint disorders and pain relief</div>
-              </div>
-              <div>
-                <div className="font-medium text-white">Orthodontics</div>
-                <div className="text-sm">Teeth alignment and bite correction solutions</div>
-              </div>
-              <div>
-                <div className="font-medium text-white">Pediatric Dentistry</div>
-                <div className="text-sm">Specialized dental care for children and teens</div>
-              </div>
-              <div>
-                <div className="font-medium text-white">Radiograph (XRAY)</div>
-                <div className="text-sm">Digital imaging for accurate diagnosis</div>
-              </div>
-              <div>
-                <div className="font-medium text-white">Prosthodontics</div>
-                <div className="text-sm">Replacement of missing teeth with implants and dentures</div>
-              </div>
-              <div>
-                <div className="font-medium text-white">Esthetics</div>
-                <div className="text-sm">Cosmetic treatments for a beautiful smile</div>
-              </div>
-            </div>
+            <ul className="space-y-2 text-gray-400">
+              <li>General Dentistry</li>
+              <li>TMJ Practitioner</li>
+              <li>Orthodontics</li>
+              <li>Pediatric Dentistry</li>
+              <li>Radiograph (XRAY)</li>
+              <li>Prosthodontics</li>
+              <li>Esthetics</li>
+            </ul>
           </div>
         </div>
 
