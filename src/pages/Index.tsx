@@ -7,6 +7,7 @@ import Footer from '@/components/Footer';
 import DentistLogin from '@/components/DentistLogin';
 import ServiceCard from '@/components/ServiceCard';
 import { useTypingAnimation } from '@/hooks/useTypingAnimation';
+
 const Index = () => {
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [isButtonHighlighted, setIsButtonHighlighted] = useState(false);
@@ -65,7 +66,9 @@ const Index = () => {
     description: "Cosmetic dental treatments to enhance your smile's appearance and boost confidence.",
     icon: "✨"
   }];
-  return <div className="min-h-screen bg-white">
+
+  return (
+    <div className="min-h-screen bg-white">
       <Header onBookNow={handleBookingClick} />
       
       {/* Hero Section */}
@@ -194,17 +197,19 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Dentist Login Section */}
+      <Footer />
+      
+      {/* Dentist Login Section - Moved below footer */}
       <section className="py-8 px-4 bg-gray-50 border-t">
         <div className="container mx-auto text-center">
           <h3 className="text-lg font-semibold text-gray-700 mb-4">Healthcare Professional Access</h3>
           <DentistLogin />
         </div>
       </section>
-
-      <Footer />
       
       <BookingModal isOpen={isBookingOpen} onClose={() => setIsBookingOpen(false)} />
-    </div>;
+    </div>
+  );
 };
+
 export default Index;
