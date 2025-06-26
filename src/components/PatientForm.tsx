@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -199,14 +198,14 @@ const PatientForm = ({ onSubmit, initialData }: PatientFormProps) => {
                   <SelectTrigger className={errors.dateOfBirth ? 'border-red-500' : ''}>
                     <SelectValue placeholder="Month" />
                   </SelectTrigger>
-                  <SelectContent>
-                    <ScrollArea className="h-[200px] smooth-scroll">
+                  <SelectContent className="max-h-[200px]">
+                    <div className="overflow-y-auto max-h-[180px] smooth-scroll">
                       {months.map((month) => (
                         <SelectItem key={month.value} value={month.value}>
                           {month.label}
                         </SelectItem>
                       ))}
-                    </ScrollArea>
+                    </div>
                   </SelectContent>
                 </Select>
                 
@@ -214,29 +213,29 @@ const PatientForm = ({ onSubmit, initialData }: PatientFormProps) => {
                   <SelectTrigger className={errors.dateOfBirth ? 'border-red-500' : ''}>
                     <SelectValue placeholder="Day" />
                   </SelectTrigger>
-                  <SelectContent>
-                    <ScrollArea className="h-[200px] smooth-scroll">
+                  <SelectContent className="max-h-[200px]">
+                    <div className="overflow-y-auto max-h-[180px] smooth-scroll">
                       {days.map((day) => (
                         <SelectItem key={day.value} value={day.value}>
                           {day.label}
                         </SelectItem>
                       ))}
-                    </ScrollArea>
+                    </div>
                   </SelectContent>
                 </Select>
                 
                 <Select value={dobYear} onValueChange={(value) => handleDateChange('year', value)}>
-                  <SelectTrigger className={errors.dateOfBirth ? 'border-red-5000' : ''}>
+                  <SelectTrigger className={errors.dateOfBirth ? 'border-red-500' : ''}>
                     <SelectValue placeholder="Year" />
                   </SelectTrigger>
-                  <SelectContent>
-                    <ScrollArea className="h-[200px] smooth-scroll">
+                  <SelectContent className="max-h-[200px]">
+                    <div className="overflow-y-auto max-h-[180px] smooth-scroll">
                       {years.map((year) => (
                         <SelectItem key={year.value} value={year.value}>
                           {year.label}
                         </SelectItem>
                       ))}
-                    </ScrollArea>
+                    </div>
                   </SelectContent>
                 </Select>
               </div>

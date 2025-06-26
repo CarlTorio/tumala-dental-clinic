@@ -1,4 +1,3 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&display=swap');
 
 @tailwind base;
@@ -199,11 +198,12 @@
   .animate-delay-6 { animation-delay: 0.85s; }
   .animate-delay-7 { animation-delay: 1s; }
 
-  /* Smooth scroll for select dropdowns */
+  /* Enhanced smooth scroll for select dropdowns */
   .smooth-scroll {
     scroll-behavior: smooth;
     scrollbar-width: thin;
     scrollbar-color: rgba(156, 163, 175, 0.5) transparent;
+    -webkit-overflow-scrolling: touch; /* iOS smooth scrolling */
   }
 
   .smooth-scroll::-webkit-scrollbar {
@@ -229,6 +229,15 @@
     .smooth-scroll {
       -webkit-overflow-scrolling: touch;
       scroll-behavior: smooth;
+      overscroll-behavior: contain;
+    }
+  }
+
+  /* Additional mobile touch improvements */
+  @media (hover: none) and (pointer: coarse) {
+    .smooth-scroll {
+      scroll-snap-type: y proximity;
+      scroll-padding: 8px;
     }
   }
 }
