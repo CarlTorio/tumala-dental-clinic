@@ -32,8 +32,10 @@ const Index = () => {
       <Header onBookNow={() => setIsBookingOpen(true)} />
       
       {/* Hero Section */}
-      <section className="relative dental-gradient text-white py-20 px-4">
-        <div className="container mx-auto text-center">
+      <section className="relative dental-gradient text-white py-20 px-4 overflow-hidden">
+        {/* Circular gradient overlay */}
+        <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-radial from-white/20 via-white/10 to-transparent rounded-full -translate-x-1/3 -translate-y-1/3 blur-xl"></div>
+        <div className="container mx-auto text-center relative z-10">
           <h1 className="text-5xl md:text-6xl font-bold mb-6 animate-fade-in">
             Your Perfect Smile Starts Here
           </h1>
