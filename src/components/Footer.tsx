@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { MapPinIcon, PhoneIcon, MailIcon, ClockIcon, Facebook } from 'lucide-react';
 const Footer = () => {
@@ -63,8 +62,8 @@ Brgy. Malabanias, Angeles City, Pampanga</p>
                 <span>9:00 AM - 7:00 PM</span>
               </div>
               <div className="flex justify-between">
-                <span>Saturday - Sunday</span>
-                <span>9:00 AM - 7:00 PM</span>
+                <span>Sunday</span>
+                <span>1:00 PM - 7:00 PM</span>
               </div>
               <div className="flex justify-between">
                 
