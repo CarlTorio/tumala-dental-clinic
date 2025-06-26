@@ -53,7 +53,7 @@ Brgy. Malabanias, Angeles City, Pampanga</p>
 
           {/* Office Hours */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Office Hours</h3>
+            <h3 className="text-lg font-semibold mb-4">Clinic Hours</h3>
             <div className="space-y-2 text-gray-400">
               <div className="flex justify-between">
                 <span>Monday - Friday</span>
