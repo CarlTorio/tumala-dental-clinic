@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
@@ -7,27 +6,24 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { dentalConcerns, insuranceProviders } from './patientFormData';
 import type { AppointmentData } from '../BookingModal';
-
 interface AppointmentDetailsSectionProps {
   formData: AppointmentData['patientInfo'];
   errors: Record<string, string>;
   onInputChange: (field: keyof AppointmentData['patientInfo'], value: string) => void;
 }
-
-const AppointmentDetailsSection = ({ formData, errors, onInputChange }: AppointmentDetailsSectionProps) => {
-  return (
-    <Card>
+const AppointmentDetailsSection = ({
+  formData,
+  errors,
+  onInputChange
+}: AppointmentDetailsSectionProps) => {
+  return <Card>
       <CardHeader>
         <CardTitle>Appointment Details</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         <div>
           <Label>Patient Type *</Label>
-          <RadioGroup
-            value={formData.patientType}
-            onValueChange={(value) => onInputChange('patientType', value as 'new' | 'returning')}
-            className="flex space-x-6 mt-2"
-          >
+          <RadioGroup value={formData.patientType} onValueChange={value => onInputChange('patientType', value as 'new' | 'returning')} className="flex space-x-6 mt-2">
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="new" id="new" />
               <Label htmlFor="new">New Patient</Label>
@@ -41,58 +37,26 @@ const AppointmentDetailsSection = ({ formData, errors, onInputChange }: Appointm
 
         <div>
           <Label htmlFor="dentalConcern">Reason for Visit *</Label>
-          <Select
-            value={formData.dentalConcern}
-            onValueChange={(value) => onInputChange('dentalConcern', value)}
-          >
+          <Select value={formData.dentalConcern} onValueChange={value => onInputChange('dentalConcern', value)}>
             <SelectTrigger className={errors.dentalConcern ? 'border-red-500' : ''}>
               <SelectValue placeholder="Select your dental concern" />
             </SelectTrigger>
             <SelectContent className="z-50">
-              {dentalConcerns.map((concern) => (
-                <SelectItem key={concern} value={concern}>
+              {dentalConcerns.map(concern => <SelectItem key={concern} value={concern}>
                   {concern}
-                </SelectItem>
-              ))}
+                </SelectItem>)}
             </SelectContent>
           </Select>
-          {errors.dentalConcern && (
-            <p className="text-red-500 text-sm mt-1">{errors.dentalConcern}</p>
-          )}
+          {errors.dentalConcern && <p className="text-red-500 text-sm mt-1">{errors.dentalConcern}</p>}
         </div>
 
-        <div>
-          <Label htmlFor="insurance">Insurance Provider</Label>
-          <Select
-            value={formData.insurance}
-            onValueChange={(value) => onInputChange('insurance', value)}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Select your insurance provider" />
-            </SelectTrigger>
-            <SelectContent className="z-50">
-              {insuranceProviders.map((provider) => (
-                <SelectItem key={provider} value={provider}>
-                  {provider}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+        
 
         <div>
           <Label htmlFor="specialNotes">Special Notes or Requirements</Label>
-          <Textarea
-            id="specialNotes"
-            value={formData.specialNotes}
-            onChange={(e) => onInputChange('specialNotes', e.target.value)}
-            placeholder="Any special accommodations, medications, or notes for the dentist..."
-            rows={3}
-          />
+          <Textarea id="specialNotes" value={formData.specialNotes} onChange={e => onInputChange('specialNotes', e.target.value)} placeholder="Any special accommodations, medications, or notes for the dentist..." rows={3} />
         </div>
       </CardContent>
-    </Card>
-  );
+    </Card>;
 };
-
 export default AppointmentDetailsSection;
