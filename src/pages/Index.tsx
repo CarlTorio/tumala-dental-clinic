@@ -6,11 +6,9 @@ import BookingModal from '@/components/BookingModal';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import DentistLogin from '@/components/DentistLogin';
-
 const Index = () => {
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [isButtonHighlighted, setIsButtonHighlighted] = useState(false);
-  
   const handleBookingClick = () => {
     setIsButtonHighlighted(true);
     setIsBookingOpen(true);
@@ -20,11 +18,9 @@ const Index = () => {
       setIsButtonHighlighted(false);
     }, 400);
   };
-
   const handleMapClick = () => {
     window.open('https://maps.app.goo.gl/Mnej5iLxeQNfKZur7', '_blank');
   };
-
   const services = [{
     title: "General Dentistry",
     description: "Comprehensive oral health care including cleanings, fillings, and preventive treatments.",
@@ -38,7 +34,6 @@ const Index = () => {
     description: "Specialized treatment for temporomandibular joint disorders, jaw pain, and bite alignment issues.",
     icon: "🔧"
   }];
-
   return <div className="min-h-screen bg-white">
       <Header onBookNow={handleBookingClick} />
       
@@ -120,7 +115,7 @@ const Index = () => {
                     <h3 className="font-semibold text-lg">Office Hours</h3>
                     <div className="text-gray-600">
                       <p>Monday - Friday: 8:00 AM - 6:00 PM</p>
-                      <p>Saturday: 9:00 AM - 3:00 PM</p>
+                      <p>Saturday: 9:00 AM - 7:00 PM</p>
                       <p>Sunday: Closed</p>
                     </div>
                   </div>
@@ -138,17 +133,9 @@ const Index = () => {
               </div>
             </div>
             <div className="rounded-lg overflow-hidden shadow-lg cursor-pointer hover:shadow-xl transition-shadow duration-300" onClick={handleMapClick}>
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3845.8847742562577!2d120.58825897589!3d15.155638985276!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3396f27a7b5c7b7b%3A0x8b8b8b8b8b8b8b8b!2s4009-A%20Richtofen%20St%2C%20Angeles%2C%20Pampanga%2C%20Philippines!5e0!3m2!1sen!2sph!4v1640995200000!5m2!1sen!2sph"
-                width="100%"
-                height="384"
-                style={{ border: 0 }}
-                allowFullScreen
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                title="Tumala Dental Clinic Location"
-                className="pointer-events-none"
-              />
+              <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3845.8847742562577!2d120.58825897589!3d15.155638985276!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3396f27a7b5c7b7b%3A0x8b8b8b8b8b8b8b8b!2s4009-A%20Richtofen%20St%2C%20Angeles%2C%20Pampanga%2C%20Philippines!5e0!3m2!1sen!2sph!4v1640995200000!5m2!1sen!2sph" width="100%" height="384" style={{
+              border: 0
+            }} allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade" title="Tumala Dental Clinic Location" className="pointer-events-none" />
               <div className="absolute inset-0 bg-transparent hover:bg-blue-500 hover:bg-opacity-10 transition-colors duration-300 flex items-center justify-center">
                 <div className="bg-white bg-opacity-90 px-4 py-2 rounded-lg opacity-0 hover:opacity-100 transition-opacity duration-300">
                   <MapPinIcon className="h-5 w-5 text-primary inline mr-2" />
@@ -187,5 +174,4 @@ const Index = () => {
       <BookingModal isOpen={isBookingOpen} onClose={() => setIsBookingOpen(false)} />
     </div>;
 };
-
 export default Index;
