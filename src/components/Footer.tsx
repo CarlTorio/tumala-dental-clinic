@@ -60,12 +60,12 @@ Brgy. Malabanias, Angeles City, Pampanga</p>
                 <span>9:00 AM - 7:00 PM</span>
               </div>
               <div className="flex justify-between">
-                <span>Saturday</span>
+                <span>Saturday - Sunday</span>
                 <span>9:00 AM - 3:00 PM</span>
               </div>
               <div className="flex justify-between">
-                <span>Sunday</span>
-                <span>Closed</span>
+                
+                
               </div>
               <div className="pt-2 border-t border-gray-700">
                 <div className="flex items-center space-x-2 text-red-400">
