@@ -81,7 +81,7 @@ Brgy. Malabanias, Angeles City, Pampanga</p>
             <h3 className="text-lg font-semibold mb-4">Our Services</h3>
             <ul className="space-y-2 text-gray-400">
               <li>General Dentistry</li>
-              <li>Cosmetic Dentistry</li>
+              <li>TMJ Practitioner</li>
               <li>Orthodontics</li>
               <li>Emergency Care</li>
               <li>Pediatric Dentistry</li>
