@@ -1,12 +1,12 @@
 
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { CalendarIcon, ClockIcon, PhoneIcon, MailIcon, MapPinIcon } from 'lucide-react';
 import BookingModal from '@/components/BookingModal';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import DentistLogin from '@/components/DentistLogin';
+import ServiceCard from '@/components/ServiceCard';
 
 const Index = () => {
   const [isBookingOpen, setIsBookingOpen] = useState(false);
@@ -130,16 +130,29 @@ const Index = () => {
               Comprehensive dental care tailored to your needs, delivered with the latest technology and gentle care.
             </p>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {services.map((service, index) => <Card key={index} className="hover:shadow-lg transition-shadow duration-300 border-0 bg-white">
-                <CardHeader className="text-center">
-                  
-                  <CardTitle className="text-primary">{service.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-600 text-center">{service.description}</p>
-                </CardContent>
-              </Card>)}
+          
+          {/* Desktop Layout - Center Esthetics */}
+          <div className="hidden md:block">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+              {services.slice(0, 6).map((service, index) => (
+                <ServiceCard key={index} service={service} index={index} />
+              ))}
+            </div>
+            {/* Center the Esthetics service */}
+            <div className="flex justify-center">
+              <div className="w-full max-w-sm">
+                <ServiceCard service={services[6]} index={6} />
+              </div>
+            </div>
+          </div>
+
+          {/* Mobile Layout - All services in grid with animations */}
+          <div className="block md:hidden">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              {services.map((service, index) => (
+                <ServiceCard key={index} service={service} index={index} />
+              ))}
+            </div>
           </div>
         </div>
       </section>
