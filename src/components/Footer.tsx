@@ -93,7 +93,7 @@ Brgy. Malabanias, Angeles City, Pampanga</p>
         </div>
 
         <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
-          <p>© 2025 DentalCare Plus. All rights reserved.</p>
+          <p>© 2025 TumalaDentalClinic . All rights reserved.</p>
         </div>
       </div>
     </footer>;
