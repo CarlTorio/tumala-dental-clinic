@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { UserIcon, PhoneIcon, MailIcon } from 'lucide-react';
 import type { AppointmentData } from './BookingModal';
 
@@ -214,14 +215,14 @@ const PatientForm = ({ onSubmit, initialData }: PatientFormProps) => {
               <SelectTrigger className={errors.dentalConcern ? 'border-red-500' : ''}>
                 <SelectValue placeholder="Select your dental concern" />
               </SelectTrigger>
-              <SelectContent className="z-50 max-h-[200px] overflow-hidden">
-                <div className="max-h-[200px] overflow-y-auto">
+              <SelectContent className="z-50">
+                <ScrollArea className="h-[200px]">
                   {dentalConcerns.map((concern) => (
                     <SelectItem key={concern} value={concern}>
                       {concern}
                     </SelectItem>
                   ))}
-                </div>
+                </ScrollArea>
               </SelectContent>
             </Select>
             {errors.dentalConcern && (
@@ -238,14 +239,14 @@ const PatientForm = ({ onSubmit, initialData }: PatientFormProps) => {
               <SelectTrigger>
                 <SelectValue placeholder="Select your insurance provider" />
               </SelectTrigger>
-              <SelectContent className="z-50 max-h-[200px] overflow-hidden">
-                <div className="max-h-[200px] overflow-y-auto">
+              <SelectContent className="z-50">
+                <ScrollArea className="h-[200px]">
                   {insuranceProviders.map((provider) => (
                     <SelectItem key={provider} value={provider}>
                       {provider}
                     </SelectItem>
                   ))}
-                </div>
+                </ScrollArea>
               </SelectContent>
             </Select>
           </div>
