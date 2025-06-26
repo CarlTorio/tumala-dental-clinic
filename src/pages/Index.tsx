@@ -51,10 +51,10 @@ const Index = () => {
           <div className="max-w-4xl mx-auto">
             <div className="rounded-lg overflow-hidden shadow-lg">
               <iframe
-                src="https://drive.google.com/file/d/1S6yFZ7XhkrOEOi0R8hBeKmra8wQVbdkH/preview?autoplay=1&loop=1&mute=1&controls=0"
+                src="https://drive.google.com/file/d/1S6yFZ7XhkrOEOi0R8hBeKmra8wQVbdkH/preview"
                 className="w-full h-64 md:h-96"
                 frameBorder="0"
-                allow="autoplay; fullscreen"
+                allow="autoplay; fullscreen; picture-in-picture"
                 allowFullScreen
                 title="Tumala Dental Clinic Video"
                 style={{ aspectRatio: '16/9' }}
