@@ -1,5 +1,4 @@
 
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -32,26 +31,9 @@ const Index = () => {
   return <div className="min-h-screen bg-white">
       <Header onBookNow={() => setIsBookingOpen(true)} />
       
-      {/* Hero Section - Enhanced */}
-      <section className="relative dental-gradient text-white py-20 px-4 overflow-hidden">
-        {/* Enhanced teeth pattern background */}
-        <div className="absolute inset-0 opacity-90">
-          <div className="teeth-pattern"></div>
-        </div>
-        
-        {/* Central vignette highlight */}
-        <div className="hero-vignette"></div>
-        
-        {/* Enhanced floating tooth icons */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="floating-tooth floating-tooth-1">🦷</div>
-          <div className="floating-tooth floating-tooth-2">🦷</div>
-          <div className="floating-tooth floating-tooth-3">🦷</div>
-          <div className="floating-tooth floating-tooth-4">🦷</div>
-          <div className="floating-tooth floating-tooth-5">🦷</div>
-        </div>
-        
-        <div className="container mx-auto text-center relative z-10">
+      {/* Hero Section */}
+      <section className="relative dental-gradient text-white py-20 px-4">
+        <div className="container mx-auto text-center">
           <h1 className="text-5xl md:text-6xl font-bold mb-6 animate-fade-in">
             Your Perfect Smile Starts Here
           </h1>
