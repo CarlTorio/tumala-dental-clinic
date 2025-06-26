@@ -6,12 +6,10 @@ import BookingModal from '@/components/BookingModal';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import DentistLogin from '@/components/DentistLogin';
-
 const Index = () => {
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [isButtonHighlighted, setIsButtonHighlighted] = useState(false);
   const [isCtaButtonHighlighted, setIsCtaButtonHighlighted] = useState(false);
-
   const handleBookingClick = () => {
     setIsButtonHighlighted(true);
     setIsBookingOpen(true);
@@ -21,7 +19,6 @@ const Index = () => {
       setIsButtonHighlighted(false);
     }, 400);
   };
-
   const handleCtaBookingClick = () => {
     setIsCtaButtonHighlighted(true);
     setIsBookingOpen(true);
@@ -31,51 +28,39 @@ const Index = () => {
       setIsCtaButtonHighlighted(false);
     }, 400);
   };
-
   const handleMapClick = () => {
     window.open('https://maps.app.goo.gl/Mnej5iLxeQNfKZur7', '_blank');
   };
-
-  const services = [
-    {
-      title: "General Dentistry",
-      description: "Comprehensive oral health care including cleanings, fillings, and preventive treatments.",
-      icon: "🦷"
-    },
-    {
-      title: "TMJ-Practitioner",
-      description: "Specialized treatment for temporomandibular joint disorders, jaw pain, and bite alignment issues.",
-      icon: "🔧"
-    },
-    {
-      title: "Orthodontics",
-      description: "Straighten your teeth with braces, clear aligners, and orthodontic treatments.",
-      icon: "🦷"
-    },
-    {
-      title: "Pediatric Dentistry",
-      description: "Specialized dental care for children, focusing on prevention and creating positive dental experiences.",
-      icon: "👶"
-    },
-    {
-      title: "Radiograph (XRAY)",
-      description: "Advanced digital X-ray imaging for accurate diagnosis and treatment planning.",
-      icon: "📸"
-    },
-    {
-      title: "Prosthodontics",
-      description: "Restoration and replacement of teeth with crowns, bridges, dentures, and implants.",
-      icon: "🦷"
-    },
-    {
-      title: "Esthetics",
-      description: "Cosmetic dental treatments to enhance your smile's appearance and boost confidence.",
-      icon: "✨"
-    }
-  ];
-
-  return (
-    <div className="min-h-screen bg-white">
+  const services = [{
+    title: "General Dentistry",
+    description: "Comprehensive oral health care including cleanings, fillings, and preventive treatments.",
+    icon: "🦷"
+  }, {
+    title: "TMJ-Practitioner",
+    description: "Specialized treatment for temporomandibular joint disorders, jaw pain, and bite alignment issues.",
+    icon: "🔧"
+  }, {
+    title: "Orthodontics",
+    description: "Straighten your teeth with braces, clear aligners, and orthodontic treatments.",
+    icon: "🦷"
+  }, {
+    title: "Pediatric Dentistry",
+    description: "Specialized dental care for children, focusing on prevention and creating positive dental experiences.",
+    icon: "👶"
+  }, {
+    title: "Radiograph (XRAY)",
+    description: "Advanced digital X-ray imaging for accurate diagnosis and treatment planning.",
+    icon: "📸"
+  }, {
+    title: "Prosthodontics",
+    description: "Restoration and replacement of teeth with crowns, bridges, dentures, and implants.",
+    icon: "🦷"
+  }, {
+    title: "Esthetics",
+    description: "Cosmetic dental treatments to enhance your smile's appearance and boost confidence.",
+    icon: "✨"
+  }];
+  return <div className="min-h-screen bg-white">
       <Header onBookNow={handleBookingClick} />
       
       {/* Hero Section */}
@@ -118,8 +103,7 @@ const Index = () => {
             </p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {services.map((service, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow duration-300 border-0 bg-white">
+            {services.map((service, index) => <Card key={index} className="hover:shadow-lg transition-shadow duration-300 border-0 bg-white">
                 <CardHeader className="text-center">
                   <div className="text-4xl mb-2">{service.icon}</div>
                   <CardTitle className="text-primary">{service.title}</CardTitle>
@@ -127,8 +111,7 @@ const Index = () => {
                 <CardContent>
                   <p className="text-gray-600 text-center">{service.description}</p>
                 </CardContent>
-              </Card>
-            ))}
+              </Card>)}
           </div>
         </div>
       </section>
@@ -152,7 +135,7 @@ const Index = () => {
                   <div>
                     <h3 className="font-semibold text-lg">Office Hours</h3>
                     <div className="text-gray-600">
-                      <p>Monday - Friday: 9:00 AM - 7:00 PM</p>
+                      <p>Monday - Saturday: 9:00 AM - 7:00 PM</p>
                       <p>Saturday- Sunday: 9:00 AM - 7:00 PM</p>
                       
                     </div>
@@ -205,8 +188,6 @@ const Index = () => {
       <Footer />
       
       <BookingModal isOpen={isBookingOpen} onClose={() => setIsBookingOpen(false)} />
-    </div>
-  );
+    </div>;
 };
-
 export default Index;
