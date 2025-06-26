@@ -145,7 +145,7 @@ const AppointmentCalendar = ({
           
           {selectedDate && <div className="mt-4 text-xs text-gray-500 space-y-1">
               <p>• Each appointment will be done not less than 30 munites (so consider the time)</p>
-              {getDay(selectedDate) === 0 ? <p>• Sunday hours: 1:00 PM - 7:00 PM</p> : <p>• Office hours: 9:00 AM - 7:00 PM (Mon-Sat)</p>}
+              {getDay(selectedDate) === 0 ? <p>• Clinic hours: 9:00 AM - 7:00 PM (Mon-Sat)</p> : <p>• Office hours: 9:00 AM - 7:00 PM (Mon-Sat)</p>}
             </div>}
         </CardContent>
       </Card>
