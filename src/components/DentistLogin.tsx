@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -50,7 +51,7 @@ const DentistLogin = ({ isOpen, onClose }: DentistLoginProps) => {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (username === 'DENTIST' && password === 'APARTMENTS') {
+    if (username === 'DENTIST' && password === 'DENTIST') {
       setIsLoggedIn(true);
       setError('');
       
