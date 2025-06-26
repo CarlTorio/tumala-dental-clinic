@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -49,7 +48,7 @@ const DentistLogin = ({ isOpen, onClose }: DentistLoginProps) => {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (username === 'DENTIST' && password === 'APPOINTMENTS') {
+    if (username === 'DENTIST' && password === 'APARTMENTS') {
       setIsLoggedIn(true);
       setError('');
       
@@ -85,8 +84,13 @@ const DentistLogin = ({ isOpen, onClose }: DentistLoginProps) => {
     loadAppointments();
   };
 
+  // Filter appointments
   const pendingAppointments = appointments.filter(apt => apt.status === 'Pending');
   const confirmedAppointments = appointments.filter(apt => apt.status === 'Confirmed');
+  
+  // Filter today's appointments
+  const today = new Date().toLocaleDateString();
+  const todayAppointments = appointments.filter(apt => apt.date === today);
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -175,8 +179,11 @@ const DentistLogin = ({ isOpen, onClose }: DentistLoginProps) => {
             </div>
             
             <Tabs defaultValue="all" className="w-full">
-              <TabsList className="grid w-full grid-cols-3">
+              <TabsList className="grid w-full grid-cols-4">
                 <TabsTrigger value="all">All Appointments ({appointments.length})</TabsTrigger>
+                <TabsTrigger value="today" className="text-blue-600">
+                  Today ({todayAppointments.length})
+                </TabsTrigger>
                 <TabsTrigger value="pending" className="text-yellow-600">
                   Pending ({pendingAppointments.length})
                 </TabsTrigger>
@@ -282,6 +289,89 @@ const DentistLogin = ({ isOpen, onClose }: DentistLoginProps) => {
                         ))}
                       </TableBody>
                     </Table>
+                  )}
+                </div>
+              </TabsContent>
+              
+              <TabsContent value="today" className="mt-4">
+                <div className="space-y-4">
+                  {todayAppointments.length === 0 ? (
+                    <Card className="text-center py-8">
+                      <CardContent>
+                        <CalendarIcon className="h-12 w-12 text-blue-400 mx-auto mb-4" />
+                        <p className="text-gray-500">No appointments for today</p>
+                        <p className="text-sm text-gray-400">Today's appointments will appear here</p>
+                      </CardContent>
+                    </Card>
+                  ) : (
+                    <div className="space-y-4">
+                      <div className="text-sm text-gray-600 mb-4">
+                        Showing appointments for {today}
+                      </div>
+                      {todayAppointments.map((appointment) => (
+                        <Card key={appointment.id} className="border-l-4 border-l-blue-500">
+                          <CardHeader className="pb-3">
+                            <CardTitle className="flex items-center justify-between">
+                              <span className="text-lg">{appointment.patientName}</span>
+                              <div className="flex items-center space-x-2">
+                                <span className={`px-3 py-1 rounded-full text-sm ${
+                                  appointment.status === 'Confirmed' 
+                                    ? 'bg-green-100 text-green-800' 
+                                    : 'bg-yellow-100 text-yellow-800'
+                                }`}>
+                                  {appointment.status}
+                                </span>
+                                {appointment.status === 'Pending' && (
+                                  <Button
+                                    onClick={() => handleStatusUpdate(appointment.id, 'Confirmed')}
+                                    size="sm"
+                                    className="bg-green-600 hover:bg-green-700"
+                                  >
+                                    <CheckIcon className="h-4 w-4 mr-1" />
+                                    Confirm
+                                  </Button>
+                                )}
+                              </div>
+                            </CardTitle>
+                          </CardHeader>
+                          <CardContent>
+                            <div className="grid md:grid-cols-2 gap-4">
+                              <div className="space-y-2">
+                                <div className="flex items-center text-sm text-gray-600">
+                                  <ClockIcon className="h-4 w-4 mr-2" />
+                                  {appointment.time}
+                                </div>
+                                <div className="text-sm text-gray-600">
+                                  <strong>Concern:</strong> {appointment.dentalConcern}
+                                </div>
+                                <div className="text-sm text-gray-600">
+                                  <strong>Patient Type:</strong> {appointment.patientType}
+                                </div>
+                              </div>
+                              <div className="space-y-2">
+                                <div className="text-sm text-gray-600">
+                                  <strong>Email:</strong> {appointment.email}
+                                </div>
+                                <div className="text-sm text-gray-600">
+                                  <strong>Phone:</strong> {appointment.phone}
+                                </div>
+                                {appointment.insurance && (
+                                  <div className="text-sm text-gray-600">
+                                    <strong>Insurance:</strong> {appointment.insurance}
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                            {appointment.specialNotes && (
+                              <div className="mt-3 p-3 bg-gray-50 rounded">
+                                <strong className="text-sm">Special Notes:</strong>
+                                <p className="text-sm text-gray-600 mt-1">{appointment.specialNotes}</p>
+                              </div>
+                            )}
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
                   )}
                 </div>
               </TabsContent>
