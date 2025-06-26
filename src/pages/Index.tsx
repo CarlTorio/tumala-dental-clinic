@@ -1,7 +1,7 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { CalendarIcon, ClockIcon, PhoneIcon, MailIcon, MapPinIcon } from 'lucide-react';
 import BookingModal from '@/components/BookingModal';
 import Header from '@/components/Header';
@@ -31,25 +31,6 @@ const Index = () => {
       title: "Emergency Care",
       description: "Immediate dental care for urgent situations and dental emergencies.",
       icon: "🚨"
-    }
-  ];
-
-  const faqs = [
-    {
-      question: "How do I prepare for my dental appointment?",
-      answer: "Brush and floss before your visit, arrive 15 minutes early, and bring your insurance card and ID."
-    },
-    {
-      question: "What insurance plans do you accept?",
-      answer: "We accept most major insurance plans including Delta Dental, Blue Cross Blue Shield, and Aetna."
-    },
-    {
-      question: "Can I reschedule my appointment?",
-      answer: "Yes, you can reschedule up to 24 hours before your appointment by calling our office or using your booking reference."
-    },
-    {
-      question: "What should I expect during my first visit?",
-      answer: "Your first visit includes a comprehensive exam, X-rays if needed, and a discussion of your treatment plan."
     }
   ];
 
@@ -147,90 +128,6 @@ const Index = () => {
                 <p className="text-sm">(Map integration placeholder)</p>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Emergency Contact */}
-      <section className="py-12 dental-accent-bg">
-        <div className="container mx-auto text-center px-4">
-          <h2 className="text-3xl font-bold text-primary mb-4">Dental Emergency?</h2>
-          <p className="text-gray-600 mb-6 text-lg">
-            We provide emergency dental care. Call us immediately for urgent situations.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button variant="outline" size="lg" className="border-primary text-primary hover:bg-primary hover:text-white">
-              <PhoneIcon className="mr-2 h-5 w-5" />
-              Emergency Line: (555) 911-CARE
-            </Button>
-            <Button size="lg" onClick={() => setIsBookingOpen(true)}>
-              <CalendarIcon className="mr-2 h-5 w-5" />
-              Book Regular Appointment
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* Insurance Information */}
-      <section className="py-16 px-4">
-        <div className="container mx-auto text-center">
-          <h2 className="text-4xl font-bold text-primary mb-8">Insurance & Payment</h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            <Card className="border-0 shadow-sm">
-              <CardHeader>
-                <CardTitle className="text-primary">Insurance Accepted</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-2">
-                  <Badge variant="secondary">Delta Dental</Badge>
-                  <Badge variant="secondary">Blue Cross Blue Shield</Badge>
-                  <Badge variant="secondary">Aetna</Badge>
-                  <Badge variant="secondary">Cigna</Badge>
-                  <Badge variant="secondary">MetLife</Badge>
-                </div>
-              </CardContent>
-            </Card>
-            <Card className="border-0 shadow-sm">
-              <CardHeader>
-                <CardTitle className="text-primary">Payment Options</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ul className="text-gray-600 space-y-2">
-                  <li>✓ Cash & Check</li>
-                  <li>✓ Credit & Debit Cards</li>
-                  <li>✓ Flexible Payment Plans</li>
-                  <li>✓ CareCredit Financing</li>
-                </ul>
-              </CardContent>
-            </Card>
-            <Card className="border-0 shadow-sm">
-              <CardHeader>
-                <CardTitle className="text-primary">New Patient Special</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-2xl font-bold text-primary mb-2">$99</p>
-                <p className="text-gray-600">Comprehensive exam, X-rays, and consultation</p>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ Section */}
-      <section className="py-16 px-4 dental-light-bg">
-        <div className="container mx-auto">
-          <h2 className="text-4xl font-bold text-primary text-center mb-12">Frequently Asked Questions</h2>
-          <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-            {faqs.map((faq, index) => (
-              <Card key={index} className="border-0 bg-white">
-                <CardHeader>
-                  <CardTitle className="text-lg text-primary">{faq.question}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-600">{faq.answer}</p>
-                </CardContent>
-              </Card>
-            ))}
           </div>
         </div>
       </section>
