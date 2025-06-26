@@ -1,5 +1,4 @@
 
-
 @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&display=swap');
 
 @tailwind base;
@@ -130,55 +129,121 @@
     animation: dental-shine 3s ease-in-out infinite;
   }
 
-  /* Teeth Pattern Background */
+  /* Enhanced Teeth Pattern Background */
   .teeth-pattern {
     width: 100%;
     height: 100%;
     background-image: 
+      /* Circular vignette effect */
+      radial-gradient(
+        circle at center,
+        transparent 0%,
+        transparent 30%,
+        rgba(0, 0, 0, 0.1) 70%,
+        rgba(0, 0, 0, 0.2) 100%
+      ),
+      /* Subtle tooth-like pattern */
       repeating-linear-gradient(
         45deg,
         transparent,
+        transparent 15px,
+        rgba(255, 255, 255, 0.08) 15px,
+        rgba(255, 255, 255, 0.08) 30px
+      ),
+      repeating-linear-gradient(
+        -45deg,
+        transparent,
         transparent 20px,
-        rgba(255, 255, 255, 0.05) 20px,
-        rgba(255, 255, 255, 0.05) 40px
+        rgba(255, 255, 255, 0.04) 20px,
+        rgba(255, 255, 255, 0.04) 40px
+      ),
+      /* Soft radial highlights */
+      radial-gradient(
+        circle at 20% 20%,
+        rgba(255, 255, 255, 0.06) 0%,
+        transparent 40%
       ),
       radial-gradient(
-        circle at 25% 25%,
-        rgba(255, 255, 255, 0.03) 0%,
-        transparent 50%
+        circle at 80% 30%,
+        rgba(255, 255, 255, 0.04) 0%,
+        transparent 35%
+      ),
+      radial-gradient(
+        circle at 30% 80%,
+        rgba(255, 255, 255, 0.05) 0%,
+        transparent 38%
       );
-    background-size: 80px 80px, 120px 120px;
-    animation: teeth-float 20s ease-in-out infinite;
+    background-size: 
+      100% 100%,
+      60px 60px,
+      80px 80px,
+      200px 200px,
+      250px 250px,
+      180px 180px;
+    animation: teeth-float 25s ease-in-out infinite;
   }
 
-  /* Floating Tooth Animations */
+  /* Central Vignette Highlight */
+  .hero-vignette {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 120%;
+    height: 120%;
+    background: radial-gradient(
+      circle at center,
+      rgba(255, 255, 255, 0.1) 0%,
+      rgba(255, 255, 255, 0.05) 25%,
+      transparent 50%
+    );
+    pointer-events: none;
+    animation: vignette-pulse 8s ease-in-out infinite;
+  }
+
+  /* Enhanced Floating Tooth Animations */
   .floating-tooth {
     position: absolute;
-    font-size: 2rem;
-    opacity: 0.15;
-    animation: float 6s ease-in-out infinite;
+    font-size: 1.8rem;
+    opacity: 0.12;
+    animation: float 8s ease-in-out infinite;
     pointer-events: none;
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
   }
 
   .floating-tooth-1 {
-    top: 15%;
-    left: 10%;
+    top: 12%;
+    left: 8%;
     animation-delay: 0s;
-    animation-duration: 8s;
-  }
-
-  .floating-tooth-2 {
-    top: 25%;
-    right: 15%;
-    animation-delay: 2s;
     animation-duration: 10s;
   }
 
-  .floating-tooth-3 {
-    bottom: 30%;
-    left: 15%;
-    animation-delay: 4s;
+  .floating-tooth-2 {
+    top: 20%;
+    right: 12%;
+    animation-delay: 2s;
     animation-duration: 12s;
+  }
+
+  .floating-tooth-3 {
+    bottom: 25%;
+    left: 12%;
+    animation-delay: 4s;
+    animation-duration: 14s;
+  }
+
+  .floating-tooth-4 {
+    top: 35%;
+    right: 8%;
+    animation-delay: 6s;
+    animation-duration: 11s;
+  }
+
+  .floating-tooth-5 {
+    bottom: 15%;
+    right: 15%;
+    animation-delay: 8s;
+    animation-duration: 13s;
   }
 
   @keyframes dental-shine {
@@ -196,29 +261,49 @@
   @keyframes teeth-float {
     0%, 100% {
       transform: translateY(0px) rotate(0deg);
+      opacity: 0.8;
+    }
+    33% {
+      transform: translateY(-8px) rotate(1deg);
+      opacity: 0.9;
+    }
+    66% {
+      transform: translateY(-4px) rotate(-1deg);
+      opacity: 0.85;
+    }
+  }
+
+  @keyframes vignette-pulse {
+    0%, 100% {
+      opacity: 0.3;
+      transform: translate(-50%, -50%) scale(1);
     }
     50% {
-      transform: translateY(-10px) rotate(2deg);
+      opacity: 0.5;
+      transform: translate(-50%, -50%) scale(1.05);
     }
   }
 
   @keyframes float {
     0%, 100% {
       transform: translateY(0px) rotate(0deg);
-      opacity: 0.1;
+      opacity: 0.08;
     }
-    25% {
-      transform: translateY(-20px) rotate(5deg);
-      opacity: 0.2;
-    }
-    50% {
-      transform: translateY(-10px) rotate(-3deg);
+    20% {
+      transform: translateY(-25px) rotate(8deg);
       opacity: 0.15;
     }
-    75% {
-      transform: translateY(-15px) rotate(3deg);
-      opacity: 0.18;
+    40% {
+      transform: translateY(-15px) rotate(-5deg);
+      opacity: 0.12;
+    }
+    60% {
+      transform: translateY(-20px) rotate(6deg);
+      opacity: 0.14;
+    }
+    80% {
+      transform: translateY(-10px) rotate(-3deg);
+      opacity: 0.10;
     }
   }
 }
-

@@ -32,18 +32,23 @@ const Index = () => {
   return <div className="min-h-screen bg-white">
       <Header onBookNow={() => setIsBookingOpen(true)} />
       
-      {/* Hero Section */}
+      {/* Hero Section - Enhanced */}
       <section className="relative dental-gradient text-white py-20 px-4 overflow-hidden">
-        {/* Subtle teeth pattern background */}
-        <div className="absolute inset-0 opacity-10">
+        {/* Enhanced teeth pattern background */}
+        <div className="absolute inset-0 opacity-90">
           <div className="teeth-pattern"></div>
         </div>
         
-        {/* Floating tooth icons */}
+        {/* Central vignette highlight */}
+        <div className="hero-vignette"></div>
+        
+        {/* Enhanced floating tooth icons */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="floating-tooth floating-tooth-1">🦷</div>
           <div className="floating-tooth floating-tooth-2">🦷</div>
           <div className="floating-tooth floating-tooth-3">🦷</div>
+          <div className="floating-tooth floating-tooth-4">🦷</div>
+          <div className="floating-tooth floating-tooth-5">🦷</div>
         </div>
         
         <div className="container mx-auto text-center relative z-10">
@@ -180,4 +185,3 @@ const Index = () => {
 };
 
 export default Index;
-
