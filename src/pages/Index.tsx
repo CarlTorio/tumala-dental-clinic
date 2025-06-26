@@ -51,7 +51,7 @@ const Index = () => {
           <div className="max-w-4xl mx-auto">
             <div className="rounded-lg overflow-hidden shadow-lg">
               <iframe
-                src="https://drive.google.com/file/d/1S6yFZ7XhkrOEOi0R8hBeKmra8wQVbdkH/preview?rm=minimal"
+                src="https://www.youtube.com/embed/z53fHjtdncg?autoplay=1&mute=1&loop=1&playlist=z53fHjtdncg&controls=0&showinfo=0&rel=0&modestbranding=1"
                 className="w-full h-64 md:h-96"
                 frameBorder="0"
                 allow="autoplay; encrypted-media"
