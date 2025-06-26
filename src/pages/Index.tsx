@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -50,7 +51,7 @@ const Index = () => {
           <div className="max-w-4xl mx-auto">
             <div className="rounded-lg overflow-hidden shadow-lg relative" style={{ paddingTop: '56.25%' }}>
               <iframe
-                src="https://www.youtube.com/embed/z53fHjtdncg?autoplay=1&mute=1&loop=1&playlist=z53fHjtdncg&controls=0&showinfo=0&rel=0&modestbranding=1&iv_load_policy=3&cc_load_policy=0&fs=0&disablekb=1&vq=hd1080&title=0&byline=0&portrait=0&branding=0&autohide=1&theme=light&color=white&start=0&end=0"
+                src="https://www.youtube.com/embed/vkijaBkDdJM?autoplay=1&mute=1&loop=1&playlist=vkijaBkDdJM&controls=0&showinfo=0&rel=0&modestbranding=1&iv_load_policy=3&cc_load_policy=0&fs=0&disablekb=1&vq=hd1080&title=0&byline=0&portrait=0&branding=0&autohide=1&theme=light&color=white&start=0&end=0"
                 className="absolute top-0 left-0 w-full h-full"
                 frameBorder="0"
                 allow="autoplay; encrypted-media"
