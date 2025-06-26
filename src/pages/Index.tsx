@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { CalendarIcon, ClockIcon, PhoneIcon, MailIcon, MapPinIcon } from 'lucide-react';
@@ -7,11 +6,14 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import DentistLogin from '@/components/DentistLogin';
 import ServiceCard from '@/components/ServiceCard';
+import { useTypingAnimation } from '@/hooks/useTypingAnimation';
 
 const Index = () => {
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [isButtonHighlighted, setIsButtonHighlighted] = useState(false);
   const [isCtaButtonHighlighted, setIsCtaButtonHighlighted] = useState(false);
+
+  const { displayedText, isComplete } = useTypingAnimation("Your Perfect Smile Starts Here", 80, 1000);
 
   const handleBookingClick = () => {
     setIsButtonHighlighted(true);
@@ -82,8 +84,9 @@ const Index = () => {
       {/* Hero Section */}
       <section className="relative dental-gradient text-white py-20 px-4">
         <div className="container mx-auto text-center">
-          <h1 className="text-5xl font-bold mb-6 animate-fade-in md:text-5xl">
-            Your Perfect Smile Starts Here
+          <h1 className="text-5xl font-bold mb-6 md:text-5xl min-h-[4rem] flex items-center justify-center">
+            {displayedText}
+            {!isComplete && <span className="animate-pulse ml-1">|</span>}
           </h1>
           <p className="text-xl md:text-2xl mb-8 opacity-90 max-w-3xl mx-auto">
             Looking for a gentle & effective dental experience? Don't hesitate to visit us. We're committed to providing you with healthy, confident smile.
