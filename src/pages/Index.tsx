@@ -15,7 +15,7 @@ const Index = () => {
   const {
     displayedText,
     isComplete
-  } = useTypingAnimation("Your Perfect Smile Starts Here", 80, 1000);
+  } = useTypingAnimation("Your Perfect Smile Starts Here", 80, 0);
   const handleBookingClick = () => {
     setIsButtonHighlighted(true);
     setIsBookingOpen(true);

@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from 'react';
 
-export const useTypingAnimation = (text: string, speed: number = 100, delay: number = 500) => {
+export const useTypingAnimation = (text: string, speed: number = 100, delay: number = 0) => {
   const [displayedText, setDisplayedText] = useState('');
   const [isComplete, setIsComplete] = useState(false);
 
