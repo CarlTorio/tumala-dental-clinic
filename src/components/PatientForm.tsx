@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -19,30 +20,6 @@ interface PatientFormProps {
 const PatientForm = ({ onSubmit, initialData }: PatientFormProps) => {
   const [formData, setFormData] = useState(initialData);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [dobMonth, setDobMonth] = useState('');
-  const [dobDay, setDobDay] = useState('');
-  const [dobYear, setDobYear] = useState('');
-
-  // Initialize date of birth selects from existing data
-  React.useEffect(() => {
-    if (initialData.dateOfBirth) {
-      const date = new Date(initialData.dateOfBirth);
-      setDobMonth((date.getMonth() + 1).toString().padStart(2, '0'));
-      setDobDay(date.getDate().toString().padStart(2, '0'));
-      setDobYear(date.getFullYear().toString());
-    }
-  }, [initialData.dateOfBirth]);
-
-  // Update formData when individual date components change
-  React.useEffect(() => {
-    if (dobMonth && dobDay && dobYear) {
-      const dateString = `${dobYear}-${dobMonth.padStart(2, '0')}-${dobDay.padStart(2, '0')}`;
-      setFormData(prev => ({
-        ...prev,
-        dateOfBirth: dateString
-      }));
-    }
-  }, [dobMonth, dobDay, dobYear]);
 
   const dentalConcerns = [
     'Routine Cleaning',
@@ -69,35 +46,6 @@ const PatientForm = ({ onSubmit, initialData }: PatientFormProps) => {
     'Other'
   ];
 
-  // Generate months array
-  const months = [
-    { value: '01', label: 'January' },
-    { value: '02', label: 'February' },
-    { value: '03', label: 'March' },
-    { value: '04', label: 'April' },
-    { value: '05', label: 'May' },
-    { value: '06', label: 'June' },
-    { value: '07', label: 'July' },
-    { value: '08', label: 'August' },
-    { value: '09', label: 'September' },
-    { value: '10', label: 'October' },
-    { value: '11', label: 'November' },
-    { value: '12', label: 'December' }
-  ];
-
-  // Generate days array (1-31)
-  const days = Array.from({ length: 31 }, (_, i) => {
-    const day = (i + 1).toString().padStart(2, '0');
-    return { value: day, label: day };
-  });
-
-  // Generate years array (current year - 100 to current year)
-  const currentYear = new Date().getFullYear();
-  const years = Array.from({ length: 100 }, (_, i) => {
-    const year = (currentYear - i).toString();
-    return { value: year, label: year };
-  });
-
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
 
@@ -117,8 +65,13 @@ const PatientForm = ({ onSubmit, initialData }: PatientFormProps) => {
       newErrors.phone = 'Please enter a valid phone number';
     }
 
-    if (!dobMonth || !dobDay || !dobYear) {
-      newErrors.dateOfBirth = 'Date of birth is required';
+    if (!formData.dateOfBirth.trim()) {
+      newErrors.dateOfBirth = 'Age is required';
+    } else {
+      const age = parseInt(formData.dateOfBirth);
+      if (isNaN(age) || age < 1 || age > 120) {
+        newErrors.dateOfBirth = 'Please enter a valid age (1-120)';
+      }
     }
 
     if (!formData.dentalConcern) {
@@ -146,20 +99,6 @@ const PatientForm = ({ onSubmit, initialData }: PatientFormProps) => {
       setErrors(prev => ({
         ...prev,
         [field]: ''
-      }));
-    }
-  };
-
-  const handleDateChange = (type: 'month' | 'day' | 'year', value: string) => {
-    if (type === 'month') setDobMonth(value);
-    if (type === 'day') setDobDay(value);
-    if (type === 'year') setDobYear(value);
-    
-    // Clear date of birth error when user selects values
-    if (errors.dateOfBirth) {
-      setErrors(prev => ({
-        ...prev,
-        dateOfBirth: ''
       }));
     }
   };
@@ -192,53 +131,17 @@ const PatientForm = ({ onSubmit, initialData }: PatientFormProps) => {
             </div>
             
             <div>
-              <Label>Date of Birth *</Label>
-              <div className="grid grid-cols-3 gap-2">
-                <Select value={dobMonth} onValueChange={(value) => handleDateChange('month', value)}>
-                  <SelectTrigger className={errors.dateOfBirth ? 'border-red-500' : ''}>
-                    <SelectValue placeholder="Month" />
-                  </SelectTrigger>
-                  <SelectContent className="max-h-[200px]">
-                    <div className="overflow-y-auto max-h-[180px] smooth-scroll">
-                      {months.map((month) => (
-                        <SelectItem key={month.value} value={month.value}>
-                          {month.label}
-                        </SelectItem>
-                      ))}
-                    </div>
-                  </SelectContent>
-                </Select>
-                
-                <Select value={dobDay} onValueChange={(value) => handleDateChange('day', value)}>
-                  <SelectTrigger className={errors.dateOfBirth ? 'border-red-500' : ''}>
-                    <SelectValue placeholder="Day" />
-                  </SelectTrigger>
-                  <SelectContent className="max-h-[200px]">
-                    <div className="overflow-y-auto max-h-[180px] smooth-scroll">
-                      {days.map((day) => (
-                        <SelectItem key={day.value} value={day.value}>
-                          {day.label}
-                        </SelectItem>
-                      ))}
-                    </div>
-                  </SelectContent>
-                </Select>
-                
-                <Select value={dobYear} onValueChange={(value) => handleDateChange('year', value)}>
-                  <SelectTrigger className={errors.dateOfBirth ? 'border-red-500' : ''}>
-                    <SelectValue placeholder="Year" />
-                  </SelectTrigger>
-                  <SelectContent className="max-h-[200px]">
-                    <div className="overflow-y-auto max-h-[180px] smooth-scroll">
-                      {years.map((year) => (
-                        <SelectItem key={year.value} value={year.value}>
-                          {year.label}
-                        </SelectItem>
-                      ))}
-                    </div>
-                  </SelectContent>
-                </Select>
-              </div>
+              <Label htmlFor="age">Age *</Label>
+              <Input
+                id="age"
+                type="number"
+                value={formData.dateOfBirth}
+                onChange={(e) => handleInputChange('dateOfBirth', e.target.value)}
+                className={errors.dateOfBirth ? 'border-red-500' : ''}
+                placeholder="Enter your age"
+                min="1"
+                max="120"
+              />
               {errors.dateOfBirth && (
                 <p className="text-red-500 text-sm mt-1">{errors.dateOfBirth}</p>
               )}
