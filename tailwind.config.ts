@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -93,14 +94,14 @@ export default {
 						transform: 'scale(1)'
 					},
 					'50%': {
-						transform: 'scale(1.05)'
+						transform: 'scale(1.02)'
 					}
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
-				'zoom-gentle': 'zoom-gentle 3s ease-in-out infinite'
+				'zoom-gentle': 'zoom-gentle 4s ease-in-out infinite'
 			}
 		}
 	},
