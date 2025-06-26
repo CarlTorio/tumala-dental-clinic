@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -50,11 +51,13 @@ const Index = () => {
           <div className="max-w-4xl mx-auto">
             <div className="rounded-lg overflow-hidden shadow-lg">
               <iframe
-                src="https://drive.google.com/file/d/1S6yFZ7XhkrOEOi0R8hBeKmra8wQVbdkH/preview"
+                src="https://drive.google.com/file/d/1S6yFZ7XhkrOEOi0R8hBeKmra8wQVbdkH/preview?autoplay=1&loop=1&mute=1&controls=0"
                 className="w-full h-64 md:h-96"
                 frameBorder="0"
-                allow="autoplay"
+                allow="autoplay; fullscreen"
+                allowFullScreen
                 title="Tumala Dental Clinic Video"
+                style={{ aspectRatio: '16/9' }}
               ></iframe>
             </div>
           </div>
