@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -7,10 +7,12 @@ import { CalendarIcon, ClockIcon, UserIcon, CheckIcon, ArrowLeftIcon } from 'luc
 import AppointmentCalendar from '@/components/AppointmentCalendar';
 import PatientForm from '@/components/PatientForm';
 import BookingConfirmation from '@/components/BookingConfirmation';
+
 interface BookingModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
+
 export interface AppointmentData {
   date: Date | null;
   time: string;
@@ -25,11 +27,13 @@ export interface AppointmentData {
     insurance: string;
   };
 }
+
 const BookingModal = ({
   isOpen,
   onClose
 }: BookingModalProps) => {
   const [currentStep, setCurrentStep] = useState(1);
+  const dialogContentRef = useRef<HTMLDivElement>(null);
   const [appointmentData, setAppointmentData] = useState<AppointmentData>({
     date: null,
     time: '',
@@ -44,6 +48,17 @@ const BookingModal = ({
       insurance: ''
     }
   });
+
+  // Scroll to top when step changes to confirmation
+  useEffect(() => {
+    if (currentStep === 3 && dialogContentRef.current) {
+      dialogContentRef.current.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }
+  }, [currentStep]);
+
   const handleDateTimeSelect = (date: Date, time: string) => {
     setAppointmentData(prev => ({
       ...prev,
@@ -52,9 +67,11 @@ const BookingModal = ({
     }));
     setCurrentStep(1.5); // Go to confirmation step
   };
+
   const handleTimeConfirm = () => {
     setCurrentStep(2); // Go to patient information
   };
+
   const handlePatientInfoSubmit = (patientInfo: AppointmentData['patientInfo']) => {
     setAppointmentData(prev => ({
       ...prev,
@@ -62,6 +79,7 @@ const BookingModal = ({
     }));
     setCurrentStep(3);
   };
+
   const handleClose = () => {
     setCurrentStep(1);
     setAppointmentData({
@@ -80,6 +98,7 @@ const BookingModal = ({
     });
     onClose();
   };
+
   const formatTimeSlot = (time: string) => {
     const [hour, minute] = time.split(':');
     const hourNum = parseInt(hour);
@@ -87,6 +106,7 @@ const BookingModal = ({
     const displayHour = hourNum > 12 ? hourNum - 12 : hourNum === 0 ? 12 : hourNum;
     return `${displayHour}:${minute} ${ampm}`;
   };
+
   const steps = [{
     number: 1,
     title: 'Select Date & Time',
@@ -100,8 +120,9 @@ const BookingModal = ({
     title: 'Confirmation',
     icon: CheckIcon
   }];
+
   return <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto p-4 sm:p-6">
+      <DialogContent ref={dialogContentRef} className="max-w-4xl max-h-[90vh] overflow-y-auto p-4 sm:p-6">
         <DialogHeader>
           <DialogTitle className="text-xl sm:text-2xl font-bold text-primary text-center">
             Book Your Dental Appointment
@@ -230,4 +251,5 @@ const BookingModal = ({
       </DialogContent>
     </Dialog>;
 };
+
 export default BookingModal;
