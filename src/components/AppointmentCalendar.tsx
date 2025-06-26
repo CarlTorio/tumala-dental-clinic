@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { Calendar } from '@/components/ui/calendar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -8,11 +7,9 @@ import { ClockIcon } from 'lucide-react';
 import { addDays, format, isSameDay, isToday, isFuture, isAfter, startOfDay, getDay } from 'date-fns';
 import { getAppointments } from '@/utils/appointmentStorage';
 import { useIsMobile } from '@/hooks/use-mobile';
-
 interface AppointmentCalendarProps {
   onSelect: (date: Date, time: string) => void;
 }
-
 const AppointmentCalendar = ({
   onSelect
 }: AppointmentCalendarProps) => {
@@ -58,12 +55,10 @@ const AppointmentCalendar = ({
       }, 100);
     }
   }, [selectedDate, isMobile]);
-
   const isSlotBooked = (date: Date, time: string) => {
     const dateKey = date.toLocaleDateString();
     return bookedSlots[dateKey]?.includes(time) || false;
   };
-
   const isSlotAvailable = (date: Date, time: string) => {
     const now = new Date();
     const [hour, minute] = time.split(':').map(Number);
@@ -73,13 +68,11 @@ const AppointmentCalendar = ({
     // Check if slot is in the future and not booked
     return isAfter(slotDateTime, now) && !isSlotBooked(date, time);
   };
-
   const handleTimeSelect = (time: string) => {
     if (selectedDate && isSlotAvailable(selectedDate, time)) {
       onSelect(selectedDate, time);
     }
   };
-
   const formatTimeSlot = (time: string) => {
     const [hour, minute] = time.split(':');
     const hourNum = parseInt(hour);
@@ -96,7 +89,6 @@ const AppointmentCalendar = ({
 
     return date < today || date > maxDate || dayOfWeek === 0; // Disable Sundays
   };
-
   return <div className="grid lg:grid-cols-2 gap-6">
       {/* Calendar */}
       <Card>
@@ -120,7 +112,7 @@ const AppointmentCalendar = ({
       <Card ref={timeSlotsRef}>
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
-            <span>Available Times</span>
+            <span>Available Time</span>
             {selectedDate && <Badge variant="outline">
                 {format(selectedDate, 'EEEE, MMMM d')}
               </Badge>}
@@ -152,5 +144,4 @@ const AppointmentCalendar = ({
       </Card>
     </div>;
 };
-
 export default AppointmentCalendar;
