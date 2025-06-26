@@ -68,7 +68,7 @@ const Header = ({
           <div className="hidden md:flex items-center space-x-4">
             <div className="flex items-center text-sm text-gray-600">
               <PhoneIcon className="h-4 w-4 mr-1" />
-              (555) 123-SMILE
+              +63 999 464 8865
             </div>
             <Button onClick={onBookNow} className="bg-primary hover:bg-primary/90">
               <CalendarIcon className="mr-2 h-4 w-4" />
@@ -107,7 +107,7 @@ const Header = ({
               <div className="pt-4 border-t">
                 <div className="flex items-center text-sm text-gray-600 mb-3">
                   <PhoneIcon className="h-4 w-4 mr-1" />
-                  (555) 123-SMILE
+                  +63 999 464 8865
                 </div>
                 <Button onClick={onBookNow} className="w-full bg-primary hover:bg-primary/90">
                   <CalendarIcon className="mr-2 h-4 w-4" />

@@ -114,7 +114,7 @@ const Index = () => {
                   <div>
                     <h3 className="font-semibold text-lg">Contact</h3>
                     <p className="text-gray-600">
-                      Office: (555) 123-SMILE<br />
+                      Office: +63 999 464 8865<br />
                       Emergency: (555) 911-CARE
                     </p>
                   </div>
