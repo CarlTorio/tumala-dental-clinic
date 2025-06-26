@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -89,9 +90,9 @@ const DentistLogin = ({ isOpen, onClose }: DentistLoginProps) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-6xl max-h-[80vh] overflow-y-auto bg-gray-900 text-white border-gray-700">
+      <DialogContent className="max-w-6xl max-h-[80vh] overflow-y-auto bg-white text-gray-900 border-gray-200">
         <DialogHeader>
-          <DialogTitle className="text-blue-400">
+          <DialogTitle className="text-primary">
             {isLoggedIn ? 'Patient Appointments Dashboard' : 'Healthcare Professional Access'}
           </DialogTitle>
         </DialogHeader>
@@ -99,7 +100,7 @@ const DentistLogin = ({ isOpen, onClose }: DentistLoginProps) => {
         {!isLoggedIn ? (
           <form onSubmit={handleLogin} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="username" className="text-gray-300">Username</Label>
+              <Label htmlFor="username" className="text-gray-700">Username</Label>
               <div className="relative">
                 <UserIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                 <Input
@@ -108,14 +109,14 @@ const DentistLogin = ({ isOpen, onClose }: DentistLoginProps) => {
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   placeholder="Enter username"
-                  className="pl-10 bg-gray-800 border-gray-600 text-white placeholder-gray-400"
+                  className="pl-10 bg-white border-gray-300 text-gray-900 placeholder-gray-500"
                   required
                 />
               </div>
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-gray-300">Password</Label>
+              <Label htmlFor="password" className="text-gray-700">Password</Label>
               <div className="relative">
                 <LockIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                 <Input
@@ -124,7 +125,7 @@ const DentistLogin = ({ isOpen, onClose }: DentistLoginProps) => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter password"
-                  className="pl-10 bg-gray-800 border-gray-600 text-white placeholder-gray-400"
+                  className="pl-10 bg-white border-gray-300 text-gray-900 placeholder-gray-500"
                   required
                 />
               </div>
@@ -136,17 +137,17 @@ const DentistLogin = ({ isOpen, onClose }: DentistLoginProps) => {
                 checked={rememberDevice}
                 onCheckedChange={(checked) => setRememberDevice(checked as boolean)}
               />
-              <Label htmlFor="remember-device" className="text-sm flex items-center cursor-pointer text-gray-300">
+              <Label htmlFor="remember-device" className="text-sm flex items-center cursor-pointer text-gray-700">
                 <MonitorIcon className="h-4 w-4 mr-1" />
                 Remember this device
               </Label>
             </div>
             
             {error && (
-              <p className="text-red-400 text-sm">{error}</p>
+              <p className="text-red-600 text-sm">{error}</p>
             )}
             
-            <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700">
+            <Button type="submit" className="w-full bg-primary hover:bg-primary/90">
               Login
             </Button>
           </form>
@@ -154,20 +155,20 @@ const DentistLogin = ({ isOpen, onClose }: DentistLoginProps) => {
           <div className="space-y-6">
             <div className="flex justify-between items-center">
               <div className="flex items-center space-x-4">
-                <h3 className="text-lg font-semibold text-white">Appointments Management</h3>
-                <Button onClick={loadAppointments} variant="outline" size="sm" className="border-gray-600 text-gray-300 hover:bg-gray-800">
+                <h3 className="text-lg font-semibold text-gray-900">Appointments Management</h3>
+                <Button onClick={loadAppointments} variant="outline" size="sm" className="border-gray-300 text-gray-700 hover:bg-gray-50">
                   <RefreshCwIcon className="h-4 w-4 mr-2" />
                   Refresh
                 </Button>
               </div>
               <div className="flex items-center space-x-2">
                 {isDeviceRemembered && (
-                  <Button onClick={handleForgetDevice} variant="outline" size="sm" className="border-gray-600 text-gray-300 hover:bg-gray-800">
+                  <Button onClick={handleForgetDevice} variant="outline" size="sm" className="border-gray-300 text-gray-700 hover:bg-gray-50">
                     <MonitorIcon className="h-4 w-4 mr-2" />
                     Forget Device
                   </Button>
                 )}
-                <Button onClick={handleLogout} variant="outline" className="border-gray-600 text-gray-300 hover:bg-gray-800">
+                <Button onClick={handleLogout} variant="outline" className="border-gray-300 text-gray-700 hover:bg-gray-50">
                   Logout
                 </Button>
               </div>
