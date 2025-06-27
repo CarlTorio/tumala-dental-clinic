@@ -4,8 +4,9 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { CalendarIcon, ClockIcon, UserIcon, PhoneIcon, MenuIcon, RefreshCwIcon } from 'lucide-react';
-import { getAppointments, updateAppointmentStatus, type StoredAppointment } from '@/utils/appointmentStorage';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
+import { CalendarIcon, ClockIcon, UserIcon, PhoneIcon, MenuIcon, RefreshCwIcon, Trash2Icon } from 'lucide-react';
+import { getAppointments, updateAppointmentStatus, clearAllAppointments, deleteDoneAppointments, type StoredAppointment } from '@/utils/appointmentStorage';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useToast } from '@/hooks/use-toast';
 
@@ -14,6 +15,8 @@ const AppointmentsDashboard = () => {
   const [activeTab, setActiveTab] = useState('all');
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isDeletingAll, setIsDeletingAll] = useState(false);
+  const [isDeletingDone, setIsDeletingDone] = useState(false);
   const isMobile = useIsMobile();
   const { toast } = useToast();
 
@@ -59,6 +62,48 @@ const AppointmentsDashboard = () => {
         description: "Failed to update appointment status. Please try again.",
         variant: "destructive",
       });
+    }
+  };
+
+  const handleClearAllAppointments = async () => {
+    try {
+      setIsDeletingAll(true);
+      await clearAllAppointments();
+      setAppointments([]);
+      toast({
+        title: "Success",
+        description: "All appointments have been cleared.",
+      });
+    } catch (error) {
+      console.error('Error clearing appointments:', error);
+      toast({
+        title: "Error",
+        description: "Failed to clear appointments. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsDeletingAll(false);
+    }
+  };
+
+  const handleDeleteDoneAppointments = async () => {
+    try {
+      setIsDeletingDone(true);
+      await deleteDoneAppointments();
+      setAppointments(prev => prev.filter(apt => apt.status !== 'Done'));
+      toast({
+        title: "Success",
+        description: "All completed appointments have been deleted.",
+      });
+    } catch (error) {
+      console.error('Error deleting done appointments:', error);
+      toast({
+        title: "Error",
+        description: "Failed to delete completed appointments. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsDeletingDone(false);
     }
   };
 
@@ -214,6 +259,71 @@ const AppointmentsDashboard = () => {
             <RefreshCwIcon className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
             Refresh
           </Button>
+          
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={isDeletingDone || appointments.filter(apt => apt.status === 'Done').length === 0}
+                className="flex items-center gap-2"
+              >
+                <Trash2Icon className="h-4 w-4" />
+                Clear Done
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Delete Completed Appointments</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This will permanently delete all completed appointments. This action cannot be undone.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={handleDeleteDoneAppointments}
+                  disabled={isDeletingDone}
+                  className="bg-red-600 hover:bg-red-700"
+                >
+                  {isDeletingDone ? 'Deleting...' : 'Delete Completed'}
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button
+                variant="destructive"
+                size="sm"
+                disabled={isDeletingAll || appointments.length === 0}
+                className="flex items-center gap-2"
+              >
+                <Trash2Icon className="h-4 w-4" />
+                Clear All
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Clear All Appointments</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This will permanently delete ALL appointments from the database. This action cannot be undone.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={handleClearAllAppointments}
+                  disabled={isDeletingAll}
+                  className="bg-red-600 hover:bg-red-700"
+                >
+                  {isDeletingAll ? 'Clearing...' : 'Clear All'}
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+
           <Badge variant="outline" className="text-sm">
             {filteredAppointments.length} appointments
           </Badge>

@@ -1,4 +1,3 @@
-
 import { supabase } from '@/integrations/supabase/client';
 
 export interface StoredAppointment {
@@ -132,5 +131,43 @@ export const isTimeSlotBooked = async (date: Date, time: string): Promise<boolea
   } catch (error) {
     console.error('Error checking time slot availability:', error);
     return false;
+  }
+};
+
+export const clearAllAppointments = async (): Promise<void> => {
+  try {
+    const { error } = await supabase
+      .from('appointments')
+      .delete()
+      .neq('id', '00000000-0000-0000-0000-000000000000'); // Delete all rows
+
+    if (error) {
+      console.error('Error clearing all appointments:', error);
+      throw error;
+    }
+
+    console.log('All appointments cleared successfully');
+  } catch (error) {
+    console.error('Failed to clear all appointments:', error);
+    throw error;
+  }
+};
+
+export const deleteDoneAppointments = async (): Promise<void> => {
+  try {
+    const { error } = await supabase
+      .from('appointments')
+      .delete()
+      .eq('status', 'Done');
+
+    if (error) {
+      console.error('Error deleting done appointments:', error);
+      throw error;
+    }
+
+    console.log('Done appointments deleted successfully');
+  } catch (error) {
+    console.error('Failed to delete done appointments:', error);
+    throw error;
   }
 };
