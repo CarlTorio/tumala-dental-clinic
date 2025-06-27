@@ -1,10 +1,10 @@
-
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { CheckCircleIcon, CalendarIcon, ClockIcon, UserIcon, PhoneIcon } from 'lucide-react';
 import { AppointmentData } from '@/components/BookingModal';
 import { saveAppointment } from '@/utils/appointmentStorage';
+import { useToast } from '@/hooks/use-toast';
 
 interface BookingConfirmationProps {
   appointmentData: AppointmentData;
@@ -15,13 +15,35 @@ const BookingConfirmation = ({
   appointmentData,
   onClose
 }: BookingConfirmationProps) => {
+  const [isSaving, setIsSaving] = useState(false);
+  const { toast } = useToast();
+
   useEffect(() => {
-    // Save the appointment when confirmation is shown
-    if (appointmentData.date && appointmentData.time && appointmentData.patientInfo.fullName) {
-      saveAppointment(appointmentData);
-      console.log('Appointment saved to storage:', appointmentData);
-    }
-  }, [appointmentData]);
+    const handleSaveAppointment = async () => {
+      if (appointmentData.date && appointmentData.time && appointmentData.patientInfo.fullName && !isSaving) {
+        setIsSaving(true);
+        try {
+          await saveAppointment(appointmentData);
+          console.log('Appointment saved to Supabase:', appointmentData);
+          toast({
+            title: "Success!",
+            description: "Your appointment has been saved successfully.",
+          });
+        } catch (error) {
+          console.error('Failed to save appointment:', error);
+          toast({
+            title: "Error",
+            description: "Failed to save appointment. Please try again.",
+            variant: "destructive",
+          });
+        } finally {
+          setIsSaving(false);
+        }
+      }
+    };
+
+    handleSaveAppointment();
+  }, [appointmentData, isSaving, toast]);
 
   return (
     <div className="space-y-6">
@@ -91,8 +113,12 @@ const BookingConfirmation = ({
       </div>
 
       <div className="flex flex-col sm:flex-row gap-3 justify-center">
-        <Button onClick={onClose} className="bg-primary hover:bg-primary/90">
-          Close
+        <Button 
+          onClick={onClose} 
+          className="bg-primary hover:bg-primary/90"
+          disabled={isSaving}
+        >
+          {isSaving ? 'Saving...' : 'Close'}
         </Button>
       </div>
     </div>

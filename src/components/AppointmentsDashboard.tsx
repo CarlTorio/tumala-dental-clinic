@@ -4,32 +4,62 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { CalendarIcon, ClockIcon, UserIcon, PhoneIcon, MenuIcon, FilterIcon } from 'lucide-react';
+import { CalendarIcon, ClockIcon, UserIcon, PhoneIcon, MenuIcon, RefreshCwIcon } from 'lucide-react';
 import { getAppointments, updateAppointmentStatus, type StoredAppointment } from '@/utils/appointmentStorage';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { useToast } from '@/hooks/use-toast';
 
 const AppointmentsDashboard = () => {
   const [appointments, setAppointments] = useState<StoredAppointment[]>([]);
   const [activeTab, setActiveTab] = useState('all');
+  const [isLoading, setIsLoading] = useState(true);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const isMobile = useIsMobile();
+  const { toast } = useToast();
+
+  const loadAppointments = async () => {
+    try {
+      setIsRefreshing(true);
+      const stored = await getAppointments();
+      setAppointments(stored);
+    } catch (error) {
+      console.error('Error loading appointments:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load appointments. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+      setIsRefreshing(false);
+    }
+  };
 
   useEffect(() => {
-    const loadAppointments = () => {
-      const stored = getAppointments();
-      setAppointments(stored);
-    };
-
     loadAppointments();
     // Refresh appointments every 30 seconds
     const interval = setInterval(loadAppointments, 30000);
     return () => clearInterval(interval);
   }, []);
 
-  const handleStatusChange = (id: string, status: 'Done' | 'Pending' | 'Didn\'t show up') => {
-    updateAppointmentStatus(id, status);
-    setAppointments(prev => prev.map(apt => 
-      apt.id === id ? { ...apt, status } : apt
-    ));
+  const handleStatusChange = async (id: string, status: 'Done' | 'Pending' | 'Didn\'t show up') => {
+    try {
+      await updateAppointmentStatus(id, status);
+      setAppointments(prev => prev.map(apt => 
+        apt.id === id ? { ...apt, status } : apt
+      ));
+      toast({
+        title: "Success",
+        description: `Appointment status updated to "${status}".`,
+      });
+    } catch (error) {
+      console.error('Error updating appointment status:', error);
+      toast({
+        title: "Error",
+        description: "Failed to update appointment status. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   const formatDate = (dateString: string) => {
@@ -173,85 +203,106 @@ const AppointmentsDashboard = () => {
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <h2 className="text-xl font-bold text-primary">Patient Appointments</h2>
-        <Badge variant="outline" className="text-sm">
-          {filteredAppointments.length} appointments
-        </Badge>
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={loadAppointments}
+            disabled={isRefreshing}
+            className="flex items-center gap-2"
+          >
+            <RefreshCwIcon className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+            Refresh
+          </Button>
+          <Badge variant="outline" className="text-sm">
+            {filteredAppointments.length} appointments
+          </Badge>
+        </div>
       </div>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="all">All ({appointments.length})</TabsTrigger>
-          <TabsTrigger value="pending">
-            Pending ({appointments.filter(apt => apt.status === 'Pending').length})
-          </TabsTrigger>
-          <TabsTrigger value="completed">
-            Done ({appointments.filter(apt => apt.status === 'Done').length})
-          </TabsTrigger>
-          <TabsTrigger value="no-show">
-            No Show ({appointments.filter(apt => apt.status === 'Didn\'t show up').length})
-          </TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="all" className="mt-4">
-          <div className="space-y-4">
-            {filteredAppointments.length === 0 ? (
-              <Card className="p-8 text-center">
-                <CalendarIcon className="h-12 w-12 mx-auto text-gray-400 mb-4" />
-                <p className="text-gray-500">No appointments found</p>
-              </Card>
-            ) : (
-              filteredAppointments.map(appointment => (
-                <AppointmentCard key={appointment.id} appointment={appointment} showActions={false} />
-              ))
-            )}
+      {isLoading ? (
+        <Card className="p-8 text-center">
+          <div className="flex items-center justify-center gap-2">
+            <RefreshCwIcon className="h-6 w-6 animate-spin text-primary" />
+            <p className="text-gray-500">Loading appointments...</p>
           </div>
-        </TabsContent>
+        </Card>
+      ) : (
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="grid w-full grid-cols-4">
+            <TabsTrigger value="all">All ({appointments.length})</TabsTrigger>
+            <TabsTrigger value="pending">
+              Pending ({appointments.filter(apt => apt.status === 'Pending').length})
+            </TabsTrigger>
+            <TabsTrigger value="completed">
+              Done ({appointments.filter(apt => apt.status === 'Done').length})
+            </TabsTrigger>
+            <TabsTrigger value="no-show">
+              No Show ({appointments.filter(apt => apt.status === 'Didn\'t show up').length})
+            </TabsTrigger>
+          </TabsList>
 
-        <TabsContent value="pending" className="mt-4">
-          <div className="space-y-4">
-            {filteredAppointments.length === 0 ? (
-              <Card className="p-8 text-center">
-                <ClockIcon className="h-12 w-12 mx-auto text-gray-400 mb-4" />
-                <p className="text-gray-500">No pending appointments</p>
-              </Card>
-            ) : (
-              filteredAppointments.map(appointment => (
-                <AppointmentCard key={appointment.id} appointment={appointment} />
-              ))
-            )}
-          </div>
-        </TabsContent>
+          <TabsContent value="all" className="mt-4">
+            <div className="space-y-4">
+              {filteredAppointments.length === 0 ? (
+                <Card className="p-8 text-center">
+                  <CalendarIcon className="h-12 w-12 mx-auto text-gray-400 mb-4" />
+                  <p className="text-gray-500">No appointments found</p>
+                </Card>
+              ) : (
+                filteredAppointments.map(appointment => (
+                  <AppointmentCard key={appointment.id} appointment={appointment} showActions={false} />
+                ))
+              )}
+            </div>
+          </TabsContent>
 
-        <TabsContent value="completed" className="mt-4">
-          <div className="space-y-4">
-            {filteredAppointments.length === 0 ? (
-              <Card className="p-8 text-center">
-                <UserIcon className="h-12 w-12 mx-auto text-gray-400 mb-4" />
-                <p className="text-gray-500">No completed appointments</p>
-              </Card>
-            ) : (
-              filteredAppointments.map(appointment => (
-                <AppointmentCard key={appointment.id} appointment={appointment} />
-              ))
-            )}
-          </div>
-        </TabsContent>
+          <TabsContent value="pending" className="mt-4">
+            <div className="space-y-4">
+              {filteredAppointments.length === 0 ? (
+                <Card className="p-8 text-center">
+                  <ClockIcon className="h-12 w-12 mx-auto text-gray-400 mb-4" />
+                  <p className="text-gray-500">No pending appointments</p>
+                </Card>
+              ) : (
+                filteredAppointments.map(appointment => (
+                  <AppointmentCard key={appointment.id} appointment={appointment} />
+                ))
+              )}
+            </div>
+          </TabsContent>
 
-        <TabsContent value="no-show" className="mt-4">
-          <div className="space-y-4">
-            {filteredAppointments.length === 0 ? (
-              <Card className="p-8 text-center">
-                <UserIcon className="h-12 w-12 mx-auto text-gray-400 mb-4" />
-                <p className="text-gray-500">No no-show appointments</p>
-              </Card>
-            ) : (
-              filteredAppointments.map(appointment => (
-                <AppointmentCard key={appointment.id} appointment={appointment} />
-              ))
-            )}
-          </div>
-        </TabsContent>
-      </Tabs>
+          <TabsContent value="completed" className="mt-4">
+            <div className="space-y-4">
+              {filteredAppointments.length === 0 ? (
+                <Card className="p-8 text-center">
+                  <UserIcon className="h-12 w-12 mx-auto text-gray-400 mb-4" />
+                  <p className="text-gray-500">No completed appointments</p>
+                </Card>
+              ) : (
+                filteredAppointments.map(appointment => (
+                  <AppointmentCard key={appointment.id} appointment={appointment} />
+                ))
+              )}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="no-show" className="mt-4">
+            <div className="space-y-4">
+              {filteredAppointments.length === 0 ? (
+                <Card className="p-8 text-center">
+                  <UserIcon className="h-12 w-12 mx-auto text-gray-400 mb-4" />
+                  <p className="text-gray-500">No no-show appointments</p>
+                </Card>
+              ) : (
+                filteredAppointments.map(appointment => (
+                  <AppointmentCard key={appointment.id} appointment={appointment} />
+                ))
+              )}
+            </div>
+          </TabsContent>
+        </Tabs>
+      )}
     </div>
   );
 
