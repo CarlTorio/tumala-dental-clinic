@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -9,8 +8,8 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Checkbox } from '@/components/ui/checkbox';
-import { UserIcon, LockIcon, CalendarIcon, CheckIcon, ClockIcon, RefreshCwIcon, MonitorIcon, BellIcon, Trash2Icon } from 'lucide-react';
-import { getAppointments, updateAppointmentStatus, clearAllAppointments, type StoredAppointment } from '@/utils/appointmentStorage';
+import { UserIcon, LockIcon, CalendarIcon, CheckIcon, ClockIcon, RefreshCwIcon, MonitorIcon, BellIcon, Trash2Icon, X } from 'lucide-react';
+import { getAppointments, updateAppointmentStatus, clearAllAppointments, deleteAppointment, type StoredAppointment } from '@/utils/appointmentStorage';
 import { useToast } from '@/hooks/use-toast';
 
 interface DentistLoginProps {
@@ -95,6 +94,24 @@ const DentistLogin = ({ isOpen, onClose }: DentistLoginProps) => {
       await loadAppointments();
     } catch (error) {
       console.error('Error updating appointment status:', error);
+    }
+  };
+
+  const handleDeleteAppointment = async (id: string) => {
+    try {
+      await deleteAppointment(id);
+      setAppointments(prev => prev.filter(apt => apt.id !== id));
+      toast({
+        title: "Success",
+        description: "Appointment has been deleted successfully.",
+      });
+    } catch (error) {
+      console.error('Error deleting appointment:', error);
+      toast({
+        title: "Error",
+        description: "Failed to delete appointment. Please try again.",
+        variant: "destructive",
+      });
     }
   };
 
@@ -387,6 +404,14 @@ const DentistLogin = ({ isOpen, onClose }: DentistLoginProps) => {
                                     <ClockIcon className="h-4 w-4" />
                                   </Button>
                                 )}
+                                <Button
+                                  onClick={() => handleDeleteAppointment(appointment.id)}
+                                  size="sm"
+                                  variant="outline"
+                                  className="text-red-600 hover:bg-red-50 hover:border-red-200"
+                                >
+                                  <X className="h-4 w-4" />
+                                </Button>
                               </div>
                             </TableCell>
                           </TableRow>
@@ -428,6 +453,14 @@ const DentistLogin = ({ isOpen, onClose }: DentistLoginProps) => {
                                 >
                                   <CheckIcon className="h-4 w-4 mr-1" />
                                   Mark Done
+                                </Button>
+                                <Button
+                                  onClick={() => handleDeleteAppointment(appointment.id)}
+                                  size="sm"
+                                  variant="outline"
+                                  className="text-red-600 hover:bg-red-50 hover:border-red-200"
+                                >
+                                  <X className="h-4 w-4" />
                                 </Button>
                               </div>
                             </CardTitle>
@@ -510,6 +543,14 @@ const DentistLogin = ({ isOpen, onClose }: DentistLoginProps) => {
                                 <BellIcon className="h-4 w-4 mr-1" />
                                 Notify
                               </Button>
+                              <Button
+                                onClick={() => handleDeleteAppointment(appointment.id)}
+                                size="sm"
+                                variant="outline"
+                                className="text-red-600 hover:bg-red-50 hover:border-red-200"
+                              >
+                                <X className="h-4 w-4" />
+                              </Button>
                             </div>
                           </CardTitle>
                         </CardHeader>
@@ -569,9 +610,19 @@ const DentistLogin = ({ isOpen, onClose }: DentistLoginProps) => {
                         <CardHeader className="pb-3">
                           <CardTitle className="flex items-center justify-between">
                             <span className="text-lg">{appointment.patientName}</span>
-                            <span className="px-3 py-1 rounded-full text-sm bg-green-100 text-green-800">
-                              {appointment.status}
-                            </span>
+                            <div className="flex items-center space-x-2">
+                              <span className="px-3 py-1 rounded-full text-sm bg-green-100 text-green-800">
+                                {appointment.status}
+                              </span>
+                              <Button
+                                onClick={() => handleDeleteAppointment(appointment.id)}
+                                size="sm"
+                                variant="outline"
+                                className="text-red-600 hover:bg-red-50 hover:border-red-200"
+                              >
+                                <X className="h-4 w-4" />
+                              </Button>
+                            </div>
                           </CardTitle>
                         </CardHeader>
                         <CardContent>
