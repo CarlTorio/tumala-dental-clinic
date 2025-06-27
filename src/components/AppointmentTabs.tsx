@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -11,9 +10,10 @@ interface AppointmentTabsProps {
   activeTab: string;
   onTabChange: (value: string) => void;
   onStatusChange: (id: string, status: 'Done' | 'Pending' | 'Didn\'t show up') => void;
+  onDelete?: (id: string) => void;
 }
 
-const AppointmentTabs = ({ appointments, activeTab, onTabChange, onStatusChange }: AppointmentTabsProps) => {
+const AppointmentTabs = ({ appointments, activeTab, onTabChange, onStatusChange, onDelete }: AppointmentTabsProps) => {
   const filteredAppointments = appointments.filter(apt => {
     if (activeTab === 'all') return true;
     if (activeTab === 'pending') return apt.status === 'Pending';
@@ -51,6 +51,7 @@ const AppointmentTabs = ({ appointments, activeTab, onTabChange, onStatusChange 
                 appointment={appointment} 
                 showActions={false}
                 onStatusChange={onStatusChange}
+                onDelete={onDelete}
               />
             ))
           )}
@@ -70,6 +71,7 @@ const AppointmentTabs = ({ appointments, activeTab, onTabChange, onStatusChange 
                 key={appointment.id} 
                 appointment={appointment}
                 onStatusChange={onStatusChange}
+                onDelete={onDelete}
               />
             ))
           )}
@@ -89,6 +91,7 @@ const AppointmentTabs = ({ appointments, activeTab, onTabChange, onStatusChange 
                 key={appointment.id} 
                 appointment={appointment}
                 onStatusChange={onStatusChange}
+                onDelete={onDelete}
               />
             ))
           )}
@@ -108,6 +111,7 @@ const AppointmentTabs = ({ appointments, activeTab, onTabChange, onStatusChange 
                 key={appointment.id} 
                 appointment={appointment}
                 onStatusChange={onStatusChange}
+                onDelete={onDelete}
               />
             ))
           )}

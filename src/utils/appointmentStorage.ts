@@ -134,6 +134,25 @@ export const isTimeSlotBooked = async (date: Date, time: string): Promise<boolea
   }
 };
 
+export const deleteAppointment = async (id: string): Promise<void> => {
+  try {
+    const { error } = await supabase
+      .from('appointments')
+      .delete()
+      .eq('id', id);
+
+    if (error) {
+      console.error('Error deleting appointment:', error);
+      throw error;
+    }
+
+    console.log('Appointment deleted successfully');
+  } catch (error) {
+    console.error('Failed to delete appointment:', error);
+    throw error;
+  }
+};
+
 export const clearAllAppointments = async (): Promise<void> => {
   try {
     const { error } = await supabase

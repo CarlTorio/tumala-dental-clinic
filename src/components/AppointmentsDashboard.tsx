@@ -1,10 +1,9 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { MenuIcon, RefreshCwIcon } from 'lucide-react';
-import { getAppointments, updateAppointmentStatus, clearAllAppointments, deleteDoneAppointments, type StoredAppointment } from '@/utils/appointmentStorage';
+import { getAppointments, updateAppointmentStatus, clearAllAppointments, deleteDoneAppointments, deleteAppointment, type StoredAppointment } from '@/utils/appointmentStorage';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useToast } from '@/hooks/use-toast';
 import DashboardHeader from './DashboardHeader';
@@ -107,6 +106,24 @@ const AppointmentsDashboard = () => {
     }
   };
 
+  const handleDeleteAppointment = async (id: string) => {
+    try {
+      await deleteAppointment(id);
+      setAppointments(prev => prev.filter(apt => apt.id !== id));
+      toast({
+        title: "Success",
+        description: "Appointment has been deleted.",
+      });
+    } catch (error) {
+      console.error('Error deleting appointment:', error);
+      toast({
+        title: "Error",
+        description: "Failed to delete appointment. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
   const filteredAppointments = appointments.filter(apt => {
     if (activeTab === 'all') return true;
     if (activeTab === 'pending') return apt.status === 'Pending';
@@ -141,6 +158,7 @@ const AppointmentsDashboard = () => {
           activeTab={activeTab}
           onTabChange={setActiveTab}
           onStatusChange={handleStatusChange}
+          onDelete={handleDeleteAppointment}
         />
       )}
     </div>

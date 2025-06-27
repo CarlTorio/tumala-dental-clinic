@@ -1,18 +1,18 @@
-
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { CalendarIcon, ClockIcon, PhoneIcon } from 'lucide-react';
+import { CalendarIcon, ClockIcon, PhoneIcon, X } from 'lucide-react';
 import { StoredAppointment } from '@/utils/appointmentStorage';
 
 interface AppointmentCardProps {
   appointment: StoredAppointment;
   showActions?: boolean;
   onStatusChange: (id: string, status: 'Done' | 'Pending' | 'Didn\'t show up') => void;
+  onDelete?: (id: string) => void;
 }
 
-const AppointmentCard = ({ appointment, showActions = true, onStatusChange }: AppointmentCardProps) => {
+const AppointmentCard = ({ appointment, showActions = true, onStatusChange, onDelete }: AppointmentCardProps) => {
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', {
@@ -59,49 +59,62 @@ const AppointmentCard = ({ appointment, showActions = true, onStatusChange }: Ap
               </Badge>
             </div>
           </div>
-          {showActions && (
-            <div className="flex gap-2 flex-wrap">
-              {appointment.status === 'Pending' && (
-                <>
+          <div className="flex items-center gap-2">
+            {showActions && (
+              <div className="flex gap-2 flex-wrap">
+                {appointment.status === 'Pending' && (
+                  <>
+                    <Button
+                      size="sm"
+                      onClick={() => onStatusChange(appointment.id, 'Done')}
+                      className="text-xs"
+                    >
+                      Mark Done
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="destructive"
+                      onClick={() => onStatusChange(appointment.id, 'Didn\'t show up')}
+                      className="text-xs bg-red-600 hover:bg-red-700"
+                    >
+                      Didn't show up
+                    </Button>
+                  </>
+                )}
+                {appointment.status === 'Done' && (
                   <Button
                     size="sm"
-                    onClick={() => onStatusChange(appointment.id, 'Done')}
+                    variant="outline"
+                    onClick={() => onStatusChange(appointment.id, 'Pending')}
                     className="text-xs"
                   >
-                    Mark Done
+                    Reopen
                   </Button>
+                )}
+                {appointment.status === 'Didn\'t show up' && (
                   <Button
                     size="sm"
-                    variant="destructive"
-                    onClick={() => onStatusChange(appointment.id, 'Didn\'t show up')}
-                    className="text-xs bg-red-600 hover:bg-red-700"
+                    variant="outline"
+                    onClick={() => onStatusChange(appointment.id, 'Pending')}
+                    className="text-xs"
                   >
-                    Didn't show up
+                    Reopen
                   </Button>
-                </>
-              )}
-              {appointment.status === 'Done' && (
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => onStatusChange(appointment.id, 'Pending')}
-                  className="text-xs"
-                >
-                  Reopen
-                </Button>
-              )}
-              {appointment.status === 'Didn\'t show up' && (
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => onStatusChange(appointment.id, 'Pending')}
-                  className="text-xs"
-                >
-                  Reopen
-                </Button>
-              )}
-            </div>
-          )}
+                )}
+              </div>
+            )}
+            {onDelete && (
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => onDelete(appointment.id)}
+                className="text-xs p-2 hover:bg-red-50 hover:border-red-200"
+                title="Delete appointment"
+              >
+                <X className="h-4 w-4 text-red-600" />
+              </Button>
+            )}
+          </div>
         </div>
       </CardHeader>
       <CardContent className="pt-0">
