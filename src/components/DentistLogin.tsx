@@ -1,14 +1,16 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Checkbox } from '@/components/ui/checkbox';
-import { UserIcon, LockIcon, CalendarIcon, CheckIcon, ClockIcon, RefreshCwIcon, MonitorIcon, BellIcon } from 'lucide-react';
-import { getAppointments, updateAppointmentStatus, type StoredAppointment } from '@/utils/appointmentStorage';
+import { UserIcon, LockIcon, CalendarIcon, CheckIcon, ClockIcon, RefreshCwIcon, MonitorIcon, BellIcon, Trash2Icon } from 'lucide-react';
+import { getAppointments, updateAppointmentStatus, clearAllAppointments, type StoredAppointment } from '@/utils/appointmentStorage';
 import { useToast } from '@/hooks/use-toast';
 
 interface DentistLoginProps {
@@ -24,6 +26,7 @@ const DentistLogin = ({ isOpen, onClose }: DentistLoginProps) => {
   const [appointments, setAppointments] = useState<StoredAppointment[]>([]);
   const [rememberDevice, setRememberDevice] = useState(false);
   const [isDeviceRemembered, setIsDeviceRemembered] = useState(false);
+  const [isClearingAll, setIsClearingAll] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -92,6 +95,27 @@ const DentistLogin = ({ isOpen, onClose }: DentistLoginProps) => {
       await loadAppointments();
     } catch (error) {
       console.error('Error updating appointment status:', error);
+    }
+  };
+
+  const handleClearAllAppointments = async () => {
+    try {
+      setIsClearingAll(true);
+      await clearAllAppointments();
+      setAppointments([]);
+      toast({
+        title: "Success",
+        description: "All appointments have been cleared from the database.",
+      });
+    } catch (error) {
+      console.error('Error clearing all appointments:', error);
+      toast({
+        title: "Error",
+        description: "Failed to clear appointments. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsClearingAll(false);
     }
   };
 
@@ -213,6 +237,37 @@ const DentistLogin = ({ isOpen, onClose }: DentistLoginProps) => {
                   <RefreshCwIcon className="h-4 w-4 mr-2" />
                   Refresh
                 </Button>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button 
+                      variant="destructive" 
+                      size="sm" 
+                      disabled={isClearingAll || appointments.length === 0}
+                      className="flex items-center gap-2"
+                    >
+                      <Trash2Icon className="h-4 w-4" />
+                      Clear All
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Clear All Appointments</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        This will permanently delete ALL appointments from the database. This action cannot be undone.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction
+                        onClick={handleClearAllAppointments}
+                        disabled={isClearingAll}
+                        className="bg-red-600 hover:bg-red-700"
+                      >
+                        {isClearingAll ? 'Clearing...' : 'Clear All'}
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
               </div>
               <div className="flex items-center space-x-2">
                 {isDeviceRemembered && (
