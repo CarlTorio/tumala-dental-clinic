@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { Calendar } from '@/components/ui/calendar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -7,13 +8,16 @@ import { ClockIcon } from 'lucide-react';
 import { addDays, format, isSameDay, isToday, isFuture, isAfter, startOfDay, getDay } from 'date-fns';
 import { getAppointments } from '@/utils/appointmentStorage';
 import { useIsMobile } from '@/hooks/use-mobile';
+
 interface AppointmentCalendarProps {
   onSelect: (date: Date, time: string) => void;
 }
+
 const AppointmentCalendar = ({
   onSelect
 }: AppointmentCalendarProps) => {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
+  const [bookedSlots, setBookedSlots] = useState<{ [key: string]: string[] }>({});
   const isMobile = useIsMobile();
   const timeSlotsRef = useRef<HTMLDivElement>(null);
 
@@ -38,20 +42,29 @@ const AppointmentCalendar = ({
     return slots;
   }, [selectedDate]);
 
-  // Get actual booked appointments from storage
-  const bookedSlots = useMemo(() => {
-    const appointments = getAppointments();
-    const bookedByDate: {
-      [key: string]: string[];
-    } = {};
-    appointments.forEach(appointment => {
-      const dateKey = appointment.date;
-      if (!bookedByDate[dateKey]) {
-        bookedByDate[dateKey] = [];
+  // Load booked appointments from Supabase
+  useEffect(() => {
+    const loadBookedSlots = async () => {
+      try {
+        const appointments = await getAppointments();
+        const bookedByDate: { [key: string]: string[] } = {};
+        
+        appointments.forEach(appointment => {
+          const dateKey = appointment.date;
+          if (!bookedByDate[dateKey]) {
+            bookedByDate[dateKey] = [];
+          }
+          bookedByDate[dateKey].push(appointment.time);
+        });
+        
+        setBookedSlots(bookedByDate);
+      } catch (error) {
+        console.error('Error loading appointments:', error);
+        setBookedSlots({});
       }
-      bookedByDate[dateKey].push(appointment.time);
-    });
-    return bookedByDate;
+    };
+
+    loadBookedSlots();
   }, []);
 
   // Auto-scroll to time slots on mobile when date is selected
@@ -66,10 +79,12 @@ const AppointmentCalendar = ({
       }, 100);
     }
   }, [selectedDate, isMobile]);
+
   const isSlotBooked = (date: Date, time: string) => {
     const dateKey = date.toLocaleDateString();
     return bookedSlots[dateKey]?.includes(time) || false;
   };
+
   const isSlotAvailable = (date: Date, time: string) => {
     const now = new Date();
     const [hour, minute] = time.split(':').map(Number);
@@ -79,11 +94,13 @@ const AppointmentCalendar = ({
     // Check if slot is in the future and not booked
     return isAfter(slotDateTime, now) && !isSlotBooked(date, time);
   };
+
   const handleTimeSelect = (time: string) => {
     if (selectedDate && isSlotAvailable(selectedDate, time)) {
       onSelect(selectedDate, time);
     }
   };
+
   const formatTimeSlot = (time: string) => {
     const [hour, minute] = time.split(':');
     const hourNum = parseInt(hour);
@@ -98,57 +115,59 @@ const AppointmentCalendar = ({
     const maxDate = addDays(today, 30);
     return date < today || date > maxDate;
   };
-  return <div className="grid lg:grid-cols-2 gap-6">
-      {/* Calendar */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
-            <ClockIcon className="h-5 w-5 text-primary" />
-            <span>Select Date</span>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Calendar mode="single" selected={selectedDate} onSelect={setSelectedDate} disabled={disableDate} className="w-full" />
-          <div className="mt-4 text-sm text-gray-600">
-            <p>• Available appointments up to 30 days in advance</p>
-            <p>• Select a date to view available time slots</p>
-          </div>
-        </CardContent>
-      </Card>
 
-      {/* Time Slots */}
-      <Card ref={timeSlotsRef}>
-        <CardHeader>
-          <CardTitle className="flex items-center justify-between">
-            <span>Available Time</span>
-            {selectedDate && <Badge variant="outline">
-                {format(selectedDate, 'EEEE, MMMM d')}
-              </Badge>}
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          {!selectedDate ? <div className="text-center py-8 text-gray-500">
-              <ClockIcon className="h-12 w-12 mx-auto mb-2 opacity-50" />
-              <p>Please select a date to view available times</p>
-            </div> : <div className="grid grid-cols-2 gap-2 max-h-96 overflow-y-auto">
-              {timeSlots.map(time => {
-            const isAvailable = isSlotAvailable(selectedDate, time);
-            const isBooked = isSlotBooked(selectedDate, time);
-            return <Button key={time} variant={isAvailable ? "outline" : "secondary"} size="sm" className={`justify-center ${isAvailable ? 'hover:bg-primary hover:text-white border-primary/20' : 'opacity-50 cursor-not-allowed'}`} disabled={!isAvailable} onClick={() => handleTimeSelect(time)}>
-                    <span className="text-xs">
-                      {formatTimeSlot(time)}
-                      {isBooked && ' (Booked)'}
-                    </span>
-                  </Button>;
-          })}
-            </div>}
-          
-          {selectedDate && <div className="mt-4 text-xs text-gray-500 space-y-1">
-              <p>• Each appointment will be done not less than 30 munites (so consider the time)</p>
-              {getDay(selectedDate) === 0 ? <p>• Clinic hours: 9:00 AM - 7:00 PM (Mon-Sat)</p> : <p>• Office hours: 9:00 AM - 7:00 PM (Mon-Sat)</p>}
-            </div>}
-        </CardContent>
-      </Card>
-    </div>;
+  return <div className="grid lg:grid-cols-2 gap-6">
+    {/* Calendar */}
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center space-x-2">
+          <ClockIcon className="h-5 w-5 text-primary" />
+          <span>Select Date</span>
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <Calendar mode="single" selected={selectedDate} onSelect={setSelectedDate} disabled={disableDate} className="w-full" />
+        <div className="mt-4 text-sm text-gray-600">
+          <p>• Available appointments up to 30 days in advance</p>
+          <p>• Select a date to view available time slots</p>
+        </div>
+      </CardContent>
+    </Card>
+
+    {/* Time Slots */}
+    <Card ref={timeSlotsRef}>
+      <CardHeader>
+        <CardTitle className="flex items-center justify-between">
+          <span>Available Time</span>
+          {selectedDate && <Badge variant="outline">
+              {format(selectedDate, 'EEEE, MMMM d')}
+            </Badge>}
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        {!selectedDate ? <div className="text-center py-8 text-gray-500">
+            <ClockIcon className="h-12 w-12 mx-auto mb-2 opacity-50" />
+            <p>Please select a date to view available times</p>
+          </div> : <div className="grid grid-cols-2 gap-2 max-h-96 overflow-y-auto">
+            {timeSlots.map(time => {
+          const isAvailable = isSlotAvailable(selectedDate, time);
+          const isBooked = isSlotBooked(selectedDate, time);
+          return <Button key={time} variant={isAvailable ? "outline" : "secondary"} size="sm" className={`justify-center ${isAvailable ? 'hover:bg-primary hover:text-white border-primary/20' : 'opacity-50 cursor-not-allowed'}`} disabled={!isAvailable} onClick={() => handleTimeSelect(time)}>
+                  <span className="text-xs">
+                    {formatTimeSlot(time)}
+                    {isBooked && ' (Booked)'}
+                  </span>
+                </Button>;
+        })}
+          </div>}
+        
+        {selectedDate && <div className="mt-4 text-xs text-gray-500 space-y-1">
+            <p>• Each appointment will be done not less than 30 munites (so consider the time)</p>
+            {getDay(selectedDate) === 0 ? <p>• Clinic hours: 9:00 AM - 7:00 PM (Mon-Sat)</p> : <p>• Office hours: 9:00 AM - 7:00 PM (Mon-Sat)</p>}
+          </div>}
+      </CardContent>
+    </Card>
+  </div>;
 };
+
 export default AppointmentCalendar;

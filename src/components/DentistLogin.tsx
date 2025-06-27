@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -43,10 +42,15 @@ const DentistLogin = ({ isOpen, onClose }: DentistLoginProps) => {
     }
   }, [isLoggedIn, isDeviceRemembered]);
 
-  const loadAppointments = () => {
-    const stored = getAppointments();
-    setAppointments(stored);
-    console.log('Loaded appointments:', stored);
+  const loadAppointments = async () => {
+    try {
+      const stored = await getAppointments();
+      setAppointments(stored);
+      console.log('Loaded appointments:', stored);
+    } catch (error) {
+      console.error('Error loading appointments:', error);
+      setAppointments([]);
+    }
   };
 
   const handleLogin = (e: React.FormEvent) => {
@@ -82,9 +86,13 @@ const DentistLogin = ({ isOpen, onClose }: DentistLoginProps) => {
     handleLogout();
   };
 
-  const handleStatusUpdate = (id: string, newStatus: 'Done' | 'Pending') => {
-    updateAppointmentStatus(id, newStatus);
-    loadAppointments();
+  const handleStatusUpdate = async (id: string, newStatus: 'Done' | 'Pending') => {
+    try {
+      await updateAppointmentStatus(id, newStatus);
+      await loadAppointments();
+    } catch (error) {
+      console.error('Error updating appointment status:', error);
+    }
   };
 
   const handleNotifyPatient = (appointment: StoredAppointment) => {
