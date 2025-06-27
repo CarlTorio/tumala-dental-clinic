@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { CalendarIcon, ClockIcon, PhoneIcon, MailIcon, MapPinIcon } from 'lucide-react';
@@ -85,7 +86,7 @@ const Index = () => {
       
       {/* Hero Section */}
       <section className="relative dental-gradient text-white py-20 px-4">
-        <div className="container mx-auto text-center">
+        <div className="container mx-auto text-center relative z-10">
           <h1 className="text-5xl font-bold mb-6 md:text-5xl min-h-[4rem] flex items-center justify-center">
             {displayedText}
             {!isComplete && <span className="animate-pulse ml-1">|</span>}
@@ -100,7 +101,7 @@ const Index = () => {
         </div>
       </section>
 
-      <section className="py-16 px-4 dental-light-bg">
+      <section className="py-16 px-4 dental-wave-bg">
         <div className="container mx-auto">
           <div className="max-w-4xl mx-auto">
             <div className="rounded-lg overflow-hidden shadow-lg relative" style={{
@@ -115,8 +116,8 @@ const Index = () => {
         </div>
       </section>
 
-      <section id="services-area" className="py-16 px-4 dental-light-bg">
-        <div className="container mx-auto">
+      <section id="services-area" className="py-16 px-4 dental-accent-bg">
+        <div className="container mx-auto relative z-10">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold text-primary mb-4">Our Services</h2>
             <p className="text-gray-600 text-lg max-w-2xl mx-auto">
@@ -143,7 +144,7 @@ const Index = () => {
         </div>
       </section>
 
-      <section id="about-area" className="py-16 px-4">
+      <section id="about-area" className="py-16 px-4 dental-pattern">
         <div className="container mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
@@ -190,7 +191,7 @@ const Index = () => {
       </section>
 
       <section id="contact-area" className="py-16 px-4 dental-gradient text-white text-center">
-        <div className="container mx-auto">
+        <div className="container mx-auto relative z-10">
           <h2 className="text-4xl font-bold mb-4">Ready to Schedule Your Visit?</h2>
           <p className="text-xl mb-8 opacity-90">
             Take the first step towards a healthier, more beautiful smile today.
