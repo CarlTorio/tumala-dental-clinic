@@ -55,6 +55,21 @@ const PersonalInfoSection = ({ formData, errors, onInputChange }: PersonalInfoSe
         </div>
 
         <div>
+          <Label htmlFor="email">Email Address</Label>
+          <Input
+            id="email"
+            type="email"
+            value={formData.email}
+            onChange={(e) => onInputChange('email', e.target.value)}
+            className={errors.email ? 'border-red-500' : ''}
+            placeholder="Enter your email address"
+          />
+          {errors.email && (
+            <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+          )}
+        </div>
+
+        <div>
           <Label htmlFor="phone">Phone Number *</Label>
           <Input
             id="phone"

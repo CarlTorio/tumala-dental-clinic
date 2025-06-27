@@ -8,6 +8,13 @@ export const validatePatientForm = (formData: AppointmentData['patientInfo']) =>
     newErrors.fullName = 'Full name is required';
   }
 
+  if (formData.email && formData.email.trim()) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      newErrors.email = 'Please enter a valid email address';
+    }
+  }
+
   if (!formData.phone.trim()) {
     newErrors.phone = 'Phone number is required';
   } else if (!/^\(?[\d\s\-\(\)]{10,}$/.test(formData.phone.replace(/\D/g, ''))) {
