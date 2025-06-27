@@ -60,21 +60,23 @@ const AppointmentCalendar = ({
       const bookedByDate: { [key: string]: string[] } = {};
       
       appointments.forEach(appointment => {
-        // Use consistent date formatting
-        const dateKey = formatDateConsistent(new Date(appointment.date));
-        console.log('Processing appointment:', {
-          originalDate: appointment.date,
-          formattedDate: dateKey,
-          time: appointment.time
+        const dateKey = appointment.date; // Use the date directly as it's already formatted
+        console.log('Processing appointment for booking check:', {
+          dateKey,
+          time: appointment.time,
+          status: appointment.status
         });
         
-        if (!bookedByDate[dateKey]) {
-          bookedByDate[dateKey] = [];
+        // Only block time slots for pending appointments
+        if (appointment.status === 'Pending') {
+          if (!bookedByDate[dateKey]) {
+            bookedByDate[dateKey] = [];
+          }
+          bookedByDate[dateKey].push(appointment.time);
         }
-        bookedByDate[dateKey].push(appointment.time);
       });
       
-      console.log('Processed booked slots:', bookedByDate);
+      console.log('Final booked slots by date:', bookedByDate);
       setBookedSlots(bookedByDate);
       setLastRefresh(new Date());
     } catch (error) {
@@ -109,7 +111,12 @@ const AppointmentCalendar = ({
   const isSlotBooked = (date: Date, time: string) => {
     const dateKey = formatDateConsistent(date);
     const isBooked = bookedSlots[dateKey]?.includes(time) || false;
-    console.log('Checking slot:', { dateKey, time, isBooked, bookedSlots: bookedSlots[dateKey] });
+    console.log('Checking if slot is booked:', { 
+      dateKey, 
+      time, 
+      isBooked, 
+      availableSlots: bookedSlots[dateKey] || [] 
+    });
     return isBooked;
   };
 
@@ -120,12 +127,33 @@ const AppointmentCalendar = ({
     slotDateTime.setHours(hour, minute, 0, 0);
 
     // Check if slot is in the future and not booked
-    return isAfter(slotDateTime, now) && !isSlotBooked(date, time);
+    const isFutureSlot = isAfter(slotDateTime, now);
+    const isNotBooked = !isSlotBooked(date, time);
+    
+    console.log('Checking slot availability:', {
+      date: formatDateConsistent(date),
+      time,
+      isFutureSlot,
+      isNotBooked,
+      finalAvailable: isFutureSlot && isNotBooked
+    });
+    
+    return isFutureSlot && isNotBooked;
   };
 
   const handleTimeSelect = (time: string) => {
     if (selectedDate && isSlotAvailable(selectedDate, time)) {
+      console.log('Time slot selected:', {
+        date: formatDateConsistent(selectedDate),
+        time
+      });
       onSelect(selectedDate, time);
+    } else {
+      console.log('Time slot not available for selection:', {
+        date: selectedDate ? formatDateConsistent(selectedDate) : 'No date',
+        time,
+        available: selectedDate ? isSlotAvailable(selectedDate, time) : false
+      });
     }
   };
 

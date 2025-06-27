@@ -1,3 +1,4 @@
+
 import { supabase } from '@/integrations/supabase/client';
 
 export interface StoredAppointment {
@@ -23,6 +24,27 @@ const formatDateConsistent = (date: Date): string => {
   const month = (date.getMonth() + 1).toString().padStart(2, '0');
   const year = date.getFullYear();
   return `${day}/${month}/${year}`;
+};
+
+// Utility function to parse date string to Date object
+const parseDate = (dateString: string): Date | null => {
+  if (!dateString) return null;
+  
+  // Handle DD/MM/YYYY format
+  const parts = dateString.split('/');
+  if (parts.length === 3) {
+    const day = parseInt(parts[0]);
+    const month = parseInt(parts[1]) - 1; // Month is 0-indexed
+    const year = parseInt(parts[2]);
+    
+    if (day > 0 && day <= 31 && month >= 0 && month <= 11 && year > 1900) {
+      return new Date(year, month, day);
+    }
+  }
+  
+  // Fallback to Date parsing
+  const parsed = new Date(dateString);
+  return isNaN(parsed.getTime()) ? null : parsed;
 };
 
 export const saveAppointment = async (appointmentData: any): Promise<void> => {
@@ -83,27 +105,14 @@ export const getAppointments = async (): Promise<StoredAppointment[]> => {
 
     // Transform the data to match the expected interface with consistent date formatting
     const transformedData = data?.map(appointment => {
-      // Parse the stored date and reformat it consistently
+      // Use the stored date directly since it's already in DD/MM/YYYY format
       let formattedDate = appointment.appointment_date;
       
-      // If the date is in MM/DD/YYYY format, convert to DD/MM/YYYY
-      if (appointment.appointment_date && appointment.appointment_date.includes('/')) {
-        const dateParts = appointment.appointment_date.split('/');
-        if (dateParts.length === 3) {
-          // Check if it's MM/DD/YYYY format (month > 12 or typical US format)
-          const firstPart = parseInt(dateParts[0]);
-          const secondPart = parseInt(dateParts[1]);
-          
-          if (firstPart > 12 || (firstPart <= 12 && secondPart <= 12)) {
-            // If first part > 12, it's already DD/MM/YYYY
-            // If both parts <= 12, keep as is (assume DD/MM/YYYY)
-            formattedDate = appointment.appointment_date;
-          } else {
-            // Convert MM/DD/YYYY to DD/MM/YYYY
-            formattedDate = `${dateParts[1]}/${dateParts[0]}/${dateParts[2]}`;
-          }
-        }
-      }
+      console.log('Processing appointment date:', {
+        originalDate: appointment.appointment_date,
+        finalDate: formattedDate,
+        time: appointment.appointment_time
+      });
 
       return {
         id: appointment.id,
