@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+
+import React, { useEffect, useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { CheckCircleIcon, CalendarIcon, ClockIcon, UserIcon, PhoneIcon } from 'lucide-react';
@@ -16,42 +17,61 @@ const BookingConfirmation = ({
   onClose
 }: BookingConfirmationProps) => {
   const [isSaving, setIsSaving] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
   const { toast } = useToast();
+  const saveAttempted = useRef(false);
 
   useEffect(() => {
     const handleSaveAppointment = async () => {
-      if (appointmentData.date && appointmentData.time && appointmentData.patientInfo.fullName && !isSaving) {
-        setIsSaving(true);
-        try {
-          await saveAppointment(appointmentData);
-          console.log('Appointment saved to Supabase:', appointmentData);
-          toast({
-            title: "Success!",
-            description: "Your appointment has been saved successfully.",
-          });
-        } catch (error) {
-          console.error('Failed to save appointment:', error);
-          toast({
-            title: "Error",
-            description: "Failed to save appointment. Please try again.",
-            variant: "destructive",
-          });
-        } finally {
-          setIsSaving(false);
-        }
+      // Prevent multiple saves
+      if (saveAttempted.current || isSaving || isSaved) {
+        return;
+      }
+
+      // Check if we have the required data
+      if (!appointmentData.date || !appointmentData.time || !appointmentData.patientInfo.fullName) {
+        return;
+      }
+
+      saveAttempted.current = true;
+      setIsSaving(true);
+
+      try {
+        await saveAppointment(appointmentData);
+        console.log('Appointment saved successfully');
+        setIsSaved(true);
+        toast({
+          title: "Success!",
+          description: "Your appointment has been saved successfully.",
+        });
+      } catch (error) {
+        console.error('Failed to save appointment:', error);
+        saveAttempted.current = false; // Allow retry on error
+        toast({
+          title: "Error",
+          description: "Failed to save appointment. Please try again.",
+          variant: "destructive",
+        });
+      } finally {
+        setIsSaving(false);
       }
     };
 
     handleSaveAppointment();
-  }, [appointmentData, isSaving, toast]);
+  }, []); // Empty dependency array since we only want this to run once
 
   return (
     <div className="space-y-6">
       <div className="text-center">
         <CheckCircleIcon className="h-16 w-16 text-green-500 mx-auto mb-4" />
-        <h2 className="text-2xl font-bold text-green-600 mb-2">Appointment Confirmed!</h2>
+        <h2 className="text-2xl font-bold text-green-600 mb-2">
+          {isSaved ? 'Appointment Confirmed!' : 'Confirming Appointment...'}
+        </h2>
         <p className="text-gray-600">
-          Your appointment has been successfully booked. Please arrive 15 minutes early.
+          {isSaved 
+            ? 'Your appointment has been successfully booked. Please arrive 15 minutes early.'
+            : 'Please wait while we save your appointment details.'
+          }
         </p>
       </div>
 
@@ -103,14 +123,16 @@ const BookingConfirmation = ({
         </CardContent>
       </Card>
 
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-        <h3 className="font-semibold text-blue-800 mb-2">What's Next?</h3>
-        <ul className="text-blue-700 space-y-1 text-sm">
-          <li>• Please arrive 15 minutes early for your appointment</li>
-          <li>• If you need to reschedule, please call us at least 24 hours in advance</li>
-          <li>• Bring a valid ID and insurance information if applicable</li>
-        </ul>
-      </div>
+      {isSaved && (
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <h3 className="font-semibold text-blue-800 mb-2">What's Next?</h3>
+          <ul className="text-blue-700 space-y-1 text-sm">
+            <li>• Please arrive 15 minutes early for your appointment</li>
+            <li>• If you need to reschedule, please call us at least 24 hours in advance</li>
+            <li>• Bring a valid ID and insurance information if applicable</li>
+          </ul>
+        </div>
+      )}
 
       <div className="flex flex-col sm:flex-row gap-3 justify-center">
         <Button 
