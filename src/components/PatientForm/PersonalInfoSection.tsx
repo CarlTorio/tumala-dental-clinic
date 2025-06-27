@@ -54,36 +54,19 @@ const PersonalInfoSection = ({ formData, errors, onInputChange }: PersonalInfoSe
           </div>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-4">
-          <div>
-            <Label htmlFor="email">Email Address *</Label>
-            <Input
-              id="email"
-              type="email"
-              value={formData.email}
-              onChange={(e) => onInputChange('email', e.target.value)}
-              className={errors.email ? 'border-red-500' : ''}
-              placeholder="Enter your email address"
-            />
-            {errors.email && (
-              <p className="text-red-500 text-sm mt-1">{errors.email}</p>
-            )}
-          </div>
-          
-          <div>
-            <Label htmlFor="phone">Phone Number *</Label>
-            <Input
-              id="phone"
-              type="tel"
-              value={formData.phone}
-              onChange={(e) => onInputChange('phone', e.target.value)}
-              className={errors.phone ? 'border-red-500' : ''}
-              placeholder="Enter your phone number"
-            />
-            {errors.phone && (
-              <p className="text-red-500 text-sm mt-1">{errors.phone}</p>
-            )}
-          </div>
+        <div>
+          <Label htmlFor="phone">Phone Number *</Label>
+          <Input
+            id="phone"
+            type="tel"
+            value={formData.phone}
+            onChange={(e) => onInputChange('phone', e.target.value)}
+            className={errors.phone ? 'border-red-500' : ''}
+            placeholder="Enter your phone number"
+          />
+          {errors.phone && (
+            <p className="text-red-500 text-sm mt-1">{errors.phone}</p>
+          )}
         </div>
       </CardContent>
     </Card>

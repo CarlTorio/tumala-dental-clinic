@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { CalendarIcon, ClockIcon, UserIcon, PhoneIcon, MailIcon, MenuIcon, FilterIcon } from 'lucide-react';
+import { CalendarIcon, ClockIcon, UserIcon, PhoneIcon, MenuIcon, FilterIcon } from 'lucide-react';
 import { getAppointments, updateAppointmentStatus, type StoredAppointment } from '@/utils/appointmentStorage';
 import { useIsMobile } from '@/hooks/use-mobile';
 
@@ -146,17 +146,10 @@ const AppointmentsDashboard = () => {
             </div>
           </div>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div className="flex items-center gap-2 text-sm">
-              <PhoneIcon className="h-4 w-4 text-gray-500" />
-              <span className="font-medium">Phone:</span>
-              <span>{appointment.phone}</span>
-            </div>
-            <div className="flex items-center gap-2 text-sm">
-              <MailIcon className="h-4 w-4 text-gray-500" />
-              <span className="font-medium">Email:</span>
-              <span className="truncate">{appointment.email}</span>
-            </div>
+          <div className="flex items-center gap-2 text-sm">
+            <PhoneIcon className="h-4 w-4 text-gray-500" />
+            <span className="font-medium">Phone:</span>
+            <span>{appointment.phone}</span>
           </div>
 
           <div className="border-t pt-3">
