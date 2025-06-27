@@ -18,6 +18,19 @@ interface DentistLoginProps {
   onClose: () => void;
 }
 
+// Utility function to format date consistently (DD/MM/YYYY)
+const formatDateConsistent = (date: Date): string => {
+  const day = date.getDate().toString().padStart(2, '0');
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const year = date.getFullYear();
+  return `${day}/${month}/${year}`;
+};
+
+// Utility function to get today's date in consistent format
+const getTodayFormatted = (): string => {
+  return formatDateConsistent(new Date());
+};
+
 const DentistLogin = ({ isOpen, onClose }: DentistLoginProps) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState('');
@@ -186,12 +199,13 @@ const DentistLogin = ({ isOpen, onClose }: DentistLoginProps) => {
     console.log('Notifying patient:', appointment);
   };
 
-  // Filter and sort appointments
+  // Filter and sort appointments with consistent date formatting
   const pendingAppointments = appointments
     .filter(apt => apt.status === 'Pending')
     .sort((a, b) => {
       // Sort by date first, then by time (nearest appointments first)
-      const dateComparison = new Date(a.date).getTime() - new Date(b.date).getTime();
+      const dateComparison = new Date(a.date.split('/').reverse().join('/')).getTime() - 
+                           new Date(b.date.split('/').reverse().join('/')).getTime();
       if (dateComparison !== 0) return dateComparison;
       
       // If same date, sort by time
@@ -209,8 +223,8 @@ const DentistLogin = ({ isOpen, onClose }: DentistLoginProps) => {
       return new Date(b.bookedAt).getTime() - new Date(a.bookedAt).getTime();
     });
   
-  // Filter today's pending appointments and sort by time
-  const today = new Date().toLocaleDateString();
+  // Filter today's pending appointments and sort by time using consistent date format
+  const today = getTodayFormatted();
   const todayPendingAppointments = appointments
     .filter(apt => apt.date === today && apt.status === 'Pending')
     .sort((a, b) => {

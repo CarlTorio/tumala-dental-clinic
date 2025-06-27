@@ -17,14 +17,25 @@ export interface StoredAppointment {
   bookedAt: string;
 }
 
+// Utility function to format date consistently (DD/MM/YYYY)
+const formatDateConsistent = (date: Date): string => {
+  const day = date.getDate().toString().padStart(2, '0');
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const year = date.getFullYear();
+  return `${day}/${month}/${year}`;
+};
+
 export const saveAppointment = async (appointmentData: any): Promise<void> => {
   try {
+    // Ensure consistent date formatting
+    const formattedDate = appointmentData.date ? formatDateConsistent(appointmentData.date) : '';
+    
     const appointment = {
       patient_name: appointmentData.patientInfo.fullName,
       email: appointmentData.patientInfo.email || '',
       phone: appointmentData.patientInfo.phone,
       service: appointmentData.patientInfo.dentalConcern || 'General Consultation',
-      appointment_date: appointmentData.date?.toLocaleDateString() || '',
+      appointment_date: formattedDate,
       appointment_time: appointmentData.time,
       status: 'Pending' as const,
       date_of_birth: appointmentData.patientInfo.dateOfBirth,
@@ -33,6 +44,12 @@ export const saveAppointment = async (appointmentData: any): Promise<void> => {
       special_notes: appointmentData.patientInfo.specialNotes || '',
       insurance: appointmentData.patientInfo.insurance || ''
     };
+
+    console.log('Saving appointment with formatted date:', {
+      originalDate: appointmentData.date,
+      formattedDate,
+      time: appointmentData.time
+    });
 
     const { data, error } = await supabase
       .from('appointments')
@@ -64,24 +81,49 @@ export const getAppointments = async (): Promise<StoredAppointment[]> => {
       return [];
     }
 
-    // Transform the data to match the expected interface
-    const transformedData = data?.map(appointment => ({
-      id: appointment.id,
-      patientName: appointment.patient_name,
-      email: appointment.email || '',
-      phone: appointment.phone,
-      service: appointment.service,
-      date: appointment.appointment_date,
-      time: appointment.appointment_time,
-      status: appointment.status as 'Done' | 'Pending' | 'Didn\'t show up',
-      dateOfBirth: appointment.date_of_birth,
-      dentalConcern: appointment.dental_concern,
-      patientType: appointment.patient_type as 'new' | 'returning',
-      specialNotes: appointment.special_notes || '',
-      insurance: appointment.insurance || '',
-      bookedAt: appointment.booked_at
-    })) || [];
+    // Transform the data to match the expected interface with consistent date formatting
+    const transformedData = data?.map(appointment => {
+      // Parse the stored date and reformat it consistently
+      let formattedDate = appointment.appointment_date;
+      
+      // If the date is in MM/DD/YYYY format, convert to DD/MM/YYYY
+      if (appointment.appointment_date && appointment.appointment_date.includes('/')) {
+        const dateParts = appointment.appointment_date.split('/');
+        if (dateParts.length === 3) {
+          // Check if it's MM/DD/YYYY format (month > 12 or typical US format)
+          const firstPart = parseInt(dateParts[0]);
+          const secondPart = parseInt(dateParts[1]);
+          
+          if (firstPart > 12 || (firstPart <= 12 && secondPart <= 12)) {
+            // If first part > 12, it's already DD/MM/YYYY
+            // If both parts <= 12, keep as is (assume DD/MM/YYYY)
+            formattedDate = appointment.appointment_date;
+          } else {
+            // Convert MM/DD/YYYY to DD/MM/YYYY
+            formattedDate = `${dateParts[1]}/${dateParts[0]}/${dateParts[2]}`;
+          }
+        }
+      }
 
+      return {
+        id: appointment.id,
+        patientName: appointment.patient_name,
+        email: appointment.email || '',
+        phone: appointment.phone,
+        service: appointment.service,
+        date: formattedDate,
+        time: appointment.appointment_time,
+        status: appointment.status as 'Done' | 'Pending' | 'Didn\'t show up',
+        dateOfBirth: appointment.date_of_birth,
+        dentalConcern: appointment.dental_concern,
+        patientType: appointment.patient_type as 'new' | 'returning',
+        specialNotes: appointment.special_notes || '',
+        insurance: appointment.insurance || '',
+        bookedAt: appointment.booked_at
+      };
+    }) || [];
+
+    console.log('Fetched and transformed appointments:', transformedData);
     return transformedData;
   } catch (error) {
     console.error('Error loading appointments:', error);
@@ -113,7 +155,7 @@ export const updateAppointmentStatus = async (id: string, status: 'Done' | 'Pend
 
 export const isTimeSlotBooked = async (date: Date, time: string): Promise<boolean> => {
   try {
-    const dateKey = date.toLocaleDateString();
+    const dateKey = formatDateConsistent(date);
     
     const { data, error } = await supabase
       .from('appointments')

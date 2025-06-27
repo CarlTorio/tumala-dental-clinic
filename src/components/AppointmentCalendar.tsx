@@ -1,10 +1,9 @@
-
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { Calendar } from '@/components/ui/calendar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { ClockIcon } from 'lucide-react';
+import { ClockIcon, RefreshCwIcon } from 'lucide-react';
 import { addDays, format, isSameDay, isToday, isFuture, isAfter, startOfDay, getDay } from 'date-fns';
 import { getAppointments } from '@/utils/appointmentStorage';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -13,11 +12,21 @@ interface AppointmentCalendarProps {
   onSelect: (date: Date, time: string) => void;
 }
 
+// Utility function to format date consistently (DD/MM/YYYY)
+const formatDateConsistent = (date: Date): string => {
+  const day = date.getDate().toString().padStart(2, '0');
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const year = date.getFullYear();
+  return `${day}/${month}/${year}`;
+};
+
 const AppointmentCalendar = ({
   onSelect
 }: AppointmentCalendarProps) => {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [bookedSlots, setBookedSlots] = useState<{ [key: string]: string[] }>({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [lastRefresh, setLastRefresh] = useState<Date>(new Date());
   const isMobile = useIsMobile();
   const timeSlotsRef = useRef<HTMLDivElement>(null);
 
@@ -43,28 +52,45 @@ const AppointmentCalendar = ({
   }, [selectedDate]);
 
   // Load booked appointments from Supabase
-  useEffect(() => {
-    const loadBookedSlots = async () => {
-      try {
-        const appointments = await getAppointments();
-        const bookedByDate: { [key: string]: string[] } = {};
-        
-        appointments.forEach(appointment => {
-          const dateKey = appointment.date;
-          if (!bookedByDate[dateKey]) {
-            bookedByDate[dateKey] = [];
-          }
-          bookedByDate[dateKey].push(appointment.time);
+  const loadBookedSlots = async () => {
+    try {
+      setIsLoading(true);
+      console.log('Loading booked slots...');
+      const appointments = await getAppointments();
+      const bookedByDate: { [key: string]: string[] } = {};
+      
+      appointments.forEach(appointment => {
+        // Use consistent date formatting
+        const dateKey = formatDateConsistent(new Date(appointment.date));
+        console.log('Processing appointment:', {
+          originalDate: appointment.date,
+          formattedDate: dateKey,
+          time: appointment.time
         });
         
-        setBookedSlots(bookedByDate);
-      } catch (error) {
-        console.error('Error loading appointments:', error);
-        setBookedSlots({});
-      }
-    };
+        if (!bookedByDate[dateKey]) {
+          bookedByDate[dateKey] = [];
+        }
+        bookedByDate[dateKey].push(appointment.time);
+      });
+      
+      console.log('Processed booked slots:', bookedByDate);
+      setBookedSlots(bookedByDate);
+      setLastRefresh(new Date());
+    } catch (error) {
+      console.error('Error loading appointments:', error);
+      setBookedSlots({});
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
+  useEffect(() => {
     loadBookedSlots();
+    
+    // Refresh every 10 seconds to keep data synchronized
+    const interval = setInterval(loadBookedSlots, 10000);
+    return () => clearInterval(interval);
   }, []);
 
   // Auto-scroll to time slots on mobile when date is selected
@@ -81,8 +107,10 @@ const AppointmentCalendar = ({
   }, [selectedDate, isMobile]);
 
   const isSlotBooked = (date: Date, time: string) => {
-    const dateKey = date.toLocaleDateString();
-    return bookedSlots[dateKey]?.includes(time) || false;
+    const dateKey = formatDateConsistent(date);
+    const isBooked = bookedSlots[dateKey]?.includes(time) || false;
+    console.log('Checking slot:', { dateKey, time, isBooked, bookedSlots: bookedSlots[dateKey] });
+    return isBooked;
   };
 
   const isSlotAvailable = (date: Date, time: string) => {
@@ -116,58 +144,109 @@ const AppointmentCalendar = ({
     return date < today || date > maxDate;
   };
 
-  return <div className="grid lg:grid-cols-2 gap-6">
-    {/* Calendar */}
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center space-x-2">
-          <ClockIcon className="h-5 w-5 text-primary" />
-          <span>Select Date</span>
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <Calendar mode="single" selected={selectedDate} onSelect={setSelectedDate} disabled={disableDate} className="w-full" />
-        <div className="mt-4 text-sm text-gray-600">
-          <p>• Available appointments up to 30 days in advance</p>
-          <p>• Select a date to view available time slots</p>
-        </div>
-      </CardContent>
-    </Card>
+  return (
+    <div className="grid lg:grid-cols-2 gap-6">
+      {/* Calendar */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <ClockIcon className="h-5 w-5 text-primary" />
+              <span>Select Date</span>
+            </div>
+            <Button
+              onClick={loadBookedSlots}
+              variant="outline"
+              size="sm"
+              disabled={isLoading}
+              className="flex items-center gap-2"
+            >
+              <RefreshCwIcon className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
+              Refresh
+            </Button>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Calendar 
+            mode="single" 
+            selected={selectedDate} 
+            onSelect={setSelectedDate} 
+            disabled={disableDate} 
+            className="w-full" 
+          />
+          <div className="mt-4 text-sm text-gray-600">
+            <p>• Available appointments up to 30 days in advance</p>
+            <p>• Select a date to view available time slots</p>
+            {lastRefresh && (
+              <p className="text-xs text-gray-400 mt-2">
+                Last updated: {lastRefresh.toLocaleTimeString()}
+              </p>
+            )}
+          </div>
+        </CardContent>
+      </Card>
 
-    {/* Time Slots */}
-    <Card ref={timeSlotsRef}>
-      <CardHeader>
-        <CardTitle className="flex items-center justify-between">
-          <span>Available Time</span>
-          {selectedDate && <Badge variant="outline">
-              {format(selectedDate, 'EEEE, MMMM d')}
-            </Badge>}
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        {!selectedDate ? <div className="text-center py-8 text-gray-500">
-            <ClockIcon className="h-12 w-12 mx-auto mb-2 opacity-50" />
-            <p>Please select a date to view available times</p>
-          </div> : <div className="grid grid-cols-2 gap-2 max-h-96 overflow-y-auto">
-            {timeSlots.map(time => {
-          const isAvailable = isSlotAvailable(selectedDate, time);
-          const isBooked = isSlotBooked(selectedDate, time);
-          return <Button key={time} variant={isAvailable ? "outline" : "secondary"} size="sm" className={`justify-center ${isAvailable ? 'hover:bg-primary hover:text-white border-primary/20' : 'opacity-50 cursor-not-allowed'}`} disabled={!isAvailable} onClick={() => handleTimeSelect(time)}>
-                  <span className="text-xs">
-                    {formatTimeSlot(time)}
-                    {isBooked && ' (Booked)'}
-                  </span>
-                </Button>;
-        })}
-          </div>}
-        
-        {selectedDate && <div className="mt-4 text-xs text-gray-500 space-y-1">
-            <p>• Each appointment will be done not less than 30 munites (so consider the time)</p>
-            {getDay(selectedDate) === 0 ? <p>• Clinic hours: 9:00 AM - 7:00 PM (Mon-Sat)</p> : <p>• Office hours: 9:00 AM - 7:00 PM (Mon-Sat)</p>}
-          </div>}
-      </CardContent>
-    </Card>
-  </div>;
+      {/* Time Slots */}
+      <Card ref={timeSlotsRef}>
+        <CardHeader>
+          <CardTitle className="flex items-center justify-between">
+            <span>Available Time</span>
+            {selectedDate && (
+              <Badge variant="outline">
+                {format(selectedDate, 'EEEE, MMMM d')}
+              </Badge>
+            )}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          {!selectedDate ? (
+            <div className="text-center py-8 text-gray-500">
+              <ClockIcon className="h-12 w-12 mx-auto mb-2 opacity-50" />
+              <p>Please select a date to view available times</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 gap-2 max-h-96 overflow-y-auto">
+              {timeSlots.map(time => {
+                const isAvailable = isSlotAvailable(selectedDate, time);
+                const isBooked = isSlotBooked(selectedDate, time);
+                
+                return (
+                  <Button
+                    key={time}
+                    variant={isAvailable ? "outline" : "secondary"}
+                    size="sm"
+                    className={`justify-center ${
+                      isAvailable 
+                        ? 'hover:bg-primary hover:text-white border-primary/20' 
+                        : 'opacity-50 cursor-not-allowed'
+                    }`}
+                    disabled={!isAvailable}
+                    onClick={() => handleTimeSelect(time)}
+                  >
+                    <span className="text-xs">
+                      {formatTimeSlot(time)}
+                      {isBooked && ' (Booked)'}
+                    </span>
+                  </Button>
+                );
+              })}
+            </div>
+          )}
+          
+          {selectedDate && (
+            <div className="mt-4 text-xs text-gray-500 space-y-1">
+              <p>• Each appointment will be done not less than 30 minutes (so consider the time)</p>
+              {getDay(selectedDate) === 0 ? (
+                <p>• Sunday hours: 1:00 PM - 7:00 PM</p>
+              ) : (
+                <p>• Office hours: 9:00 AM - 7:00 PM (Mon-Sat)</p>
+              )}
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    </div>
+  );
 };
 
 export default AppointmentCalendar;
