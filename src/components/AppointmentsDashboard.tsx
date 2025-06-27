@@ -1,14 +1,14 @@
+
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
-import { CalendarIcon, ClockIcon, UserIcon, PhoneIcon, MenuIcon, RefreshCwIcon, Trash2Icon } from 'lucide-react';
+import { MenuIcon, RefreshCwIcon } from 'lucide-react';
 import { getAppointments, updateAppointmentStatus, clearAllAppointments, deleteDoneAppointments, type StoredAppointment } from '@/utils/appointmentStorage';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useToast } from '@/hooks/use-toast';
+import DashboardHeader from './DashboardHeader';
+import AppointmentTabs from './AppointmentTabs';
 
 const AppointmentsDashboard = () => {
   const [appointments, setAppointments] = useState<StoredAppointment[]>([]);
@@ -107,24 +107,6 @@ const AppointmentsDashboard = () => {
     }
   };
 
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      weekday: 'short',
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric'
-    });
-  };
-
-  const formatTime = (timeString: string) => {
-    const [hour, minute] = timeString.split(':');
-    const hourNum = parseInt(hour);
-    const ampm = hourNum >= 12 ? 'PM' : 'AM';
-    const displayHour = hourNum > 12 ? hourNum - 12 : hourNum === 0 ? 12 : hourNum;
-    return `${displayHour}:${minute} ${ampm}`;
-  };
-
   const filteredAppointments = appointments.filter(apt => {
     if (activeTab === 'all') return true;
     if (activeTab === 'pending') return apt.status === 'Pending';
@@ -133,202 +115,18 @@ const AppointmentsDashboard = () => {
     return true;
   });
 
-  const getBadgeVariant = (status: string) => {
-    switch (status) {
-      case 'Done':
-        return 'default';
-      case 'Didn\'t show up':
-        return 'destructive';
-      default:
-        return 'secondary';
-    }
-  };
-
-  const AppointmentCard = ({ appointment, showActions = true }: { appointment: StoredAppointment; showActions?: boolean }) => (
-    <Card className="mb-4 shadow-sm border-l-4 border-l-primary">
-      <CardHeader className="pb-3">
-        <div className="flex justify-between items-start">
-          <div>
-            <CardTitle className="text-lg font-semibold text-primary">
-              {appointment.patientName}
-            </CardTitle>
-            <div className="flex items-center gap-2 mt-1">
-              <Badge variant={getBadgeVariant(appointment.status)}>
-                {appointment.status}
-              </Badge>
-              <Badge variant="outline" className="text-xs">
-                {appointment.patientType}
-              </Badge>
-            </div>
-          </div>
-          {showActions && (
-            <div className="flex gap-2 flex-wrap">
-              {appointment.status === 'Pending' && (
-                <>
-                  <Button
-                    size="sm"
-                    onClick={() => handleStatusChange(appointment.id, 'Done')}
-                    className="text-xs"
-                  >
-                    Mark Done
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="destructive"
-                    onClick={() => handleStatusChange(appointment.id, 'Didn\'t show up')}
-                    className="text-xs bg-red-600 hover:bg-red-700"
-                  >
-                    Didn't show up
-                  </Button>
-                </>
-              )}
-              {appointment.status === 'Done' && (
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => handleStatusChange(appointment.id, 'Pending')}
-                  className="text-xs"
-                >
-                  Reopen
-                </Button>
-              )}
-              {appointment.status === 'Didn\'t show up' && (
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => handleStatusChange(appointment.id, 'Pending')}
-                  className="text-xs"
-                >
-                  Reopen
-                </Button>
-              )}
-            </div>
-          )}
-        </div>
-      </CardHeader>
-      <CardContent className="pt-0">
-        <div className="space-y-3">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div className="flex items-center gap-2 text-sm">
-              <CalendarIcon className="h-4 w-4 text-gray-500" />
-              <span className="font-medium">Date:</span>
-              <span>{formatDate(appointment.date)}</span>
-            </div>
-            <div className="flex items-center gap-2 text-sm">
-              <ClockIcon className="h-4 w-4 text-gray-500" />
-              <span className="font-medium">Time:</span>
-              <span>{formatTime(appointment.time)}</span>
-            </div>
-          </div>
-          
-          <div className="flex items-center gap-2 text-sm">
-            <PhoneIcon className="h-4 w-4 text-gray-500" />
-            <span className="font-medium">Phone:</span>
-            <span>{appointment.phone}</span>
-          </div>
-
-          <div className="border-t pt-3">
-            <div className="text-sm">
-              <span className="font-medium">Service:</span>
-              <span className="ml-2">{appointment.service}</span>
-            </div>
-            {appointment.specialNotes && (
-              <div className="text-sm mt-2">
-                <span className="font-medium">Notes:</span>
-                <span className="ml-2 text-gray-600">{appointment.specialNotes}</span>
-              </div>
-            )}
-          </div>
-        </div>
-      </CardContent>
-    </Card>
-  );
-
   const DashboardContent = () => (
     <div className="space-y-4">
-      <div className="flex justify-between items-center">
-        <h2 className="text-xl font-bold text-primary">Patient Appointments</h2>
-        <div className="flex items-center gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={loadAppointments}
-            disabled={isRefreshing}
-            className="flex items-center gap-2"
-          >
-            <RefreshCwIcon className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
-            Refresh
-          </Button>
-          
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button
-                variant="outline"
-                size="sm"
-                disabled={isDeletingDone || appointments.filter(apt => apt.status === 'Done').length === 0}
-                className="flex items-center gap-2"
-              >
-                <Trash2Icon className="h-4 w-4" />
-                Clear Done
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Delete Completed Appointments</AlertDialogTitle>
-                <AlertDialogDescription>
-                  This will permanently delete all completed appointments. This action cannot be undone.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction
-                  onClick={handleDeleteDoneAppointments}
-                  disabled={isDeletingDone}
-                  className="bg-red-600 hover:bg-red-700"
-                >
-                  {isDeletingDone ? 'Deleting...' : 'Delete Completed'}
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button
-                variant="destructive"
-                size="sm"
-                disabled={isDeletingAll || appointments.length === 0}
-                className="flex items-center gap-2"
-              >
-                <Trash2Icon className="h-4 w-4" />
-                Clear All
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Clear All Appointments</AlertDialogTitle>
-                <AlertDialogDescription>
-                  This will permanently delete ALL appointments from the database. This action cannot be undone.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction
-                  onClick={handleClearAllAppointments}
-                  disabled={isDeletingAll}
-                  className="bg-red-600 hover:bg-red-700"
-                >
-                  {isDeletingAll ? 'Clearing...' : 'Clear All'}
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-
-          <Badge variant="outline" className="text-sm">
-            {filteredAppointments.length} appointments
-          </Badge>
-        </div>
-      </div>
+      <DashboardHeader
+        appointments={appointments}
+        filteredAppointments={filteredAppointments}
+        isRefreshing={isRefreshing}
+        isDeletingAll={isDeletingAll}
+        isDeletingDone={isDeletingDone}
+        onRefresh={loadAppointments}
+        onClearAll={handleClearAllAppointments}
+        onDeleteDone={handleDeleteDoneAppointments}
+      />
 
       {isLoading ? (
         <Card className="p-8 text-center">
@@ -338,80 +136,12 @@ const AppointmentsDashboard = () => {
           </div>
         </Card>
       ) : (
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="all">All ({appointments.length})</TabsTrigger>
-            <TabsTrigger value="pending">
-              Pending ({appointments.filter(apt => apt.status === 'Pending').length})
-            </TabsTrigger>
-            <TabsTrigger value="completed">
-              Done ({appointments.filter(apt => apt.status === 'Done').length})
-            </TabsTrigger>
-            <TabsTrigger value="no-show">
-              No Show ({appointments.filter(apt => apt.status === 'Didn\'t show up').length})
-            </TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="all" className="mt-4">
-            <div className="space-y-4">
-              {filteredAppointments.length === 0 ? (
-                <Card className="p-8 text-center">
-                  <CalendarIcon className="h-12 w-12 mx-auto text-gray-400 mb-4" />
-                  <p className="text-gray-500">No appointments found</p>
-                </Card>
-              ) : (
-                filteredAppointments.map(appointment => (
-                  <AppointmentCard key={appointment.id} appointment={appointment} showActions={false} />
-                ))
-              )}
-            </div>
-          </TabsContent>
-
-          <TabsContent value="pending" className="mt-4">
-            <div className="space-y-4">
-              {filteredAppointments.length === 0 ? (
-                <Card className="p-8 text-center">
-                  <ClockIcon className="h-12 w-12 mx-auto text-gray-400 mb-4" />
-                  <p className="text-gray-500">No pending appointments</p>
-                </Card>
-              ) : (
-                filteredAppointments.map(appointment => (
-                  <AppointmentCard key={appointment.id} appointment={appointment} />
-                ))
-              )}
-            </div>
-          </TabsContent>
-
-          <TabsContent value="completed" className="mt-4">
-            <div className="space-y-4">
-              {filteredAppointments.length === 0 ? (
-                <Card className="p-8 text-center">
-                  <UserIcon className="h-12 w-12 mx-auto text-gray-400 mb-4" />
-                  <p className="text-gray-500">No completed appointments</p>
-                </Card>
-              ) : (
-                filteredAppointments.map(appointment => (
-                  <AppointmentCard key={appointment.id} appointment={appointment} />
-                ))
-              )}
-            </div>
-          </TabsContent>
-
-          <TabsContent value="no-show" className="mt-4">
-            <div className="space-y-4">
-              {filteredAppointments.length === 0 ? (
-                <Card className="p-8 text-center">
-                  <UserIcon className="h-12 w-12 mx-auto text-gray-400 mb-4" />
-                  <p className="text-gray-500">No no-show appointments</p>
-                </Card>
-              ) : (
-                filteredAppointments.map(appointment => (
-                  <AppointmentCard key={appointment.id} appointment={appointment} />
-                ))
-              )}
-            </div>
-          </TabsContent>
-        </Tabs>
+        <AppointmentTabs
+          appointments={appointments}
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
+          onStatusChange={handleStatusChange}
+        />
       )}
     </div>
   );
