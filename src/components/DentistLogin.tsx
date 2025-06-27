@@ -8,9 +8,10 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Checkbox } from '@/components/ui/checkbox';
-import { UserIcon, LockIcon, CalendarIcon, CheckIcon, ClockIcon, RefreshCwIcon, MonitorIcon, BellIcon, Trash2Icon, X } from 'lucide-react';
+import { UserIcon, LockIcon, CalendarIcon, CheckIcon, ClockIcon, RefreshCwIcon, MonitorIcon, BellIcon, Trash2Icon, X, HardDriveIcon } from 'lucide-react';
 import { getAppointments, updateAppointmentStatus, clearAllAppointments, deleteAppointment, type StoredAppointment } from '@/utils/appointmentStorage';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
 interface DentistLoginProps {
   isOpen: boolean;
@@ -26,6 +27,7 @@ const DentistLogin = ({ isOpen, onClose }: DentistLoginProps) => {
   const [rememberDevice, setRememberDevice] = useState(false);
   const [isDeviceRemembered, setIsDeviceRemembered] = useState(false);
   const [isClearingAll, setIsClearingAll] = useState(false);
+  const [storageUsage, setStorageUsage] = useState<number | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -35,14 +37,50 @@ const DentistLogin = ({ isOpen, onClose }: DentistLoginProps) => {
       setIsDeviceRemembered(true);
       setIsLoggedIn(true);
       loadAppointments();
+      loadStorageUsage();
     }
   }, []);
 
   useEffect(() => {
     if (isLoggedIn && !isDeviceRemembered) {
       loadAppointments();
+      loadStorageUsage();
     }
   }, [isLoggedIn, isDeviceRemembered]);
+
+  const loadStorageUsage = async () => {
+    try {
+      const { data, error } = await supabase.storage.listBuckets();
+      
+      if (error) {
+        console.error('Error fetching storage buckets:', error);
+        return;
+      }
+
+      let totalSize = 0;
+      
+      // Get size from all buckets
+      for (const bucket of data) {
+        const { data: files, error: filesError } = await supabase.storage
+          .from(bucket.name)
+          .list();
+          
+        if (!filesError && files) {
+          for (const file of files) {
+            if (file.metadata?.size) {
+              totalSize += file.metadata.size;
+            }
+          }
+        }
+      }
+
+      // Convert bytes to MB
+      const sizeInMB = totalSize / (1024 * 1024);
+      setStorageUsage(Math.round(sizeInMB * 100) / 100); // Round to 2 decimal places
+    } catch (error) {
+      console.error('Error calculating storage usage:', error);
+    }
+  };
 
   const loadAppointments = async () => {
     try {
@@ -68,6 +106,7 @@ const DentistLogin = ({ isOpen, onClose }: DentistLoginProps) => {
       }
       
       loadAppointments();
+      loadStorageUsage();
     } else {
       setError('Invalid username or password');
     }
@@ -79,6 +118,7 @@ const DentistLogin = ({ isOpen, onClose }: DentistLoginProps) => {
     setPassword('');
     setError('');
     setRememberDevice(false);
+    setStorageUsage(null);
     onClose();
   };
 
@@ -287,6 +327,10 @@ const DentistLogin = ({ isOpen, onClose }: DentistLoginProps) => {
                 </AlertDialog>
               </div>
               <div className="flex items-center space-x-2">
+                <Button variant="outline" size="sm" className="border-gray-300 text-gray-700 hover:bg-gray-50 cursor-default">
+                  <HardDriveIcon className="h-4 w-4 mr-2" />
+                  {storageUsage !== null ? `${storageUsage} MB` : 'Loading...'}
+                </Button>
                 {isDeviceRemembered && (
                   <Button onClick={handleForgetDevice} variant="outline" size="sm" className="border-gray-300 text-gray-700 hover:bg-gray-50">
                     <MonitorIcon className="h-4 w-4 mr-2" />
