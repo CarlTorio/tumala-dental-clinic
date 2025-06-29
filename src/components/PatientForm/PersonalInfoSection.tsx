@@ -5,12 +5,12 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { UserIcon } from 'lucide-react';
-import type { AppointmentData } from '../BookingModal';
+import type { PatientInfo } from '../BookingModal';
 
 interface PersonalInfoSectionProps {
-  formData: AppointmentData['patientInfo'];
+  formData: PatientInfo;
   errors: Record<string, string>;
-  onInputChange: (field: keyof AppointmentData['patientInfo'], value: string) => void;
+  onInputChange: (field: keyof PatientInfo, value: string) => void;
 }
 
 const PersonalInfoSection = ({ formData, errors, onInputChange }: PersonalInfoSectionProps) => {

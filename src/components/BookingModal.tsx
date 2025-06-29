@@ -9,6 +9,8 @@ export interface PatientInfo {
   phone: string;
   email: string;
   age: string;
+  dateOfBirth: string;
+  patientType: 'new' | 'returning';
   dentalConcern: string;
   specialNotes?: string;
 }
@@ -34,13 +36,18 @@ const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
       phone: '',
       email: '',
       age: '',
+      dateOfBirth: '',
+      patientType: 'new',
       dentalConcern: '',
       specialNotes: ''
     }
   });
 
-  const handleFormSubmit = (data: AppointmentData) => {
-    setAppointmentData(data);
+  const handleFormSubmit = (data: PatientInfo) => {
+    setAppointmentData(prev => ({
+      ...prev,
+      patientInfo: data
+    }));
     setStep('confirmation');
   };
 
@@ -54,6 +61,8 @@ const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
         phone: '',
         email: '',
         age: '',
+        dateOfBirth: '',
+        patientType: 'new',
         dentalConcern: '',
         specialNotes: ''
       }
@@ -65,7 +74,10 @@ const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto p-4 sm:p-6 mx-4 sm:mx-auto rounded-xl sm:rounded-lg">
         {step === 'form' ? (
-          <PatientForm onSubmit={handleFormSubmit} onCancel={handleClose} />
+          <PatientForm 
+            onSubmit={handleFormSubmit} 
+            initialData={appointmentData.patientInfo} 
+          />
         ) : (
           <BookingConfirmation 
             appointmentData={appointmentData} 
