@@ -6,12 +6,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { dentalConcerns } from './patientFormData';
-import type { PatientInfo } from '../BookingModal';
+import type { AppointmentData } from '../BookingModal';
 
 interface AppointmentDetailsSectionProps {
-  formData: PatientInfo;
+  formData: AppointmentData['patientInfo'];
   errors: Record<string, string>;
-  onInputChange: (field: keyof PatientInfo, value: string) => void;
+  onInputChange: (field: keyof AppointmentData['patientInfo'], value: string) => void;
 }
 
 const AppointmentDetailsSection = ({ formData, errors, onInputChange }: AppointmentDetailsSectionProps) => {

@@ -1,15 +1,15 @@
 
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import type { PatientInfo } from './BookingModal';
+import type { AppointmentData } from './BookingModal';
 import PersonalInfoSection from './PatientForm/PersonalInfoSection';
 import AppointmentDetailsSection from './PatientForm/AppointmentDetailsSection';
 import ImportantNotesCard from './PatientForm/ImportantNotesCard';
 import { validatePatientForm } from './PatientForm/patientFormValidation';
 
 interface PatientFormProps {
-  onSubmit: (data: PatientInfo) => void;
-  initialData: PatientInfo;
+  onSubmit: (data: AppointmentData['patientInfo']) => void;
+  initialData: AppointmentData['patientInfo'];
 }
 
 const PatientForm = ({ onSubmit, initialData }: PatientFormProps) => {
@@ -26,7 +26,7 @@ const PatientForm = ({ onSubmit, initialData }: PatientFormProps) => {
     }
   };
 
-  const handleInputChange = (field: keyof PatientInfo, value: string) => {
+  const handleInputChange = (field: keyof AppointmentData['patientInfo'], value: string) => {
     setFormData(prev => ({
       ...prev,
       [field]: value

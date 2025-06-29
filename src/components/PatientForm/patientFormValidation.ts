@@ -1,7 +1,7 @@
 
-import type { PatientInfo } from '../BookingModal';
+import type { AppointmentData } from '../BookingModal';
 
-export const validatePatientForm = (formData: PatientInfo) => {
+export const validatePatientForm = (formData: AppointmentData['patientInfo']) => {
   const newErrors: Record<string, string> = {};
 
   if (!formData.fullName.trim()) {
