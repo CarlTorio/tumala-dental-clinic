@@ -122,7 +122,7 @@ const BookingModal = ({
   }];
 
   return <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent ref={dialogContentRef} className="max-w-4xl max-h-[90vh] overflow-y-auto p-4 sm:p-6 mx-4 sm:mx-6 rounded-xl sm:rounded-lg">
+      <DialogContent ref={dialogContentRef} className="max-w-4xl max-h-[90vh] overflow-y-auto p-4 sm:p-6 mx-6 sm:mx-auto rounded-xl sm:rounded-lg">
         <DialogHeader>
           <DialogTitle className="text-xl sm:text-2xl font-bold text-primary text-center">
             Book Your Dental Appointment
