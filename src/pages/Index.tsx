@@ -101,21 +101,6 @@ const Index = () => {
         </div>
       </section>
 
-      <section className="py-16 px-4 dental-wave-bg">
-        <div className="container mx-auto">
-          <div className="max-w-4xl mx-auto">
-            <div className="rounded-lg overflow-hidden shadow-lg relative" style={{
-            paddingTop: '56.25%'
-          }}>
-              <iframe src="https://www.youtube.com/embed/vkijaBkDdJM?autoplay=1&mute=1&loop=1&playlist=vkijaBkDdJM&controls=0&showinfo=0&rel=0&modestbranding=1&iv_load_policy=3&cc_load_policy=0&fs=0&disablekb=1&hd=1&vq=hd1080&quality=hd1080&title=0&byline=0&portrait=0&branding=0&autohide=1&theme=light&color=white&start=0&end=0" className="absolute top-0 left-0 w-full h-full md:w-full md:h-full" frameBorder="0" allow="autoplay; encrypted-media" allowFullScreen title="Tumala Dental Clinic Video" style={{
-              aspectRatio: '16/9',
-              objectFit: 'cover'
-            }} />
-            </div>
-          </div>
-        </div>
-      </section>
-
       <section id="services-area" className="py-16 px-4 dental-accent-bg">
         <div className="container mx-auto relative z-10">
           <div className="text-center mb-12">
