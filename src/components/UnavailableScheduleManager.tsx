@@ -1,11 +1,10 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
-import { CalendarIcon, ClockIcon, Trash2Icon, PlusIcon, RefreshCwIcon } from 'lucide-react';
+import { CalendarIcon, ClockIcon, Trash2Icon, PlusIcon, RefreshCwIcon, CalendarXIcon } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { Badge } from '@/components/ui/badge';
@@ -24,6 +23,7 @@ const UnavailableScheduleManager = () => {
   const [schedules, setSchedules] = useState<UnavailableSchedule[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isMarkingWholeDay, setIsMarkingWholeDay] = useState(false);
   const { toast } = useToast();
 
   // Form state for daily availability
@@ -93,6 +93,63 @@ const UnavailableScheduleManager = () => {
         ? prev.filter(t => t !== time)
         : [...prev, time]
     );
+  };
+
+  const handleMarkWholeDay = async () => {
+    if (!selectedDate) {
+      toast({
+        title: "Error",
+        description: "Please select a date first.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      setIsMarkingWholeDay(true);
+      
+      // Get all time slots for the selected date
+      const allTimeSlots = generateTimeSlots(selectedDate);
+      
+      // Create entries for all time slots
+      const entries = allTimeSlots.map(time => ({
+        unavailable_date: selectedDate,
+        unavailable_time: time,
+        reason: reason || 'Whole day marked as unavailable',
+        is_full_day: false, // We're still creating individual time slots
+      }));
+
+      const { error } = await supabase
+        .from('dentist_unavailable_schedules')
+        .insert(entries);
+
+      if (error) {
+        console.error('Error marking whole day:', error);
+        toast({
+          title: "Error",
+          description: "Failed to mark whole day as unavailable.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      toast({
+        title: "Success",
+        description: `Whole day marked as unavailable (${allTimeSlots.length} time slots).`,
+      });
+
+      // Reset form
+      setSelectedDate('');
+      setSelectedTimes([]);
+      setReason('');
+
+      // Reload schedules
+      await loadSchedules();
+    } catch (error) {
+      console.error('Error marking whole day:', error);
+    } finally {
+      setIsMarkingWholeDay(false);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -242,48 +299,63 @@ const UnavailableScheduleManager = () => {
             </div>
 
             {selectedDate && (
-              <div className="space-y-4">
-                <div>
-                  <Label>Select Unavailable Time Slots *</Label>
-                  <p className="text-sm text-gray-500 mb-3">
-                    Click on time slots to mark them as unavailable. You can select multiple times.
-                  </p>
-                </div>
-                
-                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
-                  {timeSlots.map(time => (
-                    <Button
-                      key={time}
-                      type="button"
-                      variant={selectedTimes.includes(time) ? "default" : "outline"}
-                      size="sm"
-                      className={`text-xs ${
-                        selectedTimes.includes(time) 
-                          ? 'bg-red-600 hover:bg-red-700 text-white' 
-                          : 'hover:bg-red-50 hover:border-red-200'
-                      }`}
-                      onClick={() => handleTimeToggle(time)}
-                    >
-                      {formatTime(time)}
-                    </Button>
-                  ))}
+              <>
+                <div className="flex gap-3">
+                  <Button
+                    type="button"
+                    variant="destructive"
+                    onClick={handleMarkWholeDay}
+                    disabled={isMarkingWholeDay}
+                    className="flex items-center gap-2"
+                  >
+                    <CalendarXIcon className="h-4 w-4" />
+                    {isMarkingWholeDay ? 'Marking Whole Day...' : 'Mark Whole Day Unavailable'}
+                  </Button>
                 </div>
 
-                {selectedTimes.length > 0 && (
-                  <div className="p-3 bg-red-50 rounded-lg">
-                    <p className="text-sm font-medium text-red-800 mb-2">
-                      Selected unavailable times ({selectedTimes.length}):
+                <div className="space-y-4">
+                  <div>
+                    <Label>Select Specific Unavailable Time Slots</Label>
+                    <p className="text-sm text-gray-500 mb-3">
+                      Click on time slots to mark them as unavailable. You can select multiple times.
                     </p>
-                    <div className="flex flex-wrap gap-1">
-                      {selectedTimes.map(time => (
-                        <Badge key={time} variant="destructive" className="text-xs">
-                          {formatTime(time)}
-                        </Badge>
-                      ))}
-                    </div>
                   </div>
-                )}
-              </div>
+                  
+                  <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
+                    {timeSlots.map(time => (
+                      <Button
+                        key={time}
+                        type="button"
+                        variant={selectedTimes.includes(time) ? "default" : "outline"}
+                        size="sm"
+                        className={`text-xs ${
+                          selectedTimes.includes(time) 
+                            ? 'bg-red-600 hover:bg-red-700 text-white' 
+                            : 'hover:bg-red-50 hover:border-red-200'
+                        }`}
+                        onClick={() => handleTimeToggle(time)}
+                      >
+                        {formatTime(time)}
+                      </Button>
+                    ))}
+                  </div>
+
+                  {selectedTimes.length > 0 && (
+                    <div className="p-3 bg-red-50 rounded-lg">
+                      <p className="text-sm font-medium text-red-800 mb-2">
+                        Selected unavailable times ({selectedTimes.length}):
+                      </p>
+                      <div className="flex flex-wrap gap-1">
+                        {selectedTimes.map(time => (
+                          <Badge key={time} variant="destructive" className="text-xs">
+                            {formatTime(time)}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </>
             )}
 
             <div className="space-y-2">
