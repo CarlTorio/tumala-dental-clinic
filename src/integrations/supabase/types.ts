@@ -131,6 +131,36 @@ export type Database = {
         }
         Relationships: []
       }
+      dentist_unavailable_schedules: {
+        Row: {
+          created_at: string
+          id: string
+          is_full_day: boolean
+          reason: string | null
+          unavailable_date: string
+          unavailable_time: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_full_day?: boolean
+          reason?: string | null
+          unavailable_date: string
+          unavailable_time?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_full_day?: boolean
+          reason?: string | null
+          unavailable_date?: string
+          unavailable_time?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       facebook_livestreams: {
         Row: {
           created_at: string

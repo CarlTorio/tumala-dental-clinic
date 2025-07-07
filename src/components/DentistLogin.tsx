@@ -8,10 +8,11 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Checkbox } from '@/components/ui/checkbox';
-import { UserIcon, LockIcon, CalendarIcon, CheckIcon, ClockIcon, RefreshCwIcon, MonitorIcon, BellIcon, Trash2Icon, X, HardDriveIcon } from 'lucide-react';
+import { UserIcon, LockIcon, CalendarIcon, CheckIcon, ClockIcon, RefreshCwIcon, MonitorIcon, BellIcon, Trash2Icon, X, HardDriveIcon, CalendarX } from 'lucide-react';
 import { getAppointments, updateAppointmentStatus, clearAllAppointments, deleteAppointment, type StoredAppointment } from '@/utils/appointmentStorage';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import UnavailableScheduleManager from './UnavailableScheduleManager';
 
 interface DentistLoginProps {
   isOpen: boolean;
@@ -358,7 +359,7 @@ const DentistLogin = ({ isOpen, onClose }: DentistLoginProps) => {
             </div>
             
             <Tabs defaultValue="all" className="w-full">
-              <TabsList className="grid w-full grid-cols-4">
+              <TabsList className="grid w-full grid-cols-5">
                 <TabsTrigger value="all">All Appointments ({appointments.length})</TabsTrigger>
                 <TabsTrigger value="pending-today" className="text-blue-600">
                   Pending Today ({todayPendingAppointments.length})
@@ -368,6 +369,10 @@ const DentistLogin = ({ isOpen, onClose }: DentistLoginProps) => {
                 </TabsTrigger>
                 <TabsTrigger value="done" className="text-green-600">
                   Done ({doneAppointments.length})
+                </TabsTrigger>
+                <TabsTrigger value="unavailable" className="text-red-600">
+                  <CalendarX className="h-4 w-4 mr-1" />
+                  Unavailable
                 </TabsTrigger>
               </TabsList>
               
@@ -722,6 +727,10 @@ const DentistLogin = ({ isOpen, onClose }: DentistLoginProps) => {
                     ))
                   )}
                 </div>
+              </TabsContent>
+
+              <TabsContent value="unavailable" className="mt-4">
+                <UnavailableScheduleManager />
               </TabsContent>
             </Tabs>
           </div>
