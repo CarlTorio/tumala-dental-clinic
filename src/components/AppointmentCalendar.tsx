@@ -7,6 +7,7 @@ import { ClockIcon, RefreshCwIcon } from 'lucide-react';
 import { addDays, format, isSameDay, isToday, isFuture, isAfter, startOfDay, getDay } from 'date-fns';
 import { getAppointments } from '@/utils/appointmentStorage';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { supabase } from '@/integrations/supabase/client';
 
 interface AppointmentCalendarProps {
   onSelect: (date: Date, time: string) => void;
@@ -20,11 +21,20 @@ const formatDateConsistent = (date: Date): string => {
   return `${day}/${month}/${year}`;
 };
 
+// Utility function to format date for database (YYYY-MM-DD)
+const formatDateForDB = (date: Date): string => {
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
 const AppointmentCalendar = ({
   onSelect
 }: AppointmentCalendarProps) => {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [bookedSlots, setBookedSlots] = useState<{ [key: string]: string[] }>({});
+  const [unavailableSlots, setUnavailableSlots] = useState<{ [key: string]: string[] }>({});
   const [isLoading, setIsLoading] = useState(false);
   const [lastRefresh, setLastRefresh] = useState<Date>(new Date());
   const isMobile = useIsMobile();
@@ -51,16 +61,18 @@ const AppointmentCalendar = ({
     return slots;
   }, [selectedDate]);
 
-  // Load booked appointments from Supabase
+  // Load booked appointments and unavailable schedules
   const loadBookedSlots = async () => {
     try {
       setIsLoading(true);
-      console.log('Loading booked slots...');
+      console.log('Loading booked slots and unavailable schedules...');
+      
+      // Load booked appointments
       const appointments = await getAppointments();
       const bookedByDate: { [key: string]: string[] } = {};
       
       appointments.forEach(appointment => {
-        const dateKey = appointment.date; // Use the date directly as it's already formatted
+        const dateKey = appointment.date;
         console.log('Processing appointment for booking check:', {
           dateKey,
           time: appointment.time,
@@ -76,12 +88,65 @@ const AppointmentCalendar = ({
         }
       });
       
+      // Load unavailable schedules from Supabase
+      const { data: unavailableSchedules, error } = await supabase
+        .from('dentist_unavailable_schedules')
+        .select('*');
+
+      if (error) {
+        console.error('Error loading unavailable schedules:', error);
+      } else {
+        const unavailableByDate: { [key: string]: string[] } = {};
+        
+        unavailableSchedules?.forEach(schedule => {
+          // Convert database date format (YYYY-MM-DD) to display format (DD/MM/YYYY)
+          const dbDate = new Date(schedule.unavailable_date + 'T00:00:00');
+          const dateKey = formatDateConsistent(dbDate);
+          
+          console.log('Processing unavailable schedule:', {
+            dbDate: schedule.unavailable_date,
+            convertedDate: dateKey,
+            time: schedule.unavailable_time,
+            isFullDay: schedule.is_full_day
+          });
+          
+          if (schedule.is_full_day) {
+            // If it's a full day, mark all possible time slots as unavailable
+            const dayOfWeek = getDay(dbDate);
+            const allSlots = [];
+            if (dayOfWeek === 0) {
+              // Sunday slots
+              for (let hour = 13; hour < 19; hour++) {
+                allSlots.push(`${hour}:00`);
+                allSlots.push(`${hour}:30`);
+              }
+            } else {
+              // Monday-Saturday slots
+              for (let hour = 9; hour < 19; hour++) {
+                allSlots.push(`${hour}:00`);
+                allSlots.push(`${hour}:30`);
+              }
+            }
+            unavailableByDate[dateKey] = allSlots;
+          } else if (schedule.unavailable_time) {
+            if (!unavailableByDate[dateKey]) {
+              unavailableByDate[dateKey] = [];
+            }
+            unavailableByDate[dateKey].push(schedule.unavailable_time);
+          }
+        });
+        
+        console.log('Final unavailable slots by date:', unavailableByDate);
+        setUnavailableSlots(unavailableByDate);
+      }
+      
       console.log('Final booked slots by date:', bookedByDate);
       setBookedSlots(bookedByDate);
       setLastRefresh(new Date());
     } catch (error) {
-      console.error('Error loading appointments:', error);
+      console.error('Error loading appointments and schedules:', error);
       setBookedSlots({});
+      setUnavailableSlots({});
     } finally {
       setIsLoading(false);
     }
@@ -110,14 +175,12 @@ const AppointmentCalendar = ({
 
   const isSlotBooked = (date: Date, time: string) => {
     const dateKey = formatDateConsistent(date);
-    const isBooked = bookedSlots[dateKey]?.includes(time) || false;
-    console.log('Checking if slot is booked:', { 
-      dateKey, 
-      time, 
-      isBooked, 
-      availableSlots: bookedSlots[dateKey] || [] 
-    });
-    return isBooked;
+    return bookedSlots[dateKey]?.includes(time) || false;
+  };
+
+  const isSlotUnavailable = (date: Date, time: string) => {
+    const dateKey = formatDateConsistent(date);
+    return unavailableSlots[dateKey]?.includes(time) || false;
   };
 
   const isSlotAvailable = (date: Date, time: string) => {
@@ -126,19 +189,21 @@ const AppointmentCalendar = ({
     const slotDateTime = new Date(date);
     slotDateTime.setHours(hour, minute, 0, 0);
 
-    // Check if slot is in the future and not booked
+    // Check if slot is in the future, not booked, and not marked as unavailable
     const isFutureSlot = isAfter(slotDateTime, now);
     const isNotBooked = !isSlotBooked(date, time);
+    const isNotUnavailable = !isSlotUnavailable(date, time);
     
     console.log('Checking slot availability:', {
       date: formatDateConsistent(date),
       time,
       isFutureSlot,
       isNotBooked,
-      finalAvailable: isFutureSlot && isNotBooked
+      isNotUnavailable,
+      finalAvailable: isFutureSlot && isNotBooked && isNotUnavailable
     });
     
-    return isFutureSlot && isNotBooked;
+    return isFutureSlot && isNotBooked && isNotUnavailable;
   };
 
   const handleTimeSelect = (time: string) => {
@@ -237,23 +302,34 @@ const AppointmentCalendar = ({
               {timeSlots.map(time => {
                 const isAvailable = isSlotAvailable(selectedDate, time);
                 const isBooked = isSlotBooked(selectedDate, time);
+                const isUnavailable = isSlotUnavailable(selectedDate, time);
+                
+                let buttonText = formatTimeSlot(time);
+                let buttonClass = 'justify-center';
+                
+                if (isUnavailable) {
+                  buttonText += ' (Unavailable)';
+                  buttonClass += ' bg-red-100 text-red-700 border-red-200';
+                } else if (isBooked) {
+                  buttonText += ' (Booked)';
+                  buttonClass += ' bg-gray-100 text-gray-600';
+                } else if (isAvailable) {
+                  buttonClass += ' hover:bg-primary hover:text-white border-primary/20';
+                } else {
+                  buttonClass += ' opacity-50 cursor-not-allowed';
+                }
                 
                 return (
                   <Button
                     key={time}
                     variant={isAvailable ? "outline" : "secondary"}
                     size="sm"
-                    className={`justify-center ${
-                      isAvailable 
-                        ? 'hover:bg-primary hover:text-white border-primary/20' 
-                        : 'opacity-50 cursor-not-allowed'
-                    }`}
+                    className={buttonClass}
                     disabled={!isAvailable}
                     onClick={() => handleTimeSelect(time)}
                   >
                     <span className="text-xs">
-                      {formatTimeSlot(time)}
-                      {isBooked && ' (Booked)'}
+                      {buttonText}
                     </span>
                   </Button>
                 );
@@ -269,6 +345,20 @@ const AppointmentCalendar = ({
               ) : (
                 <p>• Office hours: 9:00 AM - 7:00 PM (Mon-Sat)</p>
               )}
+              <div className="flex items-center gap-4 mt-2 text-xs">
+                <div className="flex items-center gap-1">
+                  <div className="w-3 h-3 bg-primary rounded"></div>
+                  <span>Available</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <div className="w-3 h-3 bg-gray-400 rounded"></div>
+                  <span>Booked</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <div className="w-3 h-3 bg-red-400 rounded"></div>
+                  <span>Unavailable</span>
+                </div>
+              </div>
             </div>
           )}
         </CardContent>
