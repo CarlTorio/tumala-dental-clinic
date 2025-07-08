@@ -16,9 +16,10 @@ const AppointmentCard = ({ appointment, showActions = true, onStatusChange, onDe
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
+      weekday: 'short',
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
     });
   };
 
