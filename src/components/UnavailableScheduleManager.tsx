@@ -1,4 +1,5 @@
 
+
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -264,6 +265,17 @@ const UnavailableScheduleManager = () => {
     return `${displayHour}:${minute} ${ampm}`;
   };
 
+  // Format selected date for display
+  const formatSelectedDate = (dateString: string) => {
+    if (!dateString) return '';
+    const date = new Date(dateString + 'T00:00:00');
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  };
+
   // Group schedules by date for better display
   const groupedSchedules = schedules.reduce((acc, schedule) => {
     const date = schedule.unavailable_date;
@@ -287,16 +299,23 @@ const UnavailableScheduleManager = () => {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
               <Label htmlFor="unavailable_date">Select Date *</Label>
-              <Input
-                id="unavailable_date"
-                type="date"
-                value={selectedDate}
-                onChange={(e) => {
-                  setSelectedDate(e.target.value);
-                  setSelectedTimes([]); // Reset selected times when date changes
-                }}
-                required
-              />
+              <div className="space-y-2">
+                <Input
+                  id="unavailable_date"
+                  type="date"
+                  value={selectedDate}
+                  onChange={(e) => {
+                    setSelectedDate(e.target.value);
+                    setSelectedTimes([]); // Reset selected times when date changes
+                  }}
+                  required
+                />
+                {selectedDate && (
+                  <div className="text-sm text-gray-600 font-medium">
+                    Selected: {formatSelectedDate(selectedDate)}
+                  </div>
+                )}
+              </div>
             </div>
 
             {selectedDate && (
@@ -461,3 +480,4 @@ const UnavailableScheduleManager = () => {
 };
 
 export default UnavailableScheduleManager;
+
